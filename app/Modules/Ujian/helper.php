@@ -1,0 +1,5 @@
+<?php
+
+/**
+ *	Ujian Helper  
+ */

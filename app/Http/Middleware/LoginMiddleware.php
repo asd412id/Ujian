@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Auth;
+
+class LoginMiddleware
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next, $guard=null)
+    {
+      switch ($guard) {
+        case 'siswa':
+          if (!Auth::guard($guard)->user()->login) {
+            return redirect()->route('ujian.logout');
+          }
+          break;
+      }
+      return $next($request);
+    }
+}
