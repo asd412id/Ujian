@@ -94,7 +94,7 @@
                   $dtes = \App\Models\Tes::where('noujian',$p->noujian)
                   ->where('pin',$jadwal->pin)->whereIn('soal_item',json_decode($plogin->soal_ujian))->get();
                   $jumlah_soal = count(json_decode($plogin->soal_ujian));
-                  foreach ($dtes as $key => $tes) {
+                  foreach ($dtes as $key1 => $tes) {
                     $benar = $tes->soalItem->benar;
                     if (!is_null($benar) && (string) $tes->jawaban == (string) $benar && $tes->soalItem->jenis_soal=='P') {
                       $nbenar++;

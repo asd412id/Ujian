@@ -16,7 +16,7 @@ class CreateItemSoalTable extends Migration
         Schema::create('item_soal', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('uuid')->unique();
-            $table->string('kode_soal',30);
+            $table->string('kode_soal');
             $table->string('jenis_soal',1)->default('P');
             $table->text('soal');
             $table->text('opsi')->nullable();

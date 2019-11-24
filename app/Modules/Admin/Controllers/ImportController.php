@@ -278,7 +278,6 @@ class ImportController extends Controller
           $bank->item()->forceDelete();
           $bank->tes()->forceDelete();
           $bank->nama = $nama;
-          $bank->kode_kelas = $kelas->kode;
           $bank->kode_mapel = $mapel->kode;
           $bank->jenis = $jenis_ujian;
           $bank->bobot = $bobot;
@@ -293,7 +292,6 @@ class ImportController extends Controller
                 if ($soal) {
                   $item = new ItemSoal;
                   $item->uuid = (string) Str::uuid();
-                  $item->kode_soal = $kode;
                   $item->jenis_soal = $jenis_soal;
                   $item->soal = strip_tags($soal);
                   $item->acak_opsi = $jenis_soal=='P'?'Y':'N';
@@ -373,12 +371,14 @@ class ImportController extends Controller
           $bank->uuid = (string)Str::uuid();
           $bank->kode = $kode;
         }
-        $bank->item()->forceDelete();
-        $bank->tes()->forceDelete();
+        if ($bank->tes) {
+          $bank->tes()->forceDelete();
+        }
+        if ($bank->item) {
+          $bank->item()->forceDelete();
+        }
         $bank->nama = $nama;
         $bank->kode_mapel = $mapel->kode;
-        $bank->jenis = $jenis_ujian;
-        $bank->bobot = $bobot;
 
         $status = false;
 

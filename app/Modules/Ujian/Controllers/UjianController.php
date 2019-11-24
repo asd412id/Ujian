@@ -208,6 +208,7 @@ class UjianController extends Controller
 
           $tes = new Tes;
           $tes->noujian = $siswa->noujian;
+          $tes->kode_soal = $soal->kode_soal;
           $tes->pin = $siswa->login->pin;
           $tes->soal_item = $soal->uuid;
           $tes->opsi = json_encode($opsis);

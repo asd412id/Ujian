@@ -50,7 +50,7 @@ class JadwalUjianController extends Controller
         $soal = Soal::all();
         return view("Admin::master.jadwalujian.create",[
           'soal'=>$soal,
-          'siswa'=>Siswa::all()
+          'siswa'=>Siswa::orderBy('id','asc')->get()
         ]);
       }
       return redirect()->route('admin.index');
@@ -168,9 +168,7 @@ class JadwalUjianController extends Controller
           return redirect()->back()->withErrors('Jadwal tidak dapat diaktifkan karena waktu ujian telah berakhir pada '.date('d/m/Y H:i',strtotime($jadwal->selesai_ujian)));
         }
         $jadwal->aktif = 1;
-        $jadwal->tes()->update([
-          'jawaban'=>null
-        ]);
+        $jadwal->tes()->forceDelete();
       }
       if ($jadwal->save()) {
         return redirect()->back()->with('message', 'Jadwal ujian '.$jadwal->nama_ujian.' '.($jadwal->aktif==1?'diaktifkan':'dinonaktifkan'));
@@ -193,7 +191,7 @@ class JadwalUjianController extends Controller
         return view("Admin::master.jadwalujian.edit",[
           'soal'=>$soal,
           'data'=>JadwalUjian::where('uuid',$uuid)->first(),
-          'siswa'=>Siswa::all()
+          'siswa'=>Siswa::orderBy('id','asc')->get()
         ]);
       }
       return redirect()->route('admin.index');

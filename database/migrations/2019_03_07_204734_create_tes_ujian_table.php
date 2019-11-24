@@ -16,6 +16,7 @@ class CreateTesUjianTable extends Migration
         Schema::create('tes_ujian', function (Blueprint $table) {
             $table->increments('id');
             $table->string('noujian');
+            $table->string('kode_soal');
             $table->string('pin');
             $table->uuid('soal_item');
             $table->text('opsi')->nullable();
