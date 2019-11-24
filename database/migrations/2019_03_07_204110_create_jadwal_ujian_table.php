@@ -16,13 +16,15 @@ class CreateJadwalUjianTable extends Migration
         Schema::create('jadwal_ujian', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('uuid')->unique();
-            $table->string('kode_soal');
-            $table->string('kode_kelas');
+            $table->string('nama_ujian');
+            $table->tinyInteger('jumlah_soal');
+            $table->text('soal');
+            $table->text('peserta');
+            $table->string('jenis_soal',1)->default('P');
+            $table->tinyInteger('bobot');
             $table->dateTime('mulai_ujian');
             $table->dateTime('selesai_ujian');
             $table->integer('lama_ujian');
-            $table->integer('sesi_ujian');
-            $table->string('ruang_ujian')->nullable();
             $table->string('pin');
             $table->string('acak_soal',1)->default('N');
             $table->string('tampil_nilai',1)->default('N');

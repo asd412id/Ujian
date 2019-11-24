@@ -50,7 +50,7 @@ class JadwalUjianController extends Controller
         $soal = Soal::all();
         return view("Admin::master.jadwalujian.create",[
           'soal'=>$soal,
-          'kelas'=>Kelas::all()
+          'siswa'=>Siswa::all()
         ]);
       }
       return redirect()->route('admin.index');
@@ -61,26 +61,32 @@ class JadwalUjianController extends Controller
       if ($r->ajax()) {
         $soal = Soal::where('kode',$r->kode_soal)->first();
         $valid = Validator::make($r->all(),[
-          'kode_soal' => 'required',
-          'kode_kelas' => 'required',
+          'soal' => 'required',
+          'nama_ujian' => 'required',
+          'peserta' => 'required',
           'mulai_ujian' => 'required',
           'selesai_ujian' => 'required',
+          'jumlah_soal' => 'required|numeric|min:1',
+          'bobot' => 'required|numeric|min:1',
           'lama_ujian' => 'required|numeric|min:1',
-          'sesi_ujian' => 'required|numeric|min:1',
           'pin_digit' => 'required|numeric|min:1',
         ],[
-          'kode_soal.required' => 'Soal ujian tidak boleh kosong',
-          'kode_kelas.required' => 'Kelas tidak boleh kosong',
+          'soal.required' => 'Soal ujian tidak boleh kosong',
+          'nama_ujian.required' => 'Nama ujian tidak boleh kosong',
+          'peserta.required' => 'Peserta tidak boleh kosong',
           'mulai_ujian.required' => 'Waktu mulai ujian tidak boleh kosong',
           'mulai_ujian.date_format' => 'Format waktu mulai ujian tidak benar',
           'selesai_ujian.required' => 'Waktu selesai ujian tidak boleh kosong',
           'selesai_ujian.date_format' => 'Format waktu selesai ujian tidak benar',
+          'jumlah_soal.required' => 'Jumlah soal tidak boleh kosong',
+          'jumlah_soal.numeric' => 'Jumlah soal harus berupa angka',
+          'jumlah_soal.min' => 'Jumlah soal tidak boleh kurang dari 1 menit',
+          'bobot.required' => 'Bobot soal tidak boleh kosong',
+          'bobot.numeric' => 'Bobot soal harus berupa angka',
+          'bobot.min' => 'Bobot soal tidak boleh kurang dari 1 menit',
           'lama_ujian.required' => 'Lama ujian tidak boleh kosong',
           'lama_ujian.numeric' => 'Lama ujian harus berupa angka dalam menit',
           'lama_ujian.min' => 'Lama ujian tidak boleh kurang dari 1 menit',
-          'sesi_ujian.required' => 'Sesi ujian tidak boleh kosong',
-          'sesi_ujian.numeric' => 'Sesi ujian harus berupa angka',
-          'sesi_ujian.min' => 'Sesi ujian tidak boleh kurang dari 1',
           'pin_digit.required' => 'Jumlah digit pin tidak boleh kosong',
           'pin_digit.numeric' => 'Jumlah digit pin harus berupa angka',
           'pin_digit.min' => 'Jumlah digit pin tidak boleh kurang dari 1',
@@ -119,13 +125,15 @@ class JadwalUjianController extends Controller
 
       $jadwalUjian = new JadwalUjian;
       $jadwalUjian->uuid = (string) Str::uuid();
-      $jadwalUjian->kode_soal = $r->kode_soal;
-      $jadwalUjian->kode_kelas = $r->kode_kelas;
+      $jadwalUjian->nama_ujian = $r->nama_ujian;
+      $jadwalUjian->soal = json_encode($r->soal);
+      $jadwalUjian->peserta = json_encode($r->peserta);
       $jadwalUjian->mulai_ujian = $mulai_ujian->toDateTimeString();
       $jadwalUjian->selesai_ujian = $selesai_ujian->toDateTimeString();
+      $jadwalUjian->jumlah_soal = $r->jumlah_soal;
+      $jadwalUjian->jenis_soal = $r->jenis_soal;
+      $jadwalUjian->bobot = $r->bobot;
       $jadwalUjian->lama_ujian = $r->lama_ujian;
-      $jadwalUjian->sesi_ujian = $r->sesi_ujian;
-      $jadwalUjian->ruang_ujian = $r->ruang_ujian;
       $jadwalUjian->acak_soal = $r->acak_soal;
       $jadwalUjian->pin = $this->generatePin($r->pin_digit);
       $jadwalUjian->tampil_nilai = $r->tampil_nilai;
@@ -154,7 +162,7 @@ class JadwalUjianController extends Controller
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
       if ($jadwal->aktif) {
         $jadwal->aktif = 0;
-        $jadwal->login()->forceDelete();
+        $jadwal->login()->update(['end'=>Carbon::now()]);
       }else {
         if (Carbon::parse($jadwal->selesai_ujian) < Carbon::now()) {
           return redirect()->back()->withErrors('Jadwal tidak dapat diaktifkan karena waktu ujian telah berakhir pada '.date('d/m/Y H:i',strtotime($jadwal->selesai_ujian)));
@@ -165,7 +173,7 @@ class JadwalUjianController extends Controller
         ]);
       }
       if ($jadwal->save()) {
-        return redirect()->back()->with('message', 'Jadwal ujian '.$jadwal->getSoal->nama.' '.($jadwal->aktif==1?'diaktifkan':'dinonaktifkan'));
+        return redirect()->back()->with('message', 'Jadwal ujian '.$jadwal->nama_ujian.' '.($jadwal->aktif==1?'diaktifkan':'dinonaktifkan'));
       }
       return redirect()->back()->withErrors('Terjadi Kesalahan!');
     }
@@ -185,7 +193,7 @@ class JadwalUjianController extends Controller
         return view("Admin::master.jadwalujian.edit",[
           'soal'=>$soal,
           'data'=>JadwalUjian::where('uuid',$uuid)->first(),
-          'kelas'=>Kelas::all()
+          'siswa'=>Siswa::all()
         ]);
       }
       return redirect()->route('admin.index');
@@ -196,25 +204,31 @@ class JadwalUjianController extends Controller
       if ($r->ajax()) {
         $soal = Soal::where('kode',$r->kode_soal)->first();
         $valid = Validator::make($r->all(),[
-          'kode_soal' => 'required',
-          'kode_kelas' => 'required',
+          'soal' => 'required',
+          'nama_ujian' => 'required',
+          'peserta' => 'required',
           'mulai_ujian' => 'required',
           'selesai_ujian' => 'required',
+          'jumlah_soal' => 'required|numeric|min:1',
+          'bobot' => 'required|numeric|min:1',
           'lama_ujian' => 'required|numeric|min:1',
-          'sesi_ujian' => 'required|numeric|min:1',
         ],[
-          'kode_soal.required' => 'Soal ujian tidak boleh kosong',
-          'kode_kelas.required' => 'Kelas tidak boleh kosong',
+          'soal.required' => 'Soal ujian tidak boleh kosong',
+          'nama_ujian.required' => 'Nama ujian tidak boleh kosong',
+          'peserta.required' => 'Peserta tidak boleh kosong',
           'mulai_ujian.required' => 'Waktu mulai ujian tidak boleh kosong',
           'mulai_ujian.date_format' => 'Format waktu mulai ujian tidak benar',
           'selesai_ujian.required' => 'Waktu selesai ujian tidak boleh kosong',
           'selesai_ujian.date_format' => 'Format waktu selesai ujian tidak benar',
+          'jumlah_soal.required' => 'Jumlah soal tidak boleh kosong',
+          'jumlah_soal.numeric' => 'Jumlah soal harus berupa angka',
+          'jumlah_soal.min' => 'Jumlah soal tidak boleh kurang dari 1 menit',
+          'bobot.required' => 'Bobot soal tidak boleh kosong',
+          'bobot.numeric' => 'Bobot soal harus berupa angka',
+          'bobot.min' => 'Bobot soal tidak boleh kurang dari 1 menit',
           'lama_ujian.required' => 'Lama ujian tidak boleh kosong',
           'lama_ujian.numeric' => 'Lama ujian harus berupa angka dalam menit',
           'lama_ujian.min' => 'Lama ujian tidak boleh kurang dari 1 menit',
-          'sesi_ujian.required' => 'Sesi ujian tidak boleh kosong',
-          'sesi_ujian.numeric' => 'Sesi ujian harus berupa angka',
-          'sesi_ujian.min' => 'Sesi ujian tidak boleh kurang dari 1',
           ]);
 
           if ($valid->fails()) {
@@ -249,13 +263,15 @@ class JadwalUjianController extends Controller
       $selesai_ujian = Carbon::createFromFormat('d/m/Y - H:i',$r->selesai_ujian);
 
       $jadwalUjian = JadwalUjian::where('uuid',$uuid)->first();
-      $jadwalUjian->kode_soal = $r->kode_soal;
-      $jadwalUjian->kode_kelas = $r->kode_kelas;
+      $jadwalUjian->nama_ujian = $r->nama_ujian;
+      $jadwalUjian->soal = json_encode($r->soal);
+      $jadwalUjian->peserta = json_encode($r->peserta);
       $jadwalUjian->mulai_ujian = $mulai_ujian->toDateTimeString();
       $jadwalUjian->selesai_ujian = $selesai_ujian->toDateTimeString();
+      $jadwalUjian->jumlah_soal = $r->jumlah_soal;
+      $jadwalUjian->jenis_soal = $r->jenis_soal;
+      $jadwalUjian->bobot = $r->bobot;
       $jadwalUjian->lama_ujian = $r->lama_ujian;
-      $jadwalUjian->sesi_ujian = $r->sesi_ujian;
-      $jadwalUjian->ruang_ujian = $r->ruang_ujian;
       $jadwalUjian->acak_soal = $r->acak_soal;
       $jadwalUjian->tampil_nilai = $r->tampil_nilai;
 
@@ -271,7 +287,7 @@ class JadwalUjianController extends Controller
         $jadwalUjian->login()->forceDelete();
         Auth::guard('siswa')->logout();
         $jadwalUjian->tes()->forceDelete();
-        if ($jadwalUjian->delete()) {
+        if ($jadwalUjian->forceDelete()) {
           return redirect()->back()->with('message', 'Data berhasil dihapus');
         }
         return redirect()->back()->withErrors('Terjadi Kesalahan!');
@@ -305,7 +321,7 @@ class JadwalUjianController extends Controller
         'jadwal'=>$jadwal,
         'login'=>$login,
         'title' => 'Monitoring Ujian - Administrator',
-        'breadcrumb' => 'Monitoring '.$jadwal->getSoal->nama,
+        'breadcrumb' => 'Monitoring '.$jadwal->nama_ujian,
       ]);
     }
 
@@ -313,7 +329,7 @@ class JadwalUjianController extends Controller
     {
       if ($r->ajax()) {
         $jadwal = JadwalUjian::where('uuid',$uuid)->first();
-        $login = $jadwal->login()->withTrashed()->get();
+        $login = $jadwal->login()->whereNotNull('_token')->get();
         return view("Admin::monitoring.getdata",[
           'data'=>$login
         ]);
@@ -334,11 +350,9 @@ class JadwalUjianController extends Controller
     public function monitoringReset($pin,$noujian)
     {
       if (request()->ajax()) {
-        $login = Login::where('pin',$pin)->where('noujian',$noujian)->withTrashed()->first();
-        $login->start = null;
-        $login->end = null;
+        $login = Login::where('pin',$pin)->where('noujian',$noujian)->first();
+        $login->_token = null;
         $login->ip_address = null;
-        $login->deleted_at = null;
         $login->save();
         // $login->tes()->where('noujian',$noujian)->forceDelete();
         // $login->forceDelete();
@@ -352,9 +366,8 @@ class JadwalUjianController extends Controller
       $kelas = Kelas::where('uuid',$uuid)->first();
 
       if ($jadwal) {
-        $nkelas = $jadwal->kelas?'Kelas '.$jadwal->kelas->nama:'Semua Kelas';
-        $filename = 'Kartu Peserta Ujian '.$nkelas.'.pdf';
-        $peserta = $jadwal->kelas?$jadwal->kelas->siswa:Siswa::all();
+        $filename = 'Kartu Peserta Ujian '.$jadwal->nama_ujian.'.pdf';
+        $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->get();
         if (!count($peserta)) {
           return redirect()->back()->withErrors('Data siswa tidak tersedia');
         }

@@ -26,7 +26,6 @@ class SoalController extends Controller
         $role = [$role,'%'.$role.'%'];
         $q->where('kode','ilike',$role[1])
         ->orWhere('nama','ilike',$role[1])
-        ->orWhere('jenis','ilike',$role[1])
         ->orWhereHas('kelas',function($q) use($role){
           $q->where('kode',$role[0])
           ->orWhere('nama','ilike',$role[1])
@@ -63,14 +62,12 @@ class SoalController extends Controller
       $valid = Validator::make($r->all(),[
         'kode' => 'required|alpha_dash|unique:soal,kode',
         'nama' => 'required',
-        'jenis' => 'required',
         'kode_mapel' => 'required',
       ],[
         'kode.required' => 'Kode Soal tidak boleh kosong',
         'kode.unique' => 'Kode Soal :input telah digunakan',
         'kode.alpha_dash' => 'Kode Soal tidak boleh memiliki spasi',
         'nama.required' => 'Nama Soal tidak boleh kosong',
-        'jenis.required' => ':Attribute Soal tidak boleh kosong',
         'kode_mapel.required' => 'Mata pelajaran tidak boleh kosong',
       ])->validate();
 
@@ -80,7 +77,6 @@ class SoalController extends Controller
       $soal->nama = $r->nama;
       $soal->kode_mapel = $r->kode_mapel;
       $soal->jenis = $r->jenis;
-      $soal->bobot = $r->bobot;
 
       if ($soal->save()) {
         return redirect()->back()->with('message', 'Data berhasil disimpan');
@@ -104,14 +100,12 @@ class SoalController extends Controller
       $valid = Validator::make($r->all(),[
         'kode' => 'required|alpha_dash|unique:soal,kode,'.$uuid.',uuid',
         'nama' => 'required',
-        'jenis' => 'required',
         'kode_mapel' => 'required',
       ],[
         'kode.required' => 'Kode Soal tidak boleh kosong',
         'kode.unique' => 'Kode Soal :input telah digunakan',
         'kode.alpha_dash' => 'Kode Soal tidak boleh memiliki spasi',
         'nama.required' => 'Nama Soal tidak boleh kosong',
-        'jenis.required' => ':Attribute Soal tidak boleh kosong',
         'kode_mapel.required' => 'Mata pelajaran tidak boleh kosong',
       ])->validate();
 
@@ -119,7 +113,6 @@ class SoalController extends Controller
       $soal->nama = $r->nama;
       $soal->kode_mapel = $r->kode_mapel;
       $soal->jenis = $r->jenis;
-      $soal->bobot = $r->bobot;
       $soal->item()->update(['kode_soal'=>$r->kode]);
       $soal->tes()->update(['kode_soal'=>$r->kode]);
       $soal->jadwal()->update(['kode_soal'=>$r->kode]);
@@ -211,7 +204,7 @@ class SoalController extends Controller
       $item->uuid = (string) Str::uuid();
       $item->kode_soal = $soal->kode;
       $item->jenis_soal = $r->jenis_soal;
-      $item->soal = $r->soal;
+      $item->soal = trim(strip_tags($r->soal,'<strong><b><em><i><br>'));
       $item->acak_opsi = $r->jenis_soal=='P'?$r->acak_soal:null;
       $item->opsi = $r->jenis_soal=='P'?json_encode($r->opsi):null;
       $item->benar = $r->jenis_soal=='P'?$r->benar:null;
@@ -267,7 +260,7 @@ class SoalController extends Controller
       }
       $item = ItemSoal::where('uuid',$uuid)->first();
       $item->jenis_soal = $r->jenis_soal;
-      $item->soal = $r->soal;
+      $item->soal = trim(strip_tags($r->soal,'<strong><b><em><i><br>'));
       $item->acak_opsi = $r->jenis_soal=='P'?$r->acak_soal:null;
       $item->opsi = $r->jenis_soal=='P'?json_encode($r->opsi):null;
       $item->benar = $r->jenis_soal=='P'?$r->benar:null;

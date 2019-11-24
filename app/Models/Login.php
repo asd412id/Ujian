@@ -9,6 +9,7 @@ class Login extends Model
 {
   use SoftDeletes;
   protected $table = 'login';
+  protected $fillable = ['current_number','end'];
 
   public function siswa()
   {

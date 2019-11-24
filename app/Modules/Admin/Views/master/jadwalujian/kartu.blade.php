@@ -96,7 +96,7 @@
                     <br>
                     <br>
                     <br>
-                    Panitia Ujian {{ $jadwal?$jadwal->getSoal->jenis:'' }}
+                    Panitia Ujian
                   </td>
                 </tr>
               </table>

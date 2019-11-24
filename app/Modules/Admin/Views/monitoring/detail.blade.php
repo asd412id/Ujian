@@ -5,7 +5,7 @@
     <div class="card">
       <div class="card-header card-header-primary">
         <div class="pull-left">
-          <h4 class="card-title ">Status Ujian {{ $jadwal->getSoal->nama.' ('.$jadwal->getSoal->kode.')' }}</h4>
+          <h4 class="card-title ">Status Ujian {{ $jadwal->nama_ujian }}</h4>
           <p class="card-category">Status Ujian Siswa</p>
         </div>
       </div>

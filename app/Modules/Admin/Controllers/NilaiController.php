@@ -8,7 +8,9 @@ use App\Models\Sekolah;
 use App\Models\Tes;
 use App\Models\JadwalUjian;
 use App\Models\Soal;
+use App\Models\ItemSoal;
 use App\Models\Siswa;
+use App\Modules\Admin\Helper;
 
 use GuzzleHttp\Client;
 use Spreadsheet;
@@ -62,11 +64,11 @@ class NilaiController extends Controller
       return $columns;
     }
 
-    public function download($uuid)
+    public function downloadExcel($uuid)
     {
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
 
-      $filename = 'Nilai '.$jadwal->getSoal->nama.' '.($jadwal->kelas?$jadwal->kelas->nama.' '.$jadwal->kelas->jurusan:'Semua Kelas').' Sesi '.$jadwal->sesi_ujian.' ('.$jadwal->pin.')'.'.xlsx';
+      $filename = 'Nilai '.$jadwal->nama_ujian.'.xlsx';
 
       $spreadsheet = new Spreadsheet();
   		$sheet = $spreadsheet->getActiveSheet();
@@ -79,157 +81,92 @@ class NilaiController extends Controller
       $sheet->getStyle('A1:D1')->getAlignment()->setVertical('center');
       $sheet->getStyle('A')->getAlignment()->setHorizontal('center');
 
-      $sheet->mergeCells('A1:A2');
-      $sheet->mergeCells('B1:B2');
-      $sheet->mergeCells('C1:C2');
-
       $sheet->getColumnDimension('A')->setWidth(5);
-      $sheet->getColumnDimension('B')->setWidth(25);
+      $sheet->getColumnDimension('B')->setWidth(20);
       $sheet->getColumnDimension('C')->setWidth(30);
 
-      $pg = range('A','Z');
       $cols = $this->createColumnsArray('ZZ');
       $cols = array_slice($cols,3,count($cols));
-      $soal = $jadwal->getSoal->item()->where('jenis_soal','P')->get();
 
-      if (!count($soal)) {
-        return $this->downloadEssay($uuid);
-      }
-      $jsoal = $soal[0]->jenis_soal;
+      // if ($jadwal->jenis_soal == 'E') {
+      //   return $this->downloadEssay($uuid);
+      // }
 
-      $suuid = [];
-
-      $sheet->setCellValue('D1', 'No. Soal');
+      $sheet->setCellValue('D1', 'Jumlah Soal');
       $sheet->getStyle('D1')->getFont()->setBold(true);
+      $sheet->getStyle('D1')->getAlignment()->setHorizontal('center');
+      $sheet->getStyle('D1')->getAlignment()->setVertical('center');
+      $sheet->getColumnDimension('D')->setAutoSize(true);
 
-      foreach ($soal as $key => $s) {
-        array_push($suuid,$s->uuid);
-        if ($jsoal=='P'&&array_key_exists($s->benar,$pg)) {
-          $pgb = !is_null($s->benar)||$s->benar!='null'||$s->benar!=''?'('.$pg[$s->benar].')':'';
-          $sheet->setCellValue($cols[$key].'2', ($key+1).$pgb);
-        }else {
-          $sheet->setCellValue($cols[$key].'2', ($key+1));
-        }
+      if ($jadwal->jenis_soal=='P') {
+        $sheet->setCellValue('E1', 'Benar');
+        $sheet->getStyle('E1')->getFont()->setBold(true);
+        $sheet->getStyle('E1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('E1')->getAlignment()->setVertical('center');
+        $sheet->getColumnDimension('E')->setAutoSize(true);
 
-        $sheet->getStyle($cols[$key].'2')->getFont()->setBold(true);
-        $sheet->getStyle($cols[$key].'2')->getAlignment()->setHorizontal('center');
-        if ($jsoal=='P') {
-          $sheet->getColumnDimension($cols[$key])->setwidth(7);
-        }else {
-          $sheet->getColumnDimension($cols[$key])->setwidth(30);
-        }
+        $sheet->setCellValue('F1', 'Salah');
+        $sheet->getStyle('F1')->getFont()->setBold(true);
+        $sheet->getStyle('F1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('F1')->getAlignment()->setVertical('center');
+        $sheet->getColumnDimension('F')->setAutoSize(true);
       }
 
-      $sheet->mergeCells('D1:'.$cols[$key].'1');
+      $sheet->setCellValue('G1', 'Nilai Akhir');
+      $sheet->getStyle('G1')->getFont()->setBold(true);
+      $sheet->getStyle('G1')->getAlignment()->setHorizontal('center');
+      $sheet->getStyle('G1')->getAlignment()->setVertical('center');
+      $sheet->getColumnDimension('G')->setAutoSize(true);
 
-      $key++;
-      $sheet->setCellValue($cols[$key].'1', 'Jumlah Soal');
-      $sheet->getStyle($cols[$key].'1')->getFont()->setBold(true);
-      $sheet->getStyle($cols[$key].'1')->getAlignment()->setHorizontal('center');
-      $sheet->getStyle($cols[$key].'1')->getAlignment()->setVertical('center');
-      $sheet->getColumnDimension($cols[$key])->setAutoSize(true);
-      $sheet->mergeCells($cols[$key].'1:'.$cols[$key].'2');
-
-      if ($jsoal=='P') {
-        $key++;
-        $sheet->setCellValue($cols[$key].'1', 'Benar');
-        $sheet->getStyle($cols[$key].'1')->getFont()->setBold(true);
-        $sheet->getStyle($cols[$key].'1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle($cols[$key].'1')->getAlignment()->setVertical('center');
-        $sheet->getColumnDimension($cols[$key])->setAutoSize(true);
-        $sheet->mergeCells($cols[$key].'1:'.$cols[$key].'2');
-
-        $key++;
-        $sheet->setCellValue($cols[$key].'1', 'Salah');
-        $sheet->getStyle($cols[$key].'1')->getFont()->setBold(true);
-        $sheet->getStyle($cols[$key].'1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle($cols[$key].'1')->getAlignment()->setVertical('center');
-        $sheet->getColumnDimension($cols[$key])->setAutoSize(true);
-        $sheet->mergeCells($cols[$key].'1:'.$cols[$key].'2');
-      }
-
-      $key++;
-      $sheet->setCellValue($cols[$key].'1', 'Nilai Akhir');
-      $sheet->getStyle($cols[$key].'1')->getFont()->setBold(true);
-      $sheet->getStyle($cols[$key].'1')->getAlignment()->setHorizontal('center');
-      $sheet->getStyle($cols[$key].'1')->getAlignment()->setVertical('center');
-      $sheet->getColumnDimension($cols[$key])->setAutoSize(true);
-      $sheet->mergeCells($cols[$key].'1:'.$cols[$key].'2');
-
-      $inc = [];
-      $peserta = $jadwal->kelas?$jadwal->kelas->siswa()->orderBy('id','asc')->get():Siswa::orderBy('id','asc')->get();
-      $i=2;
+      $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))
+      ->orderBy('id','asc')
+      ->get();
+      $i=1;
       foreach ($peserta as $key => $v) {
-        if (!in_array($v->noujian,$inc)) {
-          array_push($inc,$v->noujian);
-          $sheet->setCellValue('A'.($i+1), $i-1);
-          $sheet->setCellValue('B'.($i+1), $v->noujian);
-          $sheet->setCellValue('C'.($i+1), $v->nama);
-          $benar = 0;
+        $sheet->setCellValue('A'.($i+1), $i);
+        $sheet->setCellValue('B'.($i+1), $v->noujian);
+        $sheet->setCellValue('C'.($i+1), $v->nama);
+        $benar = 0;
+        $nilai = 0;
+        if ($v->attemptLogin()->where('pin',$jadwal->pin)->first()) {
+          $soal = ItemSoal::whereIn('uuid',json_decode($v->attemptLogin()->where('pin',$jadwal->pin)->first()->soal_ujian))->get();
           foreach ($soal as $key1 => $s) {
-            $jawaban = @Tes::where('noujian',$v->noujian)->where('soal_item',$s->uuid)->where('pin',$jadwal->pin)->first()->jawaban;
+            $tes = Tes::where('noujian',$v->noujian)->where('soal_item',$s->uuid)->where('pin',$jadwal->pin)->first();
 
-            $sheet->getStyle($cols[$key1].($i+1))->getAlignment()->setHorizontal('center');
-
-            $color = array_key_exists($jawaban,$pg)?'00ff0c0c':'';
-            if (array_key_exists($jawaban,$pg)) {
-              // if (is_null($benar)) {
-              //   $benar = 0;
-              // }
-              if ((string) $jawaban == (string) $s->benar) {
+            if ($tes && array_key_exists($tes->jawaban,json_decode($s->opsi))) {
+              if ((string) $tes->jawaban == (string) $s->benar) {
                 $benar++;
-                $color = '00008000';
               }
             }
 
-            $sheet->getStyle($cols[$key1].($i+1))->getFont()->setBold(true);
-            $sheet->getStyle($cols[$key1].($i+1))->getFont()->getColor()->setARGB($color);
-
-            $jawab = '';
-
-            if (@Tes::where('noujian',$v->noujian)->where('soal_item',$s->uuid)->where('pin',$jadwal->pin)->first()->jawaban!=null||@Tes::where('noujian',$v->noujian)->where('soal_item',$s->uuid)->where('pin',$jadwal->pin)->first()->jawaban!='') {
-              $jwb = Tes::where('noujian',$v->noujian)->where('soal_item',$s->uuid)->where('pin',$jadwal->pin)->first()->jawaban;
-              if (array_key_exists($jwb,$pg)) {
-                $jawab = $pg[Tes::where('noujian',$v->noujian)->where('soal_item',$s->uuid)->where('pin',$jadwal->pin)->first()->jawaban];
-              }else {
-                $jawab = $jwb;
-              }
-              $sheet->getStyle($cols[$key1].($i+1))->getAlignment()->setVertical('center');
-            }else {
-              $sheet->getStyle($cols[$key1].($i+1))->getAlignment()->setHorizontal('left');
-              $sheet->getStyle($cols[$key1].($i+1))->getAlignment()->setWrapText(true);
-              $sheet->getRowDimension($cols[$key1].($i+1))->setRowHeight(15);
-            }
-
-            $sheet->setCellValue($cols[$key1].($i+1), $jawab);
           }
 
-          $nilai = 0;
-          if (!is_null($benar)) {
-            $nilai = round($benar/count($soal)*$jadwal->getSoal->bobot,2);
+          if ($soal->count()) {
+            $nilai = 0;
           }
 
-          $key1++;
-          $sheet->getStyle($cols[$key1].($i+1))->getAlignment()->setHorizontal('center');
-          $sheet->setCellValue($cols[$key1].($i+1),count($soal));
-
-          if ($jsoal=='P') {
-            $key1++;
-            $sheet->getStyle($cols[$key1].($i+1))->getAlignment()->setHorizontal('center');
-            $sheet->setCellValue($cols[$key1].($i+1),$benar);
-
-            $key1++;
-            $sheet->getStyle($cols[$key1].($i+1))->getAlignment()->setHorizontal('center');
-            $sheet->setCellValue($cols[$key1].($i+1),count($soal)-$benar);
+          if ($benar) {
+            $nilai += round($benar/$jadwal->jumlah_soal*$jadwal->bobot,2);
           }
 
-          $key1++;
-          $sheet->getStyle($cols[$key1].($i+1))->getAlignment()->setHorizontal('center');
-          $sheet->getStyle($cols[$key1].($i+1))->getFont()->setBold(true);
-          $sheet->setCellValue($cols[$key1].($i+1),$nilai);
-
-          $i++;
         }
+
+        $sheet->getStyle('D'.($i+1))->getAlignment()->setHorizontal('center');
+        $sheet->setCellValue('D'.($i+1),$jadwal->jumlah_soal);
+
+        if ($jadwal->jenis_soal=='P') {
+          $sheet->getStyle('E'.($i+1))->getAlignment()->setHorizontal('center');
+          $sheet->setCellValue('E'.($i+1),$benar);
+
+          $sheet->getStyle('F'.($i+1))->getAlignment()->setHorizontal('center');
+          $sheet->setCellValue('F'.($i+1),$jadwal->jumlah_soal-$benar);
+        }
+
+        $sheet->getStyle('G'.($i+1))->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('G'.($i+1))->getFont()->setBold(true);
+        $sheet->setCellValue('G'.($i+1),$nilai);
+
+        $i++;
       }
 
       $writer = new Xlsx($spreadsheet);
@@ -238,51 +175,109 @@ class NilaiController extends Controller
   		$writer->save("php://output");
     }
 
-    public function downloadEssay($uuid)
+    public function downloadPDF($uuid)
     {
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
 
-      $filename = 'Nilai '.$jadwal->getSoal->nama.' '.($jadwal->kelas?$jadwal->kelas->nama.' '.$jadwal->kelas->jurusan:'Semua Kelas').' Sesi '.$jadwal->sesi_ujian.' ('.$jadwal->pin.')'.'.pdf';
+      $filename = 'Nilai '.$jadwal->nama_ujian.'.pdf';
 
-      $peserta = $jadwal->kelas?$jadwal->kelas->siswa:Siswa::all();
+      $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))
+      ->orderBy('id','asc')
+      ->get();
 
-      $view = view('Admin::nilai.setnilai',[
+      $pdf = PDF::loadView('Admin::nilai.nilai-pdf',[
         'jadwal'=>$jadwal,
         'peserta'=>$peserta,
-        'title'=>$filename
-      ])->render();
-
-      $client = new Client;
-      $res = $client->request('POST','http://pdf/pdf',[
-        'form_params'=>[
-          'html'=>str_replace(url('/'),'http://nginx_ujian/',$view),
-          'options[page-width]'=>'21.5cm',
-          'options[page-height]'=>'33cm',
-          'options[margin-top]'=>'0.5cm',
-          'options[margin-bottom]'=>'0',
-          'options[margin-left]'=>'0',
-          'options[margin-right]'=>'0',
-        ]
+        'title'=>'Nilai '.$jadwal->nama_ujian,
+        'sekolah'=>Sekolah::first(),
+        'helper'=>new Helper
       ]);
 
-      if ($res->getStatusCode() == 200) {
-        return response()->attachment($res->getBody()->getContents(),$filename,'application/pdf');
-      }
-
-      return redirect()->back()->withErrors(['Tidak dapat mendownload file! Silahkan hubungi operator']);
-
-      // $pdf = PDF::loadView('Admin::nilai.setnilai',[
-      //   'jadwal'=>$jadwal,
-      //   'peserta'=>$peserta,
-      //   'title'=>$filename
-      // ]);
-
-      // return $pdf->setPaper('a4')
-      // ->setOption('margin-top',3)
+      return $pdf->setOption('page-width','21.5cm')
+      ->setOption('page-height','33cm')
       // ->setOption('margin-bottom',0)
       // ->setOption('margin-left',0)
       // ->setOption('margin-right',0)
-      // ->stream($filename);
+      ->stream($filename);
+
+    }
+
+    public function detail($uuid)
+    {
+      $jadwal = JadwalUjian::with('tes')->where('uuid',$uuid)->first();
+      return view("Admin::nilai.detail",[
+        'title'=>'Nilai '.$jadwal->nama_ujian.' - Administrator',
+        'breadcrumb'=>'Nilai Ujian',
+        'jadwal'=>$jadwal,
+        'peserta'=>Siswa::whereIn('uuid',json_decode($jadwal->peserta))->orderBy('id','asc')->get(),
+      ]);
+    }
+
+    public function detailDownload($ujian,$siswa)
+    {
+      $nilai = 0;
+      $nbenar = 0;
+      $jadwal = JadwalUjian::with('tes')->where('uuid',$ujian)->first();
+      $siswa = Siswa::where('uuid',$siswa)->first();
+      $plogin = $siswa->attemptLogin()->where('pin',$jadwal->pin)->first();
+      $jumlah_soal = count(json_decode($plogin->soal_ujian));
+      $dtes = Tes::where('noujian',$siswa->noujian)
+      ->where('pin',$jadwal->pin)->whereIn('soal_item',json_decode($plogin->soal_ujian))->get();
+
+      $soal = [];
+      $siswaSoal = json_decode($plogin->soal_ujian);
+      if (count($siswaSoal)) {
+        foreach ($siswaSoal as $key => $s) {
+          $gs = ItemSoal::where('uuid',$s)->first();
+          if ($gs) {
+            array_push($soal,$gs);
+          }
+        }
+      }
+      foreach ($dtes as $key => $tes) {
+        $benar = $tes->soalItem->benar;
+        if (!is_null($benar) && (string) $tes->jawaban == (string) $benar && $tes->soalItem->jenis_soal=='P') {
+          $nbenar++;
+        }
+      }
+      if ($jumlah_soal) {
+        $nilai = 0;
+      }
+      if ($nbenar) {
+        $nilai += round($nbenar/$jumlah_soal*$jadwal->bobot,2);
+      }
+      // return view("Admin::nilai.detail-download",[
+      //   'title'=>'Nilai '.$jadwal->nama_ujian.' - ('.$siswa->noujian.') '.$siswa->nama,
+      //   'breadcrumb'=>'Nilai Ujian',
+      //   'jadwal'=>$jadwal,
+      //   'siswa'=>$siswa,
+      //   'soal'=>$soal,
+      //   'nilai'=>$nilai,
+      //   'sekolah'=>Sekolah::first(),
+      //   'helper'=>new Helper
+      // ]);
+
+      $filename = 'Nilai '.$jadwal->nama_ujian.'.pdf';
+
+      $pdf = PDF::loadView("Admin::nilai.detail-download",[
+        'title'=>'Nilai '.$jadwal->nama_ujian.' - ('.$siswa->noujian.') '.$siswa->nama,
+        'breadcrumb'=>'Nilai Ujian',
+        'jadwal'=>$jadwal,
+        'siswa'=>$siswa,
+        'soal'=>$soal,
+        'nilai'=>$nilai,
+        'nilai'=>$nilai,
+        'benar'=>$nbenar,
+        'sekolah'=>Sekolah::first(),
+        'helper'=>new Helper
+      ]);
+
+      return $pdf->setOption('page-width','21.5cm')
+      ->setOption('page-height','33cm')
+      // ->setOption('margin-bottom',0)
+      // ->setOption('margin-left',0)
+      // ->setOption('margin-right',0)
+      ->stream($filename);
 
     }
 

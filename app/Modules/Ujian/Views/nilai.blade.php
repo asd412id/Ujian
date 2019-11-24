@@ -47,15 +47,25 @@
           <tr>
             <td width="150">Nama Ujian</td>
             <td width="10">:</td>
-            <td>{{ $ujian->jadwal->getSoal->nama }}</td>
+            <td>{{ $ujian->jadwal->nama_ujian }}</td>
           </tr>
           <tr>
             <td width="150">Jumlah Soal</td>
             <td width="10">:</td>
-            <td>{{ count($ujian->jadwal->getSoal->item).' Soal' }}</td>
+            <td>{{ count(json_decode($ujian->soal_ujian)).' Soal' }}</td>
+          </tr>
+          <tr>
+            <td width="150">Total Bobot</td>
+            <td width="10">:</td>
+            <td>{{ $ujian->jadwal->bobot }}</td>
+          </tr>
+          <tr>
+            <td width="150">Bobot Per Soal</td>
+            <td width="10">:</td>
+            <td>{{ round($ujian->jadwal->bobot/$ujian->jadwal->jumlah_soal,2) }}</td>
           </tr>
           @php
-            $terjawab = App\Models\Tes::where('noujian',$siswa->noujian)->where('pin',$siswa->login->pin)->whereNotNull('jawaban')->count();
+            $terjawab = App\Models\Tes::where('noujian',$siswa->noujian)->where('pin',$siswa->login->pin)->whereIn('soal_item',json_decode($siswa->login->soal_ujian))->whereNotNull('jawaban')->count();
           @endphp
           <tr>
             <td width="150">Terjawab</td>
@@ -65,7 +75,7 @@
           <tr>
             <td width="150">Tidak Dijawab</td>
             <td width="10">:</td>
-            <td>{{ (count($ujian->jadwal->getSoal->item))-$terjawab.' Soal' }}</td>
+            <td>{{ (count(json_decode($ujian->soal_ujian)))-$terjawab.' Soal' }}</td>
           </tr>
           @if ($ujian->jadwal->tampil_nilai=='Y')
             <tr>

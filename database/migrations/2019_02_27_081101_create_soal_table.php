@@ -18,10 +18,7 @@ class CreateSoalTable extends Migration
             $table->uuid('uuid')->unique();
             $table->string('kode');
             $table->string('nama');
-            // $table->string('kode_kelas');
             $table->string('kode_mapel');
-            $table->string('jenis')->nullable();
-            $table->integer('bobot')->nullable();
             $table->timestamps();
             $table->softdeletes();
         });

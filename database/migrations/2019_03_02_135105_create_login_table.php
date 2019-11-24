@@ -23,6 +23,7 @@ class CreateLoginTable extends Migration
             $table->dateTime('start')->nullable();
             $table->dateTime('end')->nullable();
             $table->string('ip_address')->nullable();
+            $table->tinyInteger('current_number')->default(0);
             $table->timestamps();
             $table->softdeletes();
         });

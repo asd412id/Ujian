@@ -17,7 +17,6 @@ class CreateTesUjianTable extends Migration
             $table->increments('id');
             $table->string('noujian');
             $table->string('pin');
-            $table->string('kode_soal');
             $table->uuid('soal_item');
             $table->text('opsi')->nullable();
             $table->string('jawaban')->nullable();

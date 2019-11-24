@@ -18,6 +18,7 @@
   <!--     Fonts and icons     -->
   <link href="{{ url('assets/css/fonts.css') }}" rel="stylesheet" />
   <link href="{{ url('assets/css/font-awesome.min.css') }}" rel="stylesheet" />
+  <link href="{{ url('assets/fontawesome/css/all.min.css') }}" rel="stylesheet" />
   <!-- Material Kit CSS -->
   <link href="{{ url('assets/iconfont/material-icons.css') }}" rel="stylesheet" />
   <link href="{{ url('assets/css/select2.min.css') }}" rel="stylesheet" />

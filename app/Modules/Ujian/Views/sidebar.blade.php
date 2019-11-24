@@ -62,7 +62,7 @@
       @elseif (Request::url() == route('ujian.nilai'))
         <li class="nav-item">
           <a class="nav-link" href="javascript:void(0)" style="font-size: 1em">
-            Selamat, Anda telah selesai melaksanakan ujian <b>{{ $siswa->login->jadwal->getSoal->nama }}</b><br><br>
+            Selamat, Anda telah selesai melaksanakan ujian <b>{{ $siswa->login->jadwal->nama_ujian }}</b><br><br>
             Berikut hasil ujian yang telah Anda ikuti.
           </a>
         </li>

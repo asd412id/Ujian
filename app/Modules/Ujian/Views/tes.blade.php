@@ -161,7 +161,7 @@ function setPlay(a,pl) {
 }
 
 $(document).ready(function(){
-  $(".btn-soal").first().click();
+  $(".btn-soal:eq({{ $siswa->login->current_number }})").click();
 })
 
 </script>

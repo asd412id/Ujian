@@ -6,27 +6,15 @@
   {{ csrf_field() }}
   <div class="modal-body text-left">
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-12">
         <div class="form-group">
           <label class="bmd-label-floating">Kode Soal</label>
           <input type="text" class="form-control" name="kode" value="{{ old('kode') }}">
         </div>
-      </div>
-      <div class="col-md-5">
         <div class="form-group">
           <label class="bmd-label-floating">Nama Bank Soal</label>
           <input type="text" class="form-control" name="nama" value="{{ old('nama') }}">
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <label class="bmd-label-floating">Jenis Ujian</label>
-          <input type="text" class="form-control" name="jenis" value="{{ old('jenis') }}" placeholder="Tugas, UH, UTS, US dsb...">
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
         <div class="form-group">
           <label class="bmd-label-floating">Mata Pelajaran</label>
           <select class="form-control" name="kode_mapel">
@@ -38,13 +26,6 @@
           </select>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="form-group">
-          <label class="bmd-label-floating">Bobot</label>
-          <input type="number" class="form-control" name="bobot" value="{{ old('bobot') }}">
-        </div>
-      </div>
-    </div>
     </div>
   </div>
   <div class="modal-footer">

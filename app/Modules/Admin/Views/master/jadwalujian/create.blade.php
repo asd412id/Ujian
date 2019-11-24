@@ -6,25 +6,18 @@
   {{ csrf_field() }}
   <div class="modal-body text-left">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-4">
         <div class="form-group">
-          <label class="bmd-label-floating">Soal Ujian</label>
-          <select class="form-control" id="get-soal" name="kode_soal">
-            @foreach ($soal as $key => $v)
-              <option value="{{ $v->kode }}">{{ '('.$v->kode.') '.$v->nama }}</option>
-            @endforeach
-          </select>
+          <label class="bmd-label-floating">Nama Ujian</label>
+          <input type="text" class="form-control" id="nama_ujian" name="nama_ujian" value="">
         </div>
         <div class="form-group">
-          <label class="bmd-label-floating">Kelas</label>
-          <select class="form-control" name="kode_kelas">
-            <option value="all">Semua Kelas</option>
-            @if (count($kelas))
-              @foreach ($kelas as $key => $v)
-                <option value="{{ $v->kode }}">{{ '('.$v->kode.') '.$v->nama.' '.$v->jurusan.'/'.$v->tingkat }}</option>
-              @endforeach
-            @endif
-          </select>
+          <label class="bmd-label-floating">Jumlah Soal</label>
+          <input type="number" class="form-control" id="jumlah_soal" name="jumlah_soal" value="">
+        </div>
+        <div class="form-group">
+          <label class="bmd-label-floating">Bobot</label>
+          <input type="number" class="form-control" id="bobot" name="bobot" value="100">
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Waktu Mulai Ujian</label>
@@ -38,19 +31,38 @@
           <label class="bmd-label-floating">Lama Ujian (Menit)</label>
           <input min="1" type="number" class="form-control" name="lama_ujian" value="60">
         </div>
+      </div>
+      <div class="col-md-8">
         <div class="form-group">
-          <label class="bmd-label-floating">Sesi Ujian</label>
-          <input min="1" type="number" class="form-control" name="sesi_ujian" value="1">
+          <label class="bmd-label-floating">Jenis Soal</label>
+          <select class="form-control" id="jenis_soal" name="jenis_soal">
+            <option value="P">Pilihan Ganda</option>
+            <option value="E">Essay</option>
+          </select>
         </div>
         <div class="form-group">
-          <label class="bmd-label-floating">Ruang Ujian</label>
-          <input type="text" class="form-control" name="ruang_ujian" value="">
+          <label class="bmd-label-floating">Soal Ujian</label>
+          <select class="form-control" id="get_soal" name="soal[]" multiple>
+            @foreach ($soal as $key => $v)
+              <option value="{{ $v->uuid }}">{{ '('.$v->kode.') '.$v->nama }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="bmd-label-floating">Kelas</label>
+          <select class="form-control" name="peserta[]" multiple>
+            @if (count($siswa))
+              @foreach ($siswa as $key => $v)
+                <option value="{{ $v->uuid }}">{{ '('.$v->kelas->nama.') ('.$v->noujian.') '.$v->nama }}</option>
+              @endforeach
+            @endif
+          </select>
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Acak Soal</label>
           <select class="form-control" name="acak_soal">
-            <option value="Y">Ya</option>
-            <option selected value="N">Tidak</option>
+            <option selected value="Y">Ya</option>
+            <option value="N">Tidak</option>
           </select>
         </div>
         <div class="form-group">

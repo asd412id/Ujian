@@ -10,7 +10,7 @@
         </div>
         <span class="pull-right">
           <button type="button" class="btn btn-xs btn-upload btn-success" data-target="#upload-excel" title="Impor dari file excel">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAABlgAAAZYBofSv5QAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAF5SURBVDiN3ZQxS5ZRFMd/R1MMcRBddFAQhOJFCXUI2tvEyaBNaAg/gYuDQ0NrtImfwEnQzT6B5GItgW+ggyhEDQ1CRb+GzkvXt/fJ54UWPXB5nt+5//vn3nO5B25tqFPd6O90MBgAFoD5YkwDfUB0ZayOAuvAHPAAGKpakNpnFdMfImKnFDesETW1EwA9dY9WxBnwHNhM3ks+TB7qZHyZCw6Sj4At4EdLEBFfImITeJOpw+SPf22h7XiP1dn8f6g+bSvFlPpWbWb6LPlzcqPK+EAN9YXapx53WeNKY9WlNF0tk6ntVYfVlUy/TN4pjasu72vOXXaY6wWGgcHku8n919V4N3f1Or/v/kcpvqv31SfqT39f4mKb8aS6rx5lupl8/i/jT+q2epL8Pvlby7hYs5yajeTt0ri9V4wAywU3cpSGrSc9k6lH6hpw77oaV0ZN7US54wvgFTWaEH+edMe5iDiFijaojnO1bc4DYxFRu23WDrts9DcvfgFuHlz9aQaeTwAAAABJRU5ErkJggg==">&nbsp;&nbsp;Impor
+            <i class="fa fa-fw fa-file-excel"></i> Impor
           </button>
           <form class="d-none" action="{{ route('sekolah.import') }}" method="post" enctype="multipart/form-data">
             {{ csrf_field() }}

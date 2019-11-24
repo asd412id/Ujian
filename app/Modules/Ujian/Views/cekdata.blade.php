@@ -50,17 +50,28 @@
           <tr>
             <td width="150">Nama Ujian</td>
             <td width="10">:</td>
-            <td>{{ $ujian->jadwal->getSoal->nama }}</td>
+            <td>{{ $ujian->jadwal->nama_ujian }}</td>
+          </tr>
+          <tr>
+            <td width="150">Jenis Soal</td>
+            <td width="10">:</td>
+            <td>{{ $ujian->jadwal->jenis_soal=='P'?'Pilihan Ganda':'Essay' }}</td>
           </tr>
           <tr>
             <td width="150">Jumlah Soal</td>
             <td width="10">:</td>
-            <td>{{ $ujian->jadwal->getSoal->item->count() }}</td>
+            <td>{{ $ujian->jadwal->jumlah_soal }}</td>
           </tr>
           <tr>
-            <td width="150">Sesi Ujian</td>
+          <tr>
+            <td width="150">Total Bobot</td>
             <td width="10">:</td>
-            <td>{{ $ujian->jadwal->sesi_ujian }}</td>
+            <td>{{ $ujian->jadwal->bobot }}</td>
+          </tr>
+          <tr>
+            <td width="150">Bobot Per Soal</td>
+            <td width="10">:</td>
+            <td>{{ round($ujian->jadwal->bobot/$ujian->jadwal->jumlah_soal,2) }}</td>
           </tr>
           <tr>
             <td width="150">Lama Ujian</td>

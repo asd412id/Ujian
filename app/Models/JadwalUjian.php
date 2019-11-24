@@ -15,11 +15,6 @@ class JadwalUjian extends Model
     return $this->belongsTo(Kelas::class,'kode_kelas','kode');
   }
 
-  public function getSoal()
-  {
-    return $this->belongsTo(Soal::class,'kode_soal','kode');
-  }
-
   public function login()
   {
     return $this->hasMany(Login::class,'pin','pin');

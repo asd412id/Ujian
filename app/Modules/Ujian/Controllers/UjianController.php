@@ -10,9 +10,11 @@ use App\Models\JadwalUjian;
 use App\Models\Login;
 use App\Models\ItemSoal;
 use App\Models\Tes;
+use App\Models\Soal;
 use Illuminate\Support\Str;
 use Validator;
 use Auth;
+use Hash;
 use Carbon\Carbon;
 
 class UjianController extends Controller
@@ -37,27 +39,46 @@ class UjianController extends Controller
         'pin.required'=>'Pin harus diisi',
       ])->validate();
 
-      if (Auth::guard('siswa')->attempt([
-        'noujian'=>$r->noujian,
-        'password'=>$r->password
-      ],1)) {
-        $cekPin = JadwalUjian::where('pin',$r->pin)->where('aktif',1);
-        if (!$cekPin->count()) {
+      $siswa = Siswa::where('noujian',$r->noujian)->first();
+
+      if (Hash::check($r->password,$siswa->password)) {
+        $jadwal = JadwalUjian::where('pin',$r->pin)->where('aktif',1)->first();
+        if (!$jadwal) {
           Auth::guard('siswa')->logout();
-          return redirect()->route('ujian.login')->withErrors(['PIN sesi tidak ditemukan'])->withInput($r->only('noujian'));
-        }elseif (Carbon::now() <= Carbon::parse($cekPin->first()->mulai_ujian)) {
+          return redirect()->route('ujian.login')->withErrors(['Ujian tidak tersedia'])->withInput($r->only('noujian'));
+        }elseif (Carbon::now() <= Carbon::parse($jadwal->mulai_ujian)) {
           Auth::guard('siswa')->logout();
-          return redirect()->route('ujian.login')->withErrors(['Sesi ujian akan dimulai pada tanggal '.date('d/m/Y',strtotime($cekPin->first()->mulai_ujian)).' pukul '.date('H:i',strtotime($cekPin->first()->mulai_ujian))])->withInput($r->only('noujian'));
-        }elseif (Carbon::now() >= Carbon::parse($cekPin->first()->selesai_ujian)) {
+          return redirect()->route('ujian.login')->withErrors(['Sesi ujian akan dimulai pada tanggal '.date('d/m/Y',strtotime($jadwal->mulai_ujian)).' pukul '.date('H:i',strtotime($jadwal->mulai_ujian))])->withInput($r->only('noujian'));
+        }elseif (Carbon::now() >= Carbon::parse($jadwal->selesai_ujian)) {
           Auth::guard('siswa')->logout();
           return redirect()->route('ujian.login')->withErrors(['Sesi ujian telah berakhir'])->withInput($r->only('noujian'));
-        }elseif (Auth::guard('siswa')->user()->attemptLogin()->where('pin',$r->pin)->count()) {
-          Auth::guard('siswa')->logout();
-          return redirect()->route('ujian.login')->withErrors(['Anda sudah selesai ujian'])->withInput($r->only('noujian'));
-        }elseif (Auth::guard('siswa')->user()->kode_kelas != $cekPin->first()->kode_kelas && $cekPin->first()->kode_kelas != 'all') {
+        }elseif (!in_array($siswa->uuid,json_decode($jadwal->peserta))) {
           Auth::guard('siswa')->logout();
           return redirect()->route('ujian.login')->withErrors(['Anda tidak dapat mengikuti ujian ini'])->withInput($r->only('noujian'));
+        }elseif ($siswa->attemptLogin()->where('pin',$r->pin)->first()) {
+          if (!is_null($siswa->attemptLogin()->where('pin',$r->pin)->first()->end)) {
+            Auth::guard('siswa')->logout();
+            return redirect()->route('ujian.login')->withErrors(['Anda sudah selesai ujian'])->withInput($r->only('noujian'));
+          }elseif (!is_null($siswa->attemptLogin()->where('pin',$r->pin)->first()->_token)) {
+            Auth::guard('siswa')->logout();
+            return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain!'])->withInput($r->only('noujian'));
+          }
+          Auth::guard('siswa')->attempt([
+            'noujian'=>$r->noujian,
+            'password'=>$r->password
+          ],1);
+          $user = Auth::guard('siswa')->user();
+          $ujian = Auth::guard('siswa')->user()->attemptLogin()->where('pin',$r->pin)->first();
+          $ujian->_token = $user->remember_token;
+          $ujian->ip_address = $r->ip();
+          $ujian->save();
+          session()->flush();
+          return redirect()->back();
         }
+        Auth::guard('siswa')->attempt([
+          'noujian'=>$r->noujian,
+          'password'=>$r->password
+        ],1);
         $user = Auth::guard('siswa')->user();
         $ujian = new Login;
         $ujian->uuid = (string)Str::uuid();
@@ -102,13 +123,30 @@ class UjianController extends Controller
     public function tes()
     {
       $login = Auth::guard('siswa')->user()->login;
+      $jadwal = $login->jadwal;
       if ($login->start==null) {
+        $soal = [];
         $login->start = Carbon::now()->toDateTimeString();
-        $SP = $login->jadwal->getSoal->item()->where('jenis_soal','P')->select('uuid')->get()->pluck('uuid')->toArray();
-        $SE = $login->jadwal->getSoal->item()->where('jenis_soal','E')->select('uuid')->get()->pluck('uuid')->toArray();
-        @shuffle($SP);
-        @shuffle($SE);
-        $soal = @array_merge($SP,$SE);
+
+        $soalItem = ItemSoal::where('jenis_soal',$jadwal->jenis_soal)
+        ->whereHas('getSoal',function($q) use($jadwal){
+          $q->whereIn('uuid',json_decode($jadwal->soal));
+        })
+        ->select('uuid');
+        if ($jadwal->acak_soal=='Y') {
+          $soalItem = $soalItem->inRandomOrder();
+        }
+        $soalItem = $soalItem->get();
+        $i = 0;
+        if (count($soalItem)) {
+          foreach ($soalItem as $key => $si) {
+            $i++;
+            if ($i > $jadwal->jumlah_soal) {
+              break;
+            }
+            array_push($soal,$si->uuid);
+          }
+        }
         $login->soal_ujian = json_encode($soal);
         $login->save();
       }
@@ -116,8 +154,8 @@ class UjianController extends Controller
       $timer = $this->timer();
 
       return view('Ujian::tes',[
-        'title'=>'Mulai Ujian '.$login->jadwal->getSoal->nama,
-        'breadcrumb'=>'Ujian '.$login->jadwal->getSoal->nama,
+        'title'=>'Mulai Ujian '.$jadwal->nama_ujian,
+        'breadcrumb'=>'Ujian '.$jadwal->nama_ujian,
         'soal'=>$login->soal_ujian,
         'now'=>Carbon::now(),
         'timer'=>$timer,
@@ -142,13 +180,16 @@ class UjianController extends Controller
           ]);
         }
 
+        $current_number  = array_search($r->soal,json_decode($siswa->login->soal_ujian));
+
+        $siswa->login->update(['current_number'=>$current_number]);
+
         $soal = ItemSoal::where('uuid',$r->soal)->first();
 
         $opsis = null;
 
         $cek = Tes::where('noujian',$siswa->noujian)
         ->where('pin',$siswa->login->pin)
-        ->where('kode_soal',$soal->kode_soal)
         ->where('soal_item',$soal->uuid)
         ->first();
 
@@ -168,7 +209,6 @@ class UjianController extends Controller
           $tes = new Tes;
           $tes->noujian = $siswa->noujian;
           $tes->pin = $siswa->login->pin;
-          $tes->kode_soal = $soal->kode_soal;
           $tes->soal_item = $soal->uuid;
           $tes->opsi = json_encode($opsis);
 
@@ -196,7 +236,6 @@ class UjianController extends Controller
         $soal = ItemSoal::where('uuid',$uuid)->first();
         $tes = Tes::where('noujian',$siswa->noujian)
         ->where('pin',$siswa->login->pin)
-        ->where('kode_soal',$soal->kode_soal)
         ->where('soal_item',$soal->uuid)
         ->first();
 
@@ -221,15 +260,20 @@ class UjianController extends Controller
     public function nilai()
     {
       $siswa = Auth::guard('siswa')->user();
+      if (is_null($siswa->login->end)) {
+        $siswa->login()->update([
+          'end'=>Carbon::now()
+        ]);
+      }
       $nilai = null;
       $nbenar = null;
-      $soal = $siswa->login->jadwal->getSoal;
-      $bobot = $soal->bobot;
-      $jumlah_soal = $soal->item()->where('jenis_soal','P')->count();
+      $jadwal = $siswa->login->jadwal;
+      $bobot = $jadwal->bobot;
+      $jumlah_soal = count(json_decode($siswa->login->soal_ujian));
       $dtes = Tes::where('noujian',$siswa->noujian)
-      ->where('pin',$siswa->login->pin)->get();
+      ->where('pin',$siswa->login->pin)->whereIn('soal_item',json_decode($siswa->login->soal_ujian))->get();
       foreach ($dtes as $key => $tes) {
-        $benar = @$soal->item()->where('uuid',$tes->soal_item)->first()->benar;
+        $benar = $tes->soalItem->benar;
         if (!is_null($benar) && (string) $tes->jawaban == (string) $benar && $tes->soalItem->jenis_soal=='P') {
           if (is_null($nbenar)) {
             $nbenar = 0;
@@ -269,7 +313,7 @@ class UjianController extends Controller
     {
       $siswa = Auth::guard('siswa');
       if ($siswa->user()) {
-        $siswa->user()->login()->delete();
+        // $siswa->user()->login()->delete();
         $siswa->logout();
         session()->flush();
       }

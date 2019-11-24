@@ -28,7 +28,7 @@
           <label class="bmd-label-floating">Acak Opsi</label>
           <select class="form-control" name="acak_soal">
             <option value="Y">Ya</option>
-            <option selected value="N">Tidak</option>
+            <option value="N">Tidak</option>
           </select>
         </div>
       </div>
