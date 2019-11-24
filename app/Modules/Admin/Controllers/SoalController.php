@@ -76,7 +76,6 @@ class SoalController extends Controller
       $soal->kode = $r->kode;
       $soal->nama = $r->nama;
       $soal->kode_mapel = $r->kode_mapel;
-      $soal->jenis = $r->jenis;
 
       if ($soal->save()) {
         return redirect()->back()->with('message', 'Data berhasil disimpan');
@@ -112,10 +111,12 @@ class SoalController extends Controller
       $soal = Soal::where('uuid',$uuid)->first();
       $soal->nama = $r->nama;
       $soal->kode_mapel = $r->kode_mapel;
-      $soal->jenis = $r->jenis;
-      $soal->item()->update(['kode_soal'=>$r->kode]);
-      $soal->tes()->update(['kode_soal'=>$r->kode]);
-      $soal->jadwal()->update(['kode_soal'=>$r->kode]);
+      if ($soal->item) {
+        $soal->item()->update(['kode_soal'=>$r->kode]);
+      }
+      if ($soal->tes) {
+        $soal->tes()->update(['kode_soal'=>$r->kode]);
+      }
       $soal->kode = $r->kode;
 
       if ($soal->save()) {
@@ -277,7 +278,9 @@ class SoalController extends Controller
     public function itemDestroy($uuid)
     {
         $soal = ItemSoal::where('uuid',$uuid)->first();
-        $soal->tes()->forceDelete();
+        if ($soal->tes) {
+          $soal->tes()->forceDelete();
+        }
         if ($soal->delete()) {
           return redirect()->back()->with('message', 'Data berhasil dihapus');
         }
