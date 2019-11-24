@@ -22,8 +22,4 @@ class Soal extends Model
   {
     return $this->hasMany(Tes::class,'kode_soal','kode');
   }
-  public function jadwal()
-  {
-    return $this->hasOne(JadwalUjian::class,'kode_soal','kode');
-  }
 }

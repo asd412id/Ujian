@@ -133,9 +133,6 @@ class SoalController extends Controller
         if ($soal->tes) {
           $soal->tes()->forceDelete();
         }
-        if ($soal->jadwal) {
-          $soal->jadwal()->forceDelete();
-        }
         if ($soal->delete()) {
           return redirect()->back()->with('message', 'Data berhasil dihapus');
         }
