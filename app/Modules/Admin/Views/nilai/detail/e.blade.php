@@ -8,7 +8,7 @@
     @foreach ($soal as $key => $s)
       @php
       $opsis = json_decode($s->opsi);
-      $ss = $siswa->login->tes()->where('soal_item',$s->uuid)->first();
+      $ss = \App\Models\Tes::where('soal_item',$s->uuid)->where('noujian',$siswa->noujian)->where('pin',$jadwal->pin)->first();
       @endphp
       <tr>
         <td align="center">{{ ($key+1).'.' }}</td>
