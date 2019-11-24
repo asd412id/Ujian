@@ -323,7 +323,7 @@ $get_params = http_build_query($get_params);
 		<!-- CSS adjustments for browsers with JavaScript disabled -->
 		<noscript><link rel="stylesheet" href="css/jquery.fileupload-noscript.css"></noscript>
 		<noscript><link rel="stylesheet" href="css/jquery.fileupload-ui-noscript.css"></noscript>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jplayer/2.2.0/skin/blue.monday/jplayer.blue.monday.min.css" />
+		<link rel="stylesheet" href="js/jplayer.blue.monday.min.css" />
 		<link href="css/style.css?v=<?php echo $version; ?>" rel="stylesheet" type="text/css" />
 	<!--[if lt IE 8]><style>
 	.img-container span, .img-container-mini span {
@@ -332,23 +332,23 @@ $get_params = http_build_query($get_params);
 	}
 	</style><![endif]-->
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-ui.min.js" type="text/javascript"></script>
 	<script src="js/plugins.js?v=<?php echo $version; ?>"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jplayer/2.9.2/jplayer/jquery.jplayer.min.js"></script>
+	<script src="js/jquery.jplayer.min.js"></script>
 	<script src="js/modernizr.custom.js"></script>
 
 	<?php
 	if ($config['aviary_active']){
 	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) { ?>
-		<script src="https://dme0ih8comzn4.cloudfront.net/imaging/v3/editor.js"></script>
+		<script src="js/editor.js"></script>
 	<?php }else{ ?>
 		<script src="http://feather.aviary.com/imaging/v3/editor.js"></script>
 	<?php }} ?>
 
 	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+	<script src="js/html5shiv.js"></script>
 	<![endif]-->
 
 	<script>
@@ -396,11 +396,11 @@ $get_params = http_build_query($get_params);
 </head>
 <body>
 <!-- The Templates plugin is included to render the upload/download listings -->
-<script src="//blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
+<script src="js/tmpl.min.js"></script>
 <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+<script src="js/load-image.all.min.js"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+<script src="js/canvas-to-blob.min.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
 <script src="js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
