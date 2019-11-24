@@ -127,8 +127,12 @@ class SoalController extends Controller
     public function destroy($uuid)
     {
         $soal = Soal::where('uuid',$uuid)->first();
-        $soal->item()->forceDelete();
-        $soal->tes()->forceDelete();
+        if ($soal->item) {
+          $soal->item()->forceDelete();
+        }
+        if ($soal->tes) {
+          $soal->tes()->forceDelete();
+        }
         $soal->jadwal()->forceDelete();
         if ($soal->delete()) {
           return redirect()->back()->with('message', 'Data berhasil dihapus');
