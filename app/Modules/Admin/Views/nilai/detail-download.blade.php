@@ -95,17 +95,17 @@
               <th colspan="3">Keterangan</th>
             </tr>
             @php
-              $terjawab = App\Models\Tes::where('noujian',$siswa->noujian)->where('pin',$siswa->login->pin)->whereIn('soal_item',json_decode($siswa->login->soal_ujian))->whereNotNull('jawaban')->count();
+              $terjawab = App\Models\Tes::where('noujian',$siswa->noujian)->where('pin',$siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->pin)->whereIn('soal_item',json_decode($siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->soal_ujian))->whereNotNull('jawaban')->count();
             @endphp
             <tr>
               <td>Terjawab</td>
               <td>:</td>
-              <td>{{ $terjawab.' Soal' }}</td>
+              <td>{{ $terjawab }}</td>
             </tr>
             <tr>
               <td>Tidak Dijawab</td>
               <td>:</td>
-              <td>{{ (count(json_decode($siswa->login->soal_ujian)))-$terjawab.' Soal' }}</td>
+              <td>{{ (count(json_decode($siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->soal_ujian)))-$terjawab }}</td>
             </tr>
             <tr>
               <td>Jawaban Benar</td>
