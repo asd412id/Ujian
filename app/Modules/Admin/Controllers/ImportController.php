@@ -353,17 +353,13 @@ class ImportController extends Controller
           return redirect()->back()->withErrors('Kode Mata Pelajaran tidak boleh kosong!');
         }elseif (trim($sheet->getCell('C4')->getValue())=='') {
           return redirect()->back()->withErrors('Jenis soal harus dipilih!');
-        }elseif (trim($sheet->getCell('C5')->getValue())=='') {
-          return redirect()->back()->withErrors('Bobot tidak boleh kosong!');
         }
 
         $kode = trim($sheet->getCell('C1')->getValue());
         $nama = trim($sheet->getCell('C2')->getValue());
         $mapel = Mapel::where('kode',trim($sheet->getCell('C3')->getValue()))->first();
         $jenis_soal = trim($sheet->getCell('C4')->getValue())=='Pilihan Ganda'?'P':'E';
-        $bobot = trim($sheet->getCell('C5')->getValue());
-        $jenis_ujian = trim($sheet->getCell('C6')->getValue());
-        $acak_opsi = trim($sheet->getCell('C7')->getValue())=='Ya'?'Y':'N';
+        $acak_opsi = trim($sheet->getCell('C5')->getValue())=='Ya'?'Y':'N';
 
         $bank = Soal::where('kode',$kode)->first();
         if (!$bank) {
