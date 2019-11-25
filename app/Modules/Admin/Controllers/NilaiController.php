@@ -128,8 +128,10 @@ class NilaiController extends Controller
         $sheet->setCellValue('C'.($i+1), $v->nama);
         $benar = 0;
         $nilai = 0;
-        if ($v->attemptLogin()->where('pin',$jadwal->pin)->first()) {
-          $soal = ItemSoal::whereIn('uuid',json_decode($v->attemptLogin()->where('pin',$jadwal->pin)->first()->soal_ujian))->get();
+
+        $login = $v->attemptLogin()->where('pin',$jadwal->pin)->first();
+        if ($login && $login->soal_ujian != '' && !is_null($login->soal_ujian)) {
+          $soal = ItemSoal::whereIn('uuid',json_decode($login->soal_ujian))->get();
           foreach ($soal as $key1 => $s) {
             $tes = Tes::where('noujian',$v->noujian)->where('soal_item',$s->uuid)->where('pin',$jadwal->pin)->first();
 
