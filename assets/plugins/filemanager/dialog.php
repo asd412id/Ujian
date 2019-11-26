@@ -92,7 +92,7 @@ if (!isset($_SESSION['RF']["subfolder"]))
 }
 $rfm_subfolder = '';
 
-if (!empty($_SESSION['RF']["subfolder"]) 
+if (!empty($_SESSION['RF']["subfolder"])
 	&& strpos($_SESSION['RF']["subfolder"],"/") !== 0
 	&& strpos($_SESSION['RF']["subfolder"],'.') === FALSE
 )
@@ -679,9 +679,7 @@ foreach($files as $k=>$file){
 			'extension'=>fix_strtolower($file_ext)
 		);
 	}else{
-
-
-		if($file!="." && $file!=".."){
+		if($file!="." && $file!=".." && $file!='.gitignore'){
 			if(is_dir($config['current_path'].$rfm_subfolder.$subdir.$file)){
 				$date=filemtime($config['current_path'].$rfm_subfolder.$subdir. $file);
 				$current_folders_number++;
@@ -1172,7 +1170,7 @@ $files=$sorted;
 			$file_prevent_rename = isset($filePermissions[$file]['prevent_rename']) && $filePermissions[$file]['prevent_rename'];
 			$file_prevent_delete = isset($filePermissions[$file]['prevent_delete']) && $filePermissions[$file]['prevent_delete'];
 			}
-			?>		
+			?>
 			<figure data-name="<?php echo $file ?>" data-path="<?php echo $rfm_subfolder.$subdir.$file;?>" data-type="<?php if($is_img){ echo "img"; }else{ echo "file"; } ?>">
 				<a href="javascript:void('')" class="link" data-file="<?php echo $file;?>" data-function="<?php echo $apply;?>">
 				<div class="img-precontainer">

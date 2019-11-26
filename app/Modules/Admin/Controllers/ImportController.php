@@ -229,109 +229,6 @@ class ImportController extends Controller
       return $status;
     }
 
-    public function importSoalOld(Request $r)
-    {
-      if ($r->file('excel')->isValid()) {
-        $ext = ['xlsx','xls','bin','ods'];
-        if (in_array($r->excel->extension(),$ext)) {
-          if ($r->excel->extension()=='ods') {
-            $reader = new Ods;
-          }else {
-            $reader = new Xlsx;
-          }
-          $spreadsheet = $reader->load($r->excel->path());
-
-          $sheets = $spreadsheet->getActiveSheet();
-
-          if (trim($sheets->getCell('E1')->getValue())=='') {
-            return redirect()->back()->withErrors('Kode Bank Soal tidak boleh kosong!');
-          }elseif (trim($sheets->getCell('E3')->getValue())=='') {
-            return redirect()->back()->withErrors('Kode Kelas tidak boleh kosong!');
-          }elseif (trim($sheets->getCell('E4')->getValue())=='') {
-            return redirect()->back()->withErrors('Kode Mata Pelajaran tidak boleh kosong!');
-          }elseif (trim($sheets->getCell('E5')->getValue())=='') {
-            return redirect()->back()->withErrors('Jenis soal harus dipilih!');
-          }elseif (trim($sheets->getCell('E6')->getValue())=='') {
-            return redirect()->back()->withErrors('Bobot tidak boleh kosong!');
-          }
-
-          $kode = trim($sheets->getCell('E1')->getValue());
-          $nama = trim($sheets->getCell('E2')->getValue());
-          $kelas = Kelas::where('kode',trim($sheets->getCell('E3')->getValue()))->first();
-          $mapel = Mapel::where('kode',trim($sheets->getCell('E4')->getValue()))->first();
-          $jenis_soal = trim($sheets->getCell('E5')->getValue())=='Pilihan Ganda'?'P':'E';
-          $bobot = trim($sheets->getCell('E6')->getValue());
-          $jenis_ujian = trim($sheets->getCell('E7')->getValue());
-
-          if (!$kelas) {
-            return redirect()->back()->withErrors('Kode kelas tidak tersedia!');
-          }elseif (!$mapel) {
-            return redirect()->back()->withErrors('Kode mata pelajaran tidak tersedia!');
-          }
-
-          $bank = Soal::where('kode',$kode)->first();
-          if (!$bank) {
-            $bank = new Soal;
-            $bank->uuid = (string)Str::uuid();
-            $bank->kode = $kode;
-          }
-          $bank->item()->forceDelete();
-          $bank->tes()->forceDelete();
-          $bank->nama = $nama;
-          $bank->kode_mapel = $mapel->kode;
-          $bank->jenis = $jenis_ujian;
-          $bank->bobot = $bobot;
-
-          if ($bank->save()) {
-            $status = true;
-            $soal = null;
-            $benar = 0;
-            $opsi = [];
-            foreach ($sheets->getRowIterator() as $key => $row) {
-              if (is_numeric($sheets->getCellByColumnAndRow(1,$key)->getValue())) {
-                if ($soal) {
-                  $item = new ItemSoal;
-                  $item->uuid = (string) Str::uuid();
-                  $item->jenis_soal = $jenis_soal;
-                  $item->soal = strip_tags($soal);
-                  $item->acak_opsi = $jenis_soal=='P'?'Y':'N';
-                  $item->opsi = $jenis_soal=='P'?json_encode($opsi):null;
-
-                  $item->benar = $benar;
-                  $status = $item->save();
-                }
-                $soal = $sheets->getCellByColumnAndRow(2,$key)->getValue();
-                $opsi = [];
-              }else {
-                if ($sheets->getStyle('B'.$key)->getFont()->getBold()) {
-                  $benar = count($opsi);
-                }
-                if ($sheets->getCellByColumnAndRow(2,$key)->getValue()!=''&&$soal) {
-                  array_push($opsi,$sheets->getCellByColumnAndRow(2,$key)->getValue());
-                }
-              }
-            }
-            if ($soal) {
-              $item = new ItemSoal;
-              $item->uuid = (string) Str::uuid();
-              $item->kode_soal = $kode;
-              $item->jenis_soal = $jenis_soal;
-              $item->soal = strip_tags($soal);
-              $item->acak_opsi = $jenis_soal=='P'?'Y':'N';
-              $item->opsi = $jenis_soal=='P'?json_encode($opsi):null;
-
-              $item->benar = $jenis_soal=='P'?$benar:null;
-              $status = $item->save();
-            }
-            if ($status) {
-              return redirect()->back()->with('message','Soal berhasil diimpor!');
-            }
-          }
-        }
-      }
-      return redirect()->back()->withErrors('File bukan file Excel/Spreadsheet!');
-    }
-
     public function importSoal(Request $r)
     {
       $ext = ['xlsx','xls','bin','ods'];
@@ -360,6 +257,14 @@ class ImportController extends Controller
         $mapel = Mapel::where('kode',trim($sheet->getCell('C3')->getValue()))->first();
         $jenis_soal = trim($sheet->getCell('C4')->getValue())=='Pilihan Ganda'?'P':'E';
         $acak_opsi = trim($sheet->getCell('C5')->getValue())=='Ya'?'Y':'N';
+
+		if (!$mapel) {
+          return redirect()->back()->withErrors('Kode mata pelajaran tidak tersedia!');
+        }elseif (!$jenis_soal) {
+          return redirect()->back()->withErrors('Jenis soal tidak boleh kosong!');
+        }elseif ($jenis_soal != 'P' && $jenis_soal != 'E') {
+          return redirect()->back()->withErrors('Jenis soal tidak benar! Pastikan anda menggunakan template soal untuk mengimport!');
+        }
 
         $bank = Soal::where('kode',$kode)->first();
         if (!$bank) {
