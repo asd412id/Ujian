@@ -92,7 +92,7 @@ if (!isset($_SESSION['RF']["subfolder"]))
 }
 $rfm_subfolder = '';
 
-if (!empty($_SESSION['RF']["subfolder"]) 
+if (!empty($_SESSION['RF']["subfolder"])
 	&& strpos($_SESSION['RF']["subfolder"],"/") !== 0
 	&& strpos($_SESSION['RF']["subfolder"],'.') === FALSE
 )
@@ -678,14 +678,45 @@ foreach($files as $k=>$file){
 			'permissions' => $file['permissions'],
 			'extension'=>fix_strtolower($file_ext)
 		);
-	}else if($file != "." && $file != ".." && $file != ".gitignore"){
-		if(is_dir($config['current_path'].$rfm_subfolder.$subdir.$file)){
-			$date=filemtime($config['current_path'].$rfm_subfolder.$subdir. $file);
-			$current_folders_number++;
-			if($config['show_folder_size']){
-				list($size,$nfiles,$nfolders) = folder_info($config['current_path'].$rfm_subfolder.$subdir.$file,false);
-			} else {
-				$size=0;
+	}else{
+		if($file!="." && $file!=".." && $file!='.gitignore'){
+			if(is_dir($config['current_path'].$rfm_subfolder.$subdir.$file)){
+				$date=filemtime($config['current_path'].$rfm_subfolder.$subdir. $file);
+				$current_folders_number++;
+				if($config['show_folder_size']){
+					list($size,$nfiles,$nfolders) = folder_info($config['current_path'].$rfm_subfolder.$subdir.$file,false);
+				} else {
+					$size=0;
+				}
+				$file_ext=trans('Type_dir');
+				$sorted[$k]=array(
+					'is_dir'=>true,
+					'file'=>$file,
+					'file_lcase'=>strtolower($file),
+					'date'=>$date,
+					'size'=>$size,
+					'permissions' =>'',
+					'extension'=>fix_strtolower($file_ext)
+				);
+				if($config['show_folder_size']){
+					$sorted[$k]['nfiles'] = $nfiles;
+					$sorted[$k]['nfolders'] = $nfolders;
+				}
+			}else{
+				$current_files_number++;
+				$file_path=$config['current_path'].$rfm_subfolder.$subdir.$file;
+				$date=filemtime($file_path);
+				$size=filesize($file_path);
+				$file_ext = substr(strrchr($file,'.'),1);
+				$sorted[$k]=array(
+					'is_dir'=>false,
+					'file'=>$file,
+					'file_lcase'=>strtolower($file),
+					'date'=>$date,
+					'size'=>$size,
+					'permissions' =>'',
+					'extension'=>strtolower($file_ext)
+				);
 			}
 			$file_ext=trans('Type_dir');
 			$sorted[$k]=array(
@@ -1168,7 +1199,7 @@ $files=$sorted;
 			$file_prevent_rename = isset($filePermissions[$file]['prevent_rename']) && $filePermissions[$file]['prevent_rename'];
 			$file_prevent_delete = isset($filePermissions[$file]['prevent_delete']) && $filePermissions[$file]['prevent_delete'];
 			}
-			?>		
+			?>
 			<figure data-name="<?php echo $file ?>" data-path="<?php echo $rfm_subfolder.$subdir.$file;?>" data-type="<?php if($is_img){ echo "img"; }else{ echo "file"; } ?>">
 				<a href="javascript:void('')" class="link" data-file="<?php echo $file;?>" data-function="<?php echo $apply;?>">
 				<div class="img-precontainer">
