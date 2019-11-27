@@ -28,7 +28,7 @@
                     @php
 $index = Request::get('page')??1;
 @endphp
-<td>{{ (($index-1)*10)+$key+1 }}</td>
+<td>{{ (($index-1)*30)+$key+1 }}</td>
                     <td>{{ $v->kode??'-' }}</td>
                     <td>{{ $v->nama??'-' }}</td>
                     <td style="white-space: nowrap;width: 50px" class="text-right">

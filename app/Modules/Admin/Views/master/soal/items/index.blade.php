@@ -30,7 +30,7 @@
                     @php
                     $index = Request::get('page')??1;
                     @endphp
-                    <td style="vertical-align: top">{{ (($index-1)*10)+$key+1 }}</td>
+                    <td style="vertical-align: top">{{ (($index-1)*30)+$key+1 }}</td>
                     <td style="white-space: nowrap;vertical-align: top">{{ $v->jenis_soal=='P'?'Pilihan Ganda':'Essay' }}</td>
                     <td style="vertical-align: top">{{ $v->soal?$helper->limitText(strip_tags($v->soal),25):'-' }}</td>
                     <td style="vertical-align: top">{{ $v->jenis_soal=='P'&&!is_null($v->opsi)&&$v->opsi!='null'?count(json_decode($v->opsi)):'-' }}</td>

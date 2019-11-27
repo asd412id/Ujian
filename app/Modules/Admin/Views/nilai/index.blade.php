@@ -33,7 +33,7 @@
                     @php
                     $index = Request::get('page')??1;
                     @endphp
-                    <td>{{ (($index-1)*10)+$key+1 }}</td>
+                    <td>{{ (($index-1)*30)+$key+1 }}</td>
                     <td>{{ $v->nama_ujian }}</td>
                     <td>{{ $v->pin }}</td>
                     <td>{{ $v->jumlah_soal }}</td>

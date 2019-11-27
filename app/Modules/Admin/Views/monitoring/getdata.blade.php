@@ -51,10 +51,7 @@
         }
         @endphp
         <tr>
-          @php
-          $index = Request::get('page')??1;
-          @endphp
-          <td>{{ (($index-1)*10)+$key+1 }}</td>
+          <td>{{ $key+1 }}</td>
           <td>{{ $v->siswa->noujian??'-' }}</td>
           <td>{{ $v->siswa->nama??'-' }}</td>
           <td>

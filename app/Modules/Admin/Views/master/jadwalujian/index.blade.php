@@ -35,7 +35,7 @@
                     @php
                     $index = Request::get('page')??1;
                     @endphp
-                    <td style="vertical-align: top">{{ (($index-1)*10)+$key+1 }}</td>
+                    <td style="vertical-align: top">{{ (($index-1)*30)+$key+1 }}</td>
                     <td style="vertical-align: top">{{ $v->nama_ujian }}</td>
                     <td style="vertical-align: top">{{ @count(json_decode($v->peserta)) }}</td>
                     <td style="vertical-align: top">{{ $v->jumlah_soal }}</td>

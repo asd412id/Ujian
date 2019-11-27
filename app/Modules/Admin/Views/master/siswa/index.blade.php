@@ -32,7 +32,7 @@
                     @php
 $index = Request::get('page')??1;
 @endphp
-<td>{{ (($index-1)*10)+$key+1 }}</td>
+<td>{{ (($index-1)*30)+$key+1 }}</td>
                     <td>{{ $v->noujian??'-' }}</td>
                     <td>{{ $v->nik??'-' }}</td>
                     <td>{{ $v->nama??'-' }}</td>
