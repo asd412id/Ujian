@@ -9,7 +9,7 @@
       <div class="col-md-12">
         <div class="form-group">
           <label class="bmd-label-floating">Soal</label>
-          <textarea name="soal" rows="8" id="soal" class="form-control" placeholder="Tulis soal disini...">{{ $item->soal }}</textarea>
+          <textarea name="soal" rows="8" id="soal" class="form-control" placeholder="Tulis soal disini...">{!! nl2br($item->soal) !!}</textarea>
         </div>
       </div>
     </div>
