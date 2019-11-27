@@ -303,10 +303,49 @@ class ImportController extends Controller
               if ($soal instanceof RichText) {
                 $newsoal = '';
                 foreach ($soal->getRichTextElements() as $richTextElement) {
-                  if ($richTextElement->getFont()->getBold()) {
-                    $newsoal .= '<strong>'.$richTextElement->getText().'</strong>';
-                  }else {
-                    $newsoal .= $richTextElement->getText();
+                  $st = 0;
+                  if ($richTextElement->getFont()) {
+                    $styles = '';
+                    if ($richTextElement->getFont()->getBold() === true) {
+                      $st = 1;
+                      $styles = $styles == '' ? $richTextElement->getText() : $styles;
+                      $styles = sprintf('<strong>%s</strong>',$styles);
+                    }
+                    if ($richTextElement->getFont()->getItalic() === true) {
+                      $st = 1;
+                      $styles = $styles == '' ? $richTextElement->getText() : $styles;
+                      $styles = sprintf('<em>%s</em>',$styles);
+                    }
+                    if ($richTextElement->getFont()->getUnderline() !== 'none') {
+                      $st = 1;
+                      $styles = $styles == '' ? $richTextElement->getText() : $styles;
+                      $styles = sprintf('<u>%s</u>',$styles);
+                    }
+                    if ($richTextElement->getFont()->getStrikethrough() === true) {
+                      $st = 1;
+                      $styles = $styles == '' ? $richTextElement->getText() : $styles;
+                      $styles = sprintf('<strike>%s</strike>',$styles);
+                    }
+                    if ($richTextElement->getFont()->getColor()->getRGB() != '000000') {
+                      $st = 1;
+                      $styles = $styles == '' ? $richTextElement->getText() : $styles;
+                      $styles = sprintf('<span style="color: #'.$richTextElement->getFont()->getColor()->getRGB().'">%s</span>', $styles);
+                    }
+                    if ($richTextElement->getFont()->getSuperscript() === true) {
+                      $st = 1;
+                      $styles = $styles == '' ? $richTextElement->getText() : $styles;
+                      $styles = sprintf('<sup>%s</sup>',$styles);
+                    }
+                    if ($richTextElement->getFont()->getSubscript() === true) {
+                      $st = 1;
+                      $styles = $styles == '' ? $richTextElement->getText() : $styles;
+                      $styles = sprintf('<sub>%s</sub>',$styles);
+                    }
+
+                    if (!$st) {
+                      $newsoal .= $richTextElement->getText();
+                    }
+                    $newsoal .= $styles;
                   }
                 }
                 $soal = $newsoal;

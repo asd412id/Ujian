@@ -85,7 +85,9 @@
             auto_focus: 'soal',
             menubar: false,
             statusbar: false,
-            toolbar1: "undo redo bold italic underline strikethrough removeformat",
+            height: 250,
+            toolbar1: "undo redo bold italic underline strikethrough forecolor removeformat superscript subscript",
+            plugins:["advlist autolink link image lists charmap print preview hr anchor pagebreak","searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking","table contextmenu directionality emoticons paste textcolor responsivefilemanager fontawesome noneditable code"],
             setup: function (editor) {
               editor.on('change', function () {
                 tinymce.triggerSave();
