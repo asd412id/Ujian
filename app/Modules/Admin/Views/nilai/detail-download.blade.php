@@ -33,7 +33,7 @@
               <th>{{ $siswa->noujian }}</th>
             </tr>
             <tr>
-              <td>NISN</td>
+              <td>NO. UJIAN</td>
               <td align="center">:</td>
               <th>{{ $siswa->nik }}</th>
             </tr>
@@ -52,11 +52,6 @@
         <div class="col-sm-6" style="float: right !important">
           <table class="table table-info">
             <tr>
-              <td style="width: 150px">PIN</td>
-              <td align="center" style="width: 15px">:</td>
-              <th>{{ $jadwal->pin }}</th>
-            </tr>
-            <tr>
               <td style="width: 150px">UJIAN</td>
               <td align="center" style="width: 15px">:</td>
               <th>{{ $jadwal->nama_ujian }}</th>
@@ -70,6 +65,11 @@
               <td>BOBOT</td>
               <td align="center">:</td>
               <th>{{ $jadwal->bobot }}</th>
+            </tr>
+            <tr>
+              <td style="width: 150px">PIN</td>
+              <td align="center" style="width: 15px">:</td>
+              <th>{{ $jadwal->pin }}</th>
             </tr>
             @if ($jadwal->jenis_soal=='P')
               <tr>
@@ -119,10 +119,11 @@
             </tr>
           </table>
         </div>
-        <div class="col-sm-6 pull-right text-center" style="width: 400px">
+        <div class="pull-right" style="width: 300px">
           <p>{{ $sekolah->kota.', '.date('d').' '.$helper->bulan(date('m')).' '.date('Y') }}</p>
-          <p style="margin-bottom: 75px">Mengetahui</p>
-          <p>(Orang Tua/Wali Murid)</p>
+          <p>Mengetahui</p>
+          <p style="margin-bottom: 125px">Orang Tua/Wali Murid</p>
+          <p>[.........................................................]</p>
         </div>
       </div>
     </div>

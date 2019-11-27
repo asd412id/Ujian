@@ -123,11 +123,12 @@
           </table>
         </div>
       </div>
-      <div class="row" style="margin-bottom: 45px;page-break-inside: avoid !important;">
-        <div class="col-sm-6 pull-right text-center" style="width: 400px">
+      <div class="row" style="margin-bottom: 45px;margin-top: 30px;page-break-inside: avoid !important;">
+        <div class="pull-right" style="width: 300px">
           <p>{{ $sekolah->kota.', '.date('d').' '.$helper->bulan(date('m')).' '.date('Y') }}</p>
-          <p style="margin-bottom: 75px">Mengetahui</p>
-          <p>(Kepala Sekolah)</p>
+          <p>Mengetahui</p>
+          <p style="margin-bottom: 125px">Kepala {{ $sekolah->nama }}</p>
+          <p>[.......................................................]</p>
         </div>
       </div>
     </div>
