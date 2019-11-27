@@ -8,6 +8,7 @@
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="time-now" content="{{ Carbon\Carbon::now()->format('D M d Y H:i:s e+') }}">
+  <meta name="home-url" content="{{ url('/') }}">
   @php
     $sekolah = App\Models\Sekolah::first();
   @endphp
@@ -25,6 +26,9 @@
   <link href="{{ url('assets/css/bootstrap-material-datetimepicker.css') }}" rel="stylesheet" />
   <link href="{{ url('assets/css/material-dashboard.css?v=2.1.1') }}" rel="stylesheet" />
   <style media="screen">
+    html,body{
+      height: 100%;
+    }
     .pagination{
       float: right;
     }

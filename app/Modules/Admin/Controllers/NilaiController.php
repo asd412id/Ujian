@@ -22,7 +22,7 @@ class NilaiController extends Controller
 
     public function index()
     {
-      $jadwal = JadwalUjian::with('tes')->paginate(10)->appends(request()->except('page'));
+      $jadwal = JadwalUjian::with('tes')->paginate(30)->appends(request()->except('page'));
       return view("Admin::nilai.index",[
         'title'=>'Nilai Ujian - Administrator',
         'breadcrumb'=>'Nilai Ujian',

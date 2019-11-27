@@ -21,7 +21,7 @@ class KelasController extends Controller
         ->orWhere('tingkat','ilike',$role);
       })
       ->orderBy('id','asc')
-      ->paginate(10)->appends(request()->except('page'));
+      ->paginate(30)->appends(request()->except('page'));
       $data = [
         'title' => 'Master Kelas - Administrator',
         'breadcrumb' => 'Master Kelas',

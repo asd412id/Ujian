@@ -48,15 +48,15 @@
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Soal Ujian</label>
-          <select class="form-control" id="get_soal" name="soal[]" multiple>
+          <select class="form-control select2-multiple" id="get_soal" name="soal[]" data-url="{{ route('jadwal.ujian.ajax.getsoal') }}" data-placeholder="Cari bank soal">
             @foreach ($soal as $key => $v)
               <option {{ in_array($v->uuid,$getSoal)?'selected':'' }} value="{{ $v->uuid }}">{{ '('.$v->kode.') '.$v->nama }}</option>
             @endforeach
           </select>
         </div>
         <div class="form-group">
-          <label class="bmd-label-floating">Kelas</label>
-          <select class="form-control" name="peserta[]" multiple>
+          <label class="bmd-label-floating">Peserta</label>
+          <select class="form-control select2-multiple" id="get_peserta" name="peserta[]" data-url="{{ route('jadwal.ujian.ajax.getpeserta') }}" data-placeholder="Cari peserta">
             @if (count($siswa))
               @foreach ($siswa as $key => $v)
                 <option {{ in_array($v->uuid,$getPeserta)?'selected':'' }} value="{{ $v->uuid }}">{{ '('.$v->kelas->nama.') ('.$v->noujian.') '.$v->nama }}</option>
@@ -92,6 +92,7 @@
   </div>
 </form>
 <script>
+initModalScripts();
 $("#form-data").submit(function(e){
   var form = $(this);
   e.preventDefault();

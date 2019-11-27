@@ -27,7 +27,7 @@ class SiswaController extends Controller
         });
       })
       ->orderBy('id','asc')
-      ->paginate(10)->appends(request()->except('page'));
+      ->paginate(30)->appends(request()->except('page'));
       $data = [
         'title' => 'Master Siswa - Administrator',
         'breadcrumb' => 'Master Siswa',

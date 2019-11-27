@@ -35,32 +35,22 @@
       <div class="col-md-8">
         <div class="form-group">
           <label class="bmd-label-floating">Jenis Soal</label>
-          <select class="form-control" id="jenis_soal" name="jenis_soal">
+          <select class="form-control select2" id="jenis_soal" name="jenis_soal">
             <option value="P">Pilihan Ganda</option>
             <option value="E">Essay</option>
           </select>
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Soal Ujian</label>
-          <select class="form-control" id="get_soal" name="soal[]" multiple>
-            @foreach ($soal as $key => $v)
-              <option value="{{ $v->uuid }}">{{ '('.$v->kode.') '.$v->nama }}</option>
-            @endforeach
-          </select>
+          <select class="form-control select2-multiple" id="get_soal" name="soal[]" data-url="{{ route('jadwal.ujian.ajax.getsoal') }}" data-placeholder="Cari bank soal"></select>
         </div>
         <div class="form-group">
-          <label class="bmd-label-floating">Kelas</label>
-          <select class="form-control" name="peserta[]" multiple>
-            @if (count($siswa))
-              @foreach ($siswa as $key => $v)
-                <option value="{{ $v->uuid }}">{{ '('.$v->kelas->nama.') ('.$v->noujian.') '.$v->nama }}</option>
-              @endforeach
-            @endif
-          </select>
+          <label class="bmd-label-floating">Peserta</label>
+          <select class="form-control select2-multiple" id="get_peserta" name="peserta[]" data-url="{{ route('jadwal.ujian.ajax.getpeserta') }}" data-placeholder="Cari peserta"></select>
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Acak Soal</label>
-          <select class="form-control" name="acak_soal">
+          <select class="form-control select2" name="acak_soal">
             <option selected value="Y">Ya</option>
             <option value="N">Tidak</option>
           </select>
@@ -71,7 +61,7 @@
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Tampilkan Nilai</label>
-          <select class="form-control" name="tampil_nilai">
+          <select class="form-control select2" name="tampil_nilai">
             <option value="Y">Ya</option>
             <option selected value="N">Tidak</option>
           </select>
@@ -85,6 +75,7 @@
   </div>
 </form>
 <script>
+initModalScripts();
 $("#form-data").submit(function(e){
   var form = $(this);
   e.preventDefault();

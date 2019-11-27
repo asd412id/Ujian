@@ -95,6 +95,8 @@ Route::group(['module' => 'Admin', 'middleware' => ['web'], 'namespace' => 'App\
         Route::post('/update/{uuid}','JadwalUjianController@update')->name('jadwal.ujian.update');
         Route::get('/destroy/{uuid}','JadwalUjianController@destroy')->name('jadwal.ujian.destroy');
         Route::get('/print/{uuid}','JadwalUjianController@print')->name('jadwal.ujian.print');
+        Route::get('/ajax/get-peserta','JadwalUjianController@getPeserta')->name('jadwal.ujian.ajax.getpeserta');
+        Route::get('/ajax/get-soal','JadwalUjianController@getSoal')->name('jadwal.ujian.ajax.getsoal');
       });
 
       Route::group(['prefix'=>'monitoring'], function()

@@ -19,7 +19,7 @@ class MapelController extends Controller
         ->orWhere('nama','ilike',$role);
       })
       ->orderBy('id','asc')
-      ->paginate(10)->appends(request()->except('page'));
+      ->paginate(30)->appends(request()->except('page'));
       $data = [
         'title' => 'Master Mata Pelajaran - Administrator',
         'breadcrumb' => 'Master Mata Pelajaran',

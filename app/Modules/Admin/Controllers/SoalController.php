@@ -37,7 +37,7 @@ class SoalController extends Controller
         });
       })
       ->orderBy('id','asc')
-      ->paginate(10)->appends(request()->except('page'));
+      ->paginate(30)->appends(request()->except('page'));
       $data = [
         'title' => 'Bank Soal - Administrator',
         'breadcrumb' => 'Bank Soal',
@@ -150,7 +150,7 @@ class SoalController extends Controller
         ->orWhere('opsi','ilike',$role[1]);
         })
       ->orderBy('id','asc')
-      ->paginate(10)->appends(request()->except('page'));
+      ->paginate(30)->appends(request()->except('page'));
       $data = [
         'title' => 'Soal '.$soal->nama.' - Administrator',
         'breadcrumb' => 'Soal '.$soal->nama,
@@ -208,7 +208,7 @@ class SoalController extends Controller
       $item->uuid = (string) Str::uuid();
       $item->kode_soal = $soal->kode;
       $item->jenis_soal = $r->jenis_soal;
-      $item->soal = trim(strip_tags($r->soal,'<strong><b><em><i><br>'));
+      $item->soal = trim(strip_tags($r->soal,'<strong><b><em><i><br><span><u><strike><sup><sub>'));
       $item->acak_opsi = $r->jenis_soal=='P'?$r->acak_soal:null;
       $item->opsi = $r->jenis_soal=='P'?json_encode($r->opsi):null;
       $item->benar = $r->jenis_soal=='P'?$r->benar:null;
@@ -264,7 +264,7 @@ class SoalController extends Controller
       }
       $item = ItemSoal::where('uuid',$uuid)->first();
       $item->jenis_soal = $r->jenis_soal;
-      $item->soal = trim(strip_tags($r->soal,'<strong><b><em><i><br>'));
+      $item->soal = trim(strip_tags($r->soal,'<strong><b><em><i><br><span><u><strike><sup><sub>'));
       $item->acak_opsi = $r->jenis_soal=='P'?$r->acak_soal:null;
       $item->opsi = $r->jenis_soal=='P'?json_encode($r->opsi):null;
       $item->benar = $r->jenis_soal=='P'?$r->benar:null;

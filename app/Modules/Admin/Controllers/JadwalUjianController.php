@@ -35,7 +35,7 @@ class JadwalUjianController extends Controller
       })
       ->orderBy('aktif','desc')
       ->orderBy('updated_at','desc')
-      ->paginate(10)->appends(request()->except('page'));
+      ->paginate(30)->appends(request()->except('page'));
       $data = [
         'title' => 'Jadwal Ujian - Administrator',
         'breadcrumb' => 'Jadwal Ujian',
@@ -302,7 +302,7 @@ class JadwalUjianController extends Controller
         });
       })
       ->where('aktif',1)
-      ->paginate(10)->appends(request()->except('page'));
+      ->paginate(30)->appends(request()->except('page'));
       $data = [
         'title' => 'Monitoring Ujian - Administrator',
         'breadcrumb' => 'Monitoring Ujian',
@@ -424,5 +424,61 @@ class JadwalUjianController extends Controller
       ->setOption('margin-left',0)
       ->setOption('margin-right',0)
       ->stream($filename);
+    }
+
+    public function getPeserta(Request $r)
+    {
+      if ($r->ajax()) {
+        $result = [];
+        $search = $r->term;
+        $data = Siswa::whereHas('kelas',function($q) use($search){
+          $q->where('nama','ilike','%'.$search.'%');
+        })
+        ->orWhere('nama','ilike','%'.$search.'%')
+        ->select('uuid','noujian','kode_kelas','nama')
+        ->with('kelas')
+        ->orderBy('nama','asc')
+        ->get();
+
+        if (count($data)) {
+          foreach ($data as $key => $p) {
+            array_push($result,[
+              'id'=>$p->uuid,
+              'text'=>'('.$p->noujian.') '.$p->nama.' - Kelas '.($p->kelas->nama??'-').'/'.($p->kelas->jurusan??'-')
+            ]);
+          }
+        }
+
+        return response()->json($result);
+      }
+      return redirect()->route('admin.index');
+    }
+
+    public function getSoal(Request $r)
+    {
+      if ($r->ajax()) {
+        $result = [];
+        $search = $r->term;
+        $data = Soal::whereHas('mapel',function($q) use($search){
+          $q->where('nama','ilike','%'.$search.'%');
+        })
+        ->orWhere('nama','ilike','%'.$search.'%')
+        ->orWhere('kode','ilike','%'.$search.'%')
+        ->select('uuid','kode','nama')
+        ->orderBy('nama','asc')
+        ->get();
+
+        if (count($data)) {
+          foreach ($data as $key => $p) {
+            array_push($result,[
+              'id'=>$p->uuid,
+              'text'=>'('.$p->kode.') - '.$p->nama.' -  Soal: '.$p->item()->count()
+            ]);
+          }
+        }
+
+        return response()->json($result);
+      }
+      return redirect()->route('admin.index');
     }
 }
