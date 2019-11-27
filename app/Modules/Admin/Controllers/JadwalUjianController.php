@@ -48,10 +48,7 @@ class JadwalUjianController extends Controller
     {
       if ($r->ajax()) {
         $soal = Soal::all();
-        return view("Admin::master.jadwalujian.create",[
-          'soal'=>$soal,
-          'siswa'=>Siswa::orderBy('id','asc')->get()
-        ]);
+        return view("Admin::master.jadwalujian.create");
       }
       return redirect()->route('admin.index');
     }
@@ -187,11 +184,13 @@ class JadwalUjianController extends Controller
     public function edit(Request $r,$uuid)
     {
       if ($r->ajax()) {
-        $soal = Soal::all();
+        $jadwal = JadwalUjian::where('uuid',$uuid)->first();
+        $soal = Soal::whereIn('uuid',json_decode($jadwal->soal))->get();
+        $siswa = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->orderBy('nama','asc')->get();
         return view("Admin::master.jadwalujian.edit",[
+          'data'=>$jadwal,
           'soal'=>$soal,
-          'data'=>JadwalUjian::where('uuid',$uuid)->first(),
-          'siswa'=>Siswa::orderBy('id','asc')->get()
+          'siswa'=>$siswa
         ]);
       }
       return redirect()->route('admin.index');

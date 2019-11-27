@@ -32,48 +32,42 @@
           <input min="1" type="number" class="form-control" name="lama_ujian" value="{{ $data->lama_ujian }}">
         </div>
       </div>
-      @php
-        $getSoal = json_decode($data->soal);
-        $getPeserta = json_decode($data->peserta);
-        $soal = \App\Models\Soal::all();
-        $peserta = \App\Models\Siswa::all();
-      @endphp
       <div class="col-md-8">
         <div class="form-group">
           <label class="bmd-label-floating">Jenis Soal</label>
-          <select class="form-control" id="jenis_soal" name="jenis_soal">
+          <select class="form-control select2" id="jenis_soal" name="jenis_soal">
             <option {{ $data->jenis_soal=='P'?'selected':'' }} value="P">Pilihan Ganda</option>
             <option {{ $data->jenis_soal=='E'?'selected':'' }} value="E">Essay</option>
           </select>
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Soal Ujian</label>
-          <select class="form-control select2-multiple" id="get_soal" name="soal[]" data-url="{{ route('jadwal.ujian.ajax.getsoal') }}" data-placeholder="Cari bank soal">
+          <select class="form-control select2-multiple" id="get_soal" multiple name="soal[]" data-url="{{ route('jadwal.ujian.ajax.getsoal') }}" data-placeholder="Cari bank soal">
             @foreach ($soal as $key => $v)
-              <option {{ in_array($v->uuid,$getSoal)?'selected':'' }} value="{{ $v->uuid }}">{{ '('.$v->kode.') '.$v->nama }}</option>
+              <option selected value="{{ $v->uuid }}">{{ '('.$v->kode.') '.$v->nama }}</option>
             @endforeach
           </select>
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Peserta</label>
-          <select class="form-control select2-multiple" id="get_peserta" name="peserta[]" data-url="{{ route('jadwal.ujian.ajax.getpeserta') }}" data-placeholder="Cari peserta">
+          <select class="form-control select2-multiple" id="get_peserta" name="peserta[]" data-url="{{ route('jadwal.ujian.ajax.getpeserta') }}" multiple data-placeholder="Cari peserta">
             @if (count($siswa))
               @foreach ($siswa as $key => $v)
-                <option {{ in_array($v->uuid,$getPeserta)?'selected':'' }} value="{{ $v->uuid }}">{{ '('.$v->kelas->nama.') ('.$v->noujian.') '.$v->nama }}</option>
+                <option selected value="{{ $v->uuid }}">{{ '('.$v->kelas->nama.') ('.$v->noujian.') '.$v->nama }}</option>
               @endforeach
             @endif
           </select>
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Acak Soal</label>
-          <select class="form-control" name="acak_soal">
+          <select class="form-control select2" name="acak_soal">
             <option {{ $data->acak_soal=='Y'?'selected':'' }} value="Y">Ya</option>
             <option {{ $data->acak_soal=='N'?'selected':'' }} value="N">Tidak</option>
           </select>
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Tampilkan Nilai</label>
-          <select class="form-control" name="tampil_nilai">
+          <select class="form-control select2" name="tampil_nilai">
             <option {{ $data->tampil_nilai=='Y'?'selected':'' }} value="Y">Ya</option>
             <option {{ $data->tampil_nilai=='N'?'selected':'' }} value="N">Tidak</option>
           </select>

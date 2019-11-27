@@ -42,11 +42,11 @@
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Soal Ujian</label>
-          <select class="form-control select2-multiple" id="get_soal" name="soal[]" data-url="{{ route('jadwal.ujian.ajax.getsoal') }}" data-placeholder="Cari bank soal"></select>
+          <select class="form-control select2-multiple" id="get_soal" name="soal[]" data-url="{{ route('jadwal.ujian.ajax.getsoal') }}" multiple data-placeholder="Cari bank soal"></select>
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Peserta</label>
-          <select class="form-control select2-multiple" id="get_peserta" name="peserta[]" data-url="{{ route('jadwal.ujian.ajax.getpeserta') }}" data-placeholder="Cari peserta"></select>
+          <select class="form-control select2-multiple" id="get_peserta" name="peserta[]" multiple data-url="{{ route('jadwal.ujian.ajax.getpeserta') }}" data-placeholder="Cari peserta"></select>
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Acak Soal</label>

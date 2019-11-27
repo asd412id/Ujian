@@ -62,7 +62,6 @@ $(".notif").click(function(e){
 })
 
 function initModalScripts() {
-
   $.fn.select2.amd.define('select2/selectAllAdapter', [
     'select2/utils',
     'select2/dropdown',
@@ -121,6 +120,7 @@ function initModalScripts() {
       multiple: true,
       placeholder: placeholder,
       dropdownAdapter: $.fn.select2.amd.require('select2/selectAllAdapter'),
+      minimumInputLength: 1,
       ajax: {
         url: url,
         dataType: 'json',
