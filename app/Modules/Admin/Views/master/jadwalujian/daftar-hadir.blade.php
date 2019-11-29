@@ -16,6 +16,10 @@
         border: none !important;
         padding: 3px !important;
       }
+      table.table-absen td{
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+      }
     </style>
   </head>
   <body>
@@ -23,7 +27,7 @@
       <div style="position: relative">
         @include('Admin::kop')
       </div>
-      <h3 class="text-center" style="padding:0;margin: 15px 0;">NILAI HASIL UJIAN</h3>
+      <h3 class="text-center" style="padding:0;margin: 15px 0;">DAFTAR HADIR PESERTA UJIAN</h3>
       <div class="row">
         <div class="col-sm-6 pull-left">
           <table class="table table-info">
@@ -71,52 +75,30 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <table class="table table-bordered">
+          <table class="table table-bordered table-absen">
             <thead>
               <th class="text-center">No.</th>
               <th class="text-center">No. Ujian</th>
               <th class="text-center">Nama Siswa</th>
               <th class="text-center">Kelas</th>
-              <th class="text-center">Jumlah Soal</th>
-              <th class="text-center">Benar</th>
-              <th class="text-center">Salah</th>
-              <th class="text-center">Nilai Akhir</th>
+              <th class="text-center">Tanda Tangan</th>
             </thead>
             <tbody>
               @php
               @endphp
               @foreach ($peserta as $key => $p)
-                @php
-                $nilai = 0;
-                $nbenar = 0;
-                $plogin = $p->attemptLogin()->where('pin',$jadwal->pin)->first();
-                if ($plogin) {
-                  $dtes = \App\Models\Tes::where('noujian',$p->noujian)
-                  ->where('pin',$jadwal->pin)->whereIn('soal_item',json_decode($plogin->soal_ujian))->get();
-                  $jumlah_soal = count(json_decode($plogin->soal_ujian));
-                  foreach ($dtes as $key1 => $tes) {
-                    $benar = $tes->soalItem->benar;
-                    if (!is_null($benar) && (string) $tes->jawaban == (string) $benar && $tes->soalItem->jenis_soal=='P') {
-                      $nbenar++;
-                    }
-                  }
-                  if ($jumlah_soal) {
-                    $nilai = 0;
-                  }
-                  if ($nbenar) {
-                    $nilai += round($nbenar/$jumlah_soal*$jadwal->bobot,2);
-                  }
-                }
-                @endphp
                 <tr>
                   <td class="text-center">{{ ($key+1).'.' }}</td>
                   <td>{{ $p->noujian }}</td>
                   <td>{{ $p->nama }}</td>
                   <td class="text-center">{{ $p->kelas->nama }}</td>
-                  <td class="text-center">{{ $jadwal->jumlah_soal }}</td>
-                  <td class="text-center">{{ $nbenar }}</td>
-                  <td class="text-center">{{ $jadwal->jumlah_soal-$nbenar }}</td>
-                  <td class="text-center">{{ $nilai }}</td>
+                  <td>
+                    <div class="row">
+                      <div class="col-xs-7 {{ $key!=0&&($key+1)%2==0?'pull-right':'' }}">
+                        {{ $key+1 }}
+                      </div>
+                    </div>
+                  </td>
                 </tr>
               @endforeach
             </tbody>
@@ -126,8 +108,7 @@
       <div class="row" style="margin-bottom: 45px;margin-top: 30px;page-break-inside: avoid !important;">
         <div class="pull-right" style="width: 300px">
           <p>{{ $sekolah->kota.', '.date('d').' '.$helper->bulan(date('m')).' '.date('Y') }}</p>
-          <p>Mengetahui</p>
-          <p style="margin-bottom: 125px">Kepala {{ $sekolah->nama }}</p>
+          <p style="margin-bottom: 125px">Pengawas Ujian</p>
           <p>[.......................................................]</p>
         </div>
       </div>

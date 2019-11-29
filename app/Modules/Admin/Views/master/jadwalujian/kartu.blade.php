@@ -36,28 +36,34 @@
       <div class="col-xs-6" style="margin-top: 10px">
         <table class="card">
           <tr class="text-center">
-            <td style="vertical-align: middle;padding: 3px">
-              @if ($sekolah->dept_logo)
-                <img src="{{ url('uploads/'.$sekolah->dept_logo) }}" width="45" alt="">
+            <td style="vertical-align: middle;padding: 3px;width: 75px">
+              @if (is_file(base_path('uploads/'.$sekolah->dept_logo)))
+                <img src="{{ url('uploads/'.$sekolah->dept_logo) }}" style="height: 53px" alt="">
+              @elseif (is_file(base_path('uploads/'.$sekolah->logo)))
+                <img src="{{ url('uploads/'.$sekolah->logo) }}" style="height: 53px" alt="">
               @endif
             </td>
-            <td class="text-center" style="text-transform: uppercase;font-weight: bold;vertical-align: middle;padding: 3px">
-              {!! nl2br(e($sekolah->kop_kartu)) !!}
+            <td class="text-center" style="text-transform: uppercase;font-weight: bold;vertical-align: middle;padding: 3px;font-size: 1.3em">
+              {!! $sekolah->kop_kartu?nl2br($sekolah->kop_kartu).'<br />':'' !!}
+              {!! $sekolah->nama?$sekolah->nama:'' !!}
             </td>
-            <td style="vertical-align: middle;padding: 3px">
-              @if ($sekolah->logo)
-                <img src="{{ url('uploads/'.$sekolah->logo) }}" width="45" alt="">
+            <td style="vertical-align: middle;padding: 3px;width: 75px">
+              @if (is_file(base_path('uploads/'.$sekolah->dept_logo))&&is_file(base_path('uploads/'.$sekolah->logo)))
+                <img src="{{ url('uploads/'.$sekolah->logo) }}" style="height: 53px" alt="">
               @endif
             </td>
           </tr>
           <tr>
-            <td colspan="3" class="text-center" style="border: solid 1px;font-size: 0.8em;padding: 3px">
-              <em>{{ $sekolah->alamat.', '.$sekolah->kota.', '.$sekolah->propinsi }}</em>
+            <td colspan="3" class="text-center" style="border: solid 1px;font-size: 0.9em;padding: 3px">
+              {{ $sekolah->alamat.', '.$sekolah->kota.', '.$sekolah->propinsi }}
             </td>
           </tr>
           <tr>
             <td colspan="3">
               <table class="detail">
+                <tr>
+                  <td colspan="3" class="text-center" style="font-weight: bold;font-size: 1.3em;padding-top: 5px;">KARTU UJIAN</td>
+                </tr>
                 <tr class="info">
                   <td style="width: 100px;padding-left: 15px;padding-top: 5px">NO. UJIAN</td>
                   <td style="width: 10px;padding-top: 5px">:</td>

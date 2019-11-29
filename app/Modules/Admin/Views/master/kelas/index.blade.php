@@ -37,7 +37,7 @@
                     <td>{{ $v->tingkat??'-' }}</td>
                     <td style="white-space: nowrap;width: 50px" class="text-right">
                       @if (count($v->siswa))
-                        <a href="{{ route('jadwal.ujian.print',['uuid'=>$v->uuid]) }}" target="_blank" class="btn btn-sm btn-xs btn-success" title="Cetak Kartu Ujian"><i class="material-icons">print</i></a>
+                        <a href="{{ route('jadwal.ujian.print.kartu',['uuid'=>$v->uuid]) }}" target="_blank" class="btn btn-sm btn-xs btn-success" title="Cetak Kartu Ujian"><i class="material-icons">subtitles</i></a>
                         <a class="btn btn-sm btn-xs btn-primary" title="Lihat Siswa" href="{{ route('master.siswa.index',['cari'=>$v->kode]) }}" class="text-info"><i class="material-icons">group</i></a>
                       @endif
                       <a class="btn btn-sm btn-xs btn-info" title="Ubah" href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#modalEdit" data-url="{{ route('master.kelas.edit',['uuid'=>$v->uuid]) }}" class="text-info"><i class="material-icons">edit</i></a>

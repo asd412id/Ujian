@@ -45,15 +45,16 @@
                     <td style="vertical-align: top">{{ date('d/m/Y H:i',strtotime($v->selesai_ujian)) }}</td>
                     <td style="vertical-align: top">{{ $v->lama_ujian.' Menit' }}</td>
                     <td style="font-weight:bold;vertical-align: top" class="text-primary">{{ $v->pin }}</td>
-                    <td style="white-space: nowrap;width: 50px;vertical-align: top" class="text-right">
+                    <td style="width: 115px;vertical-align: top" class="text-center">
                       @if (($v->aktif||is_null($v->aktif)))
-                      <a class="btn btn-sm btn-xs {{ $v->aktif?'btn-warning':'btn-primary' }} confirm" title="{{ $v->aktif?'Nonaktifkan':'Aktifkan' }} Jadwal Ujian" data-text="{{ $v->aktif?'Nonaktifkan Jadwal Ujian?<br>Semua peserta akan logout!':'Hasil ujian sebelumnya akan terhapus!<br>Aktifkan Jadwal Ujian?' }}" href="#" data-url="{{ route('jadwal.ujian.activate',['uuid'=>$v->uuid]) }}">{!! $v->aktif?'Nonaktifkan':'<i class="material-icons">check</i>' !!}</a>
+                      <a class="btn btn-sm btn-xs {{ $v->aktif?'btn-yellow':'btn-primary' }} confirm" title="{{ $v->aktif?'Nonaktifkan':'Aktifkan' }} Jadwal Ujian" data-text="{{ $v->aktif?'Nonaktifkan Jadwal Ujian?<br>Semua peserta akan logout!':'Hasil ujian sebelumnya akan terhapus!<br>Aktifkan Jadwal Ujian?' }}" href="#" data-url="{{ route('jadwal.ujian.activate',['uuid'=>$v->uuid]) }}">{!! $v->aktif?'<i class="material-icons">close</i>':'<i class="material-icons">check</i>' !!}</a>
                       @if ($v->aktif)
                         <a class="btn btn-sm btn-xs btn-info" title="Lihat status peserta" href="{{ route('jadwal.ujian.monitoring.detail',['uuid'=>$v->uuid]) }}" class="text-info"><i class="material-icons">desktop_windows</i></a>
                       @endif
                       @endif
-                      @if ($v->peserta)
-                        <a href="{{ route('jadwal.ujian.print',['uuid'=>$v->uuid]) }}" target="_blank" class="btn btn-sm btn-xs btn-success" title="Cetak Kartu Ujian"><i class="material-icons">print</i></a>
+                      @if ($v->peserta && count(json_decode($v->peserta)))
+                        <a href="{{ route('jadwal.ujian.print.kartu',['uuid'=>$v->uuid]) }}" target="_blank" class="btn btn-sm btn-xs btn-success" title="Cetak Kartu Ujian"><i class="material-icons">subtitles</i></a>
+                        <a href="{{ route('jadwal.ujian.print.absen',['uuid'=>$v->uuid]) }}" target="_blank" class="btn btn-sm btn-xs btn-warning" title="Cetak Daftar Hadir"><i class="material-icons">assignment</i></a>
                       @endif
                       @if (!$v->aktif)
                       @if ($v->aktif||is_null($v->aktif))

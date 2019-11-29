@@ -21,6 +21,39 @@
       return $text;
    }
 
+   public function hari($hari)
+   {
+     switch ($hari) {
+       case 'Sun':
+         $bln = 'Ahad';
+         break;
+       case 'Mon':
+         $bln = 'Senin';
+         break;
+       case 'Tue':
+         $bln = 'Selasa';
+         break;
+       case 'Wed':
+         $bln = 'Rabu';
+         break;
+       case 'Thu':
+         $bln = 'Kamis';
+         break;
+       case 'Fri':
+         $bln = 'Jum\'at';
+         break;
+       case 'Sat':
+         $bln = 'Sabtu';
+         break;
+
+       default:
+         $bln = 'Hari tidak terdaftar';
+         break;
+     }
+
+     return $bln;
+   }
+
    public function bulan($bulan)
    {
      switch ($bulan) {

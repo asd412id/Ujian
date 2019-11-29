@@ -357,7 +357,7 @@ class JadwalUjianController extends Controller
       return redirect()->route('admin.index');
     }
 
-    public function print($uuid)
+    public function printKartu($uuid)
     {
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
       $kelas = Kelas::where('uuid',$uuid)->first();
@@ -374,9 +374,6 @@ class JadwalUjianController extends Controller
         }
         $filename = 'Kartu Peserta Ujian Kelas '.$kelas->nama.' '.$kelas->jurusan.'.pdf';
         $peserta = $kelas->siswa;
-      }else {
-        $filename = 'Kartu Peserta Ujian.pdf';
-        $peserta = Siswa::all();
       }
 
       // $view = view('Admin::master.jadwalujian.kartu',[
@@ -409,7 +406,7 @@ class JadwalUjianController extends Controller
       $pdf = PDF::loadView('Admin::master.jadwalujian.kartu',[
         'jadwal'=>$jadwal,
         'peserta'=>$peserta,
-        'title'=>$filename,
+        'title'=>str_replace('.pdf','',$filename),
         'sekolah'=>Sekolah::first(),
         'helper'=>new Helper
       ]);
@@ -422,6 +419,62 @@ class JadwalUjianController extends Controller
       ->setOption('margin-bottom',0)
       ->setOption('margin-left',0)
       ->setOption('margin-right',0)
+      ->stream($filename);
+    }
+
+    public function printAbsen($uuid)
+    {
+      $jadwal = JadwalUjian::where('uuid',$uuid)->first();
+
+      if ($jadwal) {
+        $filename = 'Daftar Hadir Peserta Ujian '.$jadwal->nama_ujian.'.pdf';
+        $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->get();
+        if (!count($peserta)) {
+          return redirect()->back()->withErrors('Data siswa tidak tersedia');
+        }
+      }else {
+        return redirect()->back()->withErrors('Jadwal ujian tidak tersedia');
+      }
+
+      // $view = view('Admin::master.jadwalujian.kartu',[
+      //   'jadwal'=>$jadwal,
+      //   'peserta'=>$peserta,
+      //   'title'=>$filename,
+      //   'sekolah'=>Sekolah::first(),
+      //   'helper'=>new Helper
+      // ])->render();
+      //
+      // $client = new Client;
+      // $res = $client->request('POST','http://docker.local:/pdf',[
+      //   'form_params'=>[
+      //     'html'=>str_replace(url('/'),'http://nginx_ujian/',$view),
+      //     'options[page-width]'=>'21.5cm',
+      //     'options[page-height]'=>'33cm',
+      //     'options[margin-top]'=>'0.5cm',
+      //     'options[margin-bottom]'=>'0',
+      //     'options[margin-left]'=>'0',
+      //     'options[margin-right]'=>'0',
+      //   ]
+      // ]);
+      //
+      // if ($res->getStatusCode() == 200) {
+      //   return response()->attachment($res->getBody()->getContents(),$filename,'application/pdf');
+      // }
+      //
+      // return redirect()->back()->withErrors(['Tidak dapat mendownload file! Silahkan hubungi operator']);
+
+      $pdf = PDF::loadView('Admin::master.jadwalujian.daftar-hadir',[
+        'jadwal'=>$jadwal,
+        'peserta'=>$peserta,
+        'title'=>str_replace('.pdf','',$filename),
+        'sekolah'=>Sekolah::first(),
+        'helper'=>new Helper
+      ]);
+
+      return $pdf->setOptions([
+        'page-width'=>'21.5cm',
+        'page-height'=>'33cm'
+      ])
       ->stream($filename);
     }
 

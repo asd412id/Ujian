@@ -20,10 +20,10 @@
   </head>
   <body>
     <div class="container-fluid">
-      <h1 class="text-center">
-        NILAI UJIAN
-      </h1>
-      <hr>
+      <div style="position: relative">
+        @include('Admin::kop')
+      </div>
+      <h3 class="text-center" style="padding:0;margin: 15px 0;">NILAI HASIL UJIAN</h3>
       <div class="row">
         <div class="col-sm-6" style="float: left !important">
           <table class="table table-info">
@@ -121,7 +121,6 @@
         </div>
         <div class="pull-right" style="width: 300px">
           <p>{{ $sekolah->kota.', '.date('d').' '.$helper->bulan(date('m')).' '.date('Y') }}</p>
-          <p>Mengetahui</p>
           <p style="margin-bottom: 125px">Orang Tua/Wali Murid</p>
           <p>[.........................................................]</p>
         </div>

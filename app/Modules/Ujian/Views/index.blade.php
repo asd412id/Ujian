@@ -4,9 +4,14 @@
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    @if ($sekolah&&is_file(base_path('uploads/'.$sekolah->logo)))
-      <link rel="icon" href="{{ url('uploads/'.$sekolah->logo) }}" type="image/x-icon"/>
-      <link rel="shortcut icon" href="{{ url('uploads/'.$sekolah->logo) }}" type="image/x-icon"/>
+    @if ($sekolah)
+      @if (is_file(base_path('uploads/'.$sekolah->logo)))
+        <link rel="icon" href="{{ url('uploads/'.$sekolah->logo) }}" type="image/x-icon"/>
+        <link rel="shortcut icon" href="{{ url('uploads/'.$sekolah->logo) }}" type="image/x-icon"/>
+      @elseif (is_file(base_path('uploads/'.$sekolah->dept_logo)))
+        <link rel="icon" href="{{ url('uploads/'.$sekolah->dept_logo) }}" type="image/x-icon"/>
+        <link rel="shortcut icon" href="{{ url('uploads/'.$sekolah->dept_logo) }}" type="image/x-icon"/>
+      @endif
     @endif
     <title>
         Masuk Ujian
@@ -34,6 +39,8 @@
   <div class="logo-wrap">
     @if (is_file(base_path('uploads/'.$sekolah->logo)))
       <img src="{{ url('uploads/'.$sekolah->logo) }}" alt="" style="position: relative">
+    @elseif (is_file(base_path('uploads/'.$sekolah->dept_logo)))
+      <img src="{{ url('uploads/'.$sekolah->dept_logo) }}" alt="" style="position: relative">
     @endif
   </div>
   @endif

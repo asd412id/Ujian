@@ -12,9 +12,14 @@
   @php
     $sekolah = App\Models\Sekolah::first();
   @endphp
-  @if ($sekolah&&is_file(base_path('uploads/'.$sekolah->logo)))
-    <link rel="icon" href="{{ url('uploads/'.$sekolah->logo) }}" type="image/x-icon"/>
-    <link rel="shortcut icon" href="{{ url('uploads/'.$sekolah->logo) }}" type="image/x-icon"/>
+  @if ($sekolah)
+    @if (is_file(base_path('uploads/'.$sekolah->logo)))
+      <link rel="icon" href="{{ url('uploads/'.$sekolah->logo) }}" type="image/x-icon"/>
+      <link rel="shortcut icon" href="{{ url('uploads/'.$sekolah->logo) }}" type="image/x-icon"/>
+    @elseif (is_file(base_path('uploads/'.$sekolah->dept_logo)))
+      <link rel="icon" href="{{ url('uploads/'.$sekolah->dept_logo) }}" type="image/x-icon"/>
+      <link rel="shortcut icon" href="{{ url('uploads/'.$sekolah->dept_logo) }}" type="image/x-icon"/>
+    @endif
   @endif
   <!--     Fonts and icons     -->
   <link href="{{ url('assets/css/fonts.css') }}" rel="stylesheet" />
@@ -42,7 +47,7 @@
       padding: 0.4rem !important;
     }
     .table td .btn-xs{
-      margin: 0 !important;
+      margin: 2px 0;
     }
     select.form-control {
         /* width: 268px; */
@@ -79,6 +84,16 @@
         background: none;
         color: #333;
         border: none !important;
+    }
+    .btn.btn-blue {
+      color: #fff;
+      background-color: #0030ff;
+      border-color: #0030ff;
+    }
+    .btn.btn-yellow {
+      color: #fff;
+      background-color: #cecd03;
+      border-color: #cecd03;
     }
     .select2-container .select2-selection--single{
       height: 35px;

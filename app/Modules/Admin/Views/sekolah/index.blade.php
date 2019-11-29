@@ -81,12 +81,12 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
-                <label class="bmd-label-floating">Kop Kartu Siswa</label>
-                <textarea name="kop_kartu" rows="5" class="form-control">{{ old('fax')?old('fax'):@$sekolah->kop_kartu }}</textarea>
+                <label class="bmd-label-floating">Kop Dokumen</label>
+                <textarea name="kop_kartu" rows="4" class="form-control" placeholder="PEMERINTAH KABUPATEN SINJAI&#10;DINAS PENDIDIKAN" autofocus>{{ old('kop_kartu')?old('kop_kartu'):@$sekolah->kop_kartu }}</textarea>
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary pull-right">Ubah Profil</button>
+          <button type="submit" class="btn btn-primary pull-right">Simpan Profil</button>
           <div class="clearfix"></div>
         </form>
       </div>
@@ -109,7 +109,7 @@
     <div class="card card-profile" style="margin-top: 75px">
       <div class="card-avatar">
         <a href="#pablo">
-          <img class="img" src="{{ @$sekolah->dept_logo?url('uploads',$sekolah->dept_logo):url('assets/img/noimage.png') }}" />
+          <img class="img" src="{{ @$sekolah->dept_logo&&is_file(base_path('uploads/'.$sekolah->dept_logo))?url('uploads',$sekolah->dept_logo):url('assets/img/noimage.png') }}" />
         </a>
       </div>
       <div class="card-body">
@@ -124,7 +124,7 @@
     <div class="card card-profile" style="margin-top: 75px">
       <div class="card-avatar">
         <a href="#pablo">
-          <img class="img" src="{{ @$sekolah->logo?url('uploads',$sekolah->logo):url('assets/img/noimage.png') }}" />
+          <img class="img" src="{{ @$sekolah->logo&&is_file(base_path('uploads/'.$sekolah->logo))?url('uploads',$sekolah->logo):url('assets/img/noimage.png') }}" />
         </a>
       </div>
       <div class="card-body">
