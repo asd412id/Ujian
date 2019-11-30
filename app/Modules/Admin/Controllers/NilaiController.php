@@ -78,14 +78,17 @@ class NilaiController extends Controller
   		$sheet->setCellValue('A1', 'No');
   		$sheet->setCellValue('B1', 'No. Ujian');
   		$sheet->setCellValue('C1', 'Nama Siswa');
-      $sheet->getStyle('A1:C1')->getFont()->setBold(true);
+  		$sheet->setCellValue('D1', 'Kelas');
+      $sheet->getStyle('A1:D1')->getFont()->setBold(true);
       $sheet->getStyle('A1:D1')->getAlignment()->setHorizontal('center');
       $sheet->getStyle('A1:D1')->getAlignment()->setVertical('center');
       $sheet->getStyle('A')->getAlignment()->setHorizontal('center');
+      $sheet->getStyle('D')->getAlignment()->setHorizontal('center');
 
       $sheet->getColumnDimension('A')->setWidth(5);
       $sheet->getColumnDimension('B')->setWidth(20);
       $sheet->getColumnDimension('C')->setWidth(30);
+      $sheet->getColumnDimension('D')->setAutoSize(true);
 
       $cols = $this->createColumnsArray('ZZ');
       $cols = array_slice($cols,3,count($cols));
@@ -94,31 +97,31 @@ class NilaiController extends Controller
       //   return $this->downloadEssay($uuid);
       // }
 
-      $sheet->setCellValue('D1', 'Jumlah Soal');
-      $sheet->getStyle('D1')->getFont()->setBold(true);
-      $sheet->getStyle('D1')->getAlignment()->setHorizontal('center');
-      $sheet->getStyle('D1')->getAlignment()->setVertical('center');
-      $sheet->getColumnDimension('D')->setAutoSize(true);
+      $sheet->setCellValue('E1', 'Jumlah Soal');
+      $sheet->getStyle('E1')->getFont()->setBold(true);
+      $sheet->getStyle('E1')->getAlignment()->setHorizontal('center');
+      $sheet->getStyle('E1')->getAlignment()->setVertical('center');
+      $sheet->getColumnDimension('E')->setAutoSize(true);
 
       if ($jadwal->jenis_soal=='P') {
-        $sheet->setCellValue('E1', 'Benar');
-        $sheet->getStyle('E1')->getFont()->setBold(true);
-        $sheet->getStyle('E1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('E1')->getAlignment()->setVertical('center');
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-
-        $sheet->setCellValue('F1', 'Salah');
+        $sheet->setCellValue('F1', 'Benar');
         $sheet->getStyle('F1')->getFont()->setBold(true);
         $sheet->getStyle('F1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('F1')->getAlignment()->setVertical('center');
         $sheet->getColumnDimension('F')->setAutoSize(true);
+
+        $sheet->setCellValue('G1', 'Salah');
+        $sheet->getStyle('G1')->getFont()->setBold(true);
+        $sheet->getStyle('G1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('G1')->getAlignment()->setVertical('center');
+        $sheet->getColumnDimension('G')->setAutoSize(true);
       }
 
-      $sheet->setCellValue('G1', 'Nilai Akhir');
-      $sheet->getStyle('G1')->getFont()->setBold(true);
-      $sheet->getStyle('G1')->getAlignment()->setHorizontal('center');
-      $sheet->getStyle('G1')->getAlignment()->setVertical('center');
-      $sheet->getColumnDimension('G')->setAutoSize(true);
+      $sheet->setCellValue('H1', 'Nilai Akhir');
+      $sheet->getStyle('H1')->getFont()->setBold(true);
+      $sheet->getStyle('H1')->getAlignment()->setHorizontal('center');
+      $sheet->getStyle('H1')->getAlignment()->setVertical('center');
+      $sheet->getColumnDimension('H')->setAutoSize(true);
 
       $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))
       ->orderBy('id','asc')
@@ -126,8 +129,9 @@ class NilaiController extends Controller
       $i=1;
       foreach ($peserta as $key => $v) {
         $sheet->setCellValue('A'.($i+1), $i);
-        $sheet->setCellValue('B'.($i+1), $v->noujian);
-        $sheet->setCellValue('C'.($i+1), $v->nama);
+        $sheet->setCellValue('B'.($i+1), $v->noujian??'-');
+        $sheet->setCellValue('C'.($i+1), $v->nama??'-');
+        $sheet->setCellValue('D'.($i+1), $v->kelas?$v->kelas->nama:'-');
         $benar = 0;
         $nilai = 0;
 
@@ -155,27 +159,27 @@ class NilaiController extends Controller
 
         }
 
-        $sheet->getStyle('D'.($i+1))->getAlignment()->setHorizontal('center');
-        $sheet->setCellValue('D'.($i+1),$jadwal->jumlah_soal);
+        $sheet->getStyle('E'.($i+1))->getAlignment()->setHorizontal('center');
+        $sheet->setCellValue('E'.($i+1),$jadwal->jumlah_soal);
 
         if ($jadwal->jenis_soal=='P') {
-          $sheet->getStyle('E'.($i+1))->getAlignment()->setHorizontal('center');
-          $sheet->setCellValue('E'.($i+1),$benar);
-
           $sheet->getStyle('F'.($i+1))->getAlignment()->setHorizontal('center');
-          $sheet->setCellValue('F'.($i+1),$jadwal->jumlah_soal-$benar);
+          $sheet->setCellValue('F'.($i+1),$benar);
+
+          $sheet->getStyle('G'.($i+1))->getAlignment()->setHorizontal('center');
+          $sheet->setCellValue('G'.($i+1),$jadwal->jumlah_soal-$benar);
         }
 
-        $sheet->getStyle('G'.($i+1))->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('G'.($i+1))->getFont()->setBold(true);
-        $sheet->setCellValue('G'.($i+1),$nilai);
+        $sheet->getStyle('H'.($i+1))->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('H'.($i+1))->getFont()->setBold(true);
+        $sheet->setCellValue('H'.($i+1),$nilai);
 
         $i++;
       }
 
       $writer = new Xlsx($spreadsheet);
   		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      header('Content-Disposition: attachment; filename="'.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'"');
+      header('Content-Disposition: attachment; filename="'.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.xlsx"');
   		$writer->save("php://output");
     }
 
