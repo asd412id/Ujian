@@ -504,7 +504,7 @@ class JadwalUjianController extends Controller
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
 
       if ($jadwal) {
-        $filename = 'Daftar Hadir Peserta Ujian '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
+        $filename = 'Berita Acara Pelaksanaan '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
         $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->get();
         if (!count($peserta)) {
           return redirect()->back()->withErrors('Data siswa tidak tersedia');

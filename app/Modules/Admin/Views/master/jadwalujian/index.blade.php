@@ -45,7 +45,7 @@
                     <td style="vertical-align: top">{{ date('d/m/Y H:i',strtotime($v->selesai_ujian)) }}</td>
                     <td style="vertical-align: top">{{ $v->lama_ujian.' Menit' }}</td>
                     <td style="font-weight:bold;vertical-align: top" class="text-primary">{{ $v->pin }}</td>
-                    <td style="width: 115px;vertical-align: top" class="text-center">
+                    <td style="width: 150px;vertical-align: top" class="text-center">
                       @if (($v->aktif||is_null($v->aktif)))
                       <a class="btn btn-sm btn-xs {{ $v->aktif?'btn-yellow':'btn-primary' }} confirm" title="{{ $v->aktif?'Nonaktifkan':'Aktifkan' }} Jadwal Ujian" data-text="{{ $v->aktif?'Nonaktifkan Jadwal Ujian?<br>Semua peserta akan logout!':'Hasil ujian sebelumnya akan terhapus!<br>Aktifkan Jadwal Ujian?' }}" href="#" data-url="{{ route('jadwal.ujian.activate',['uuid'=>$v->uuid]) }}">{!! $v->aktif?'<i class="material-icons">close</i>':'<i class="material-icons">check</i>' !!}</a>
                       @if ($v->aktif)
