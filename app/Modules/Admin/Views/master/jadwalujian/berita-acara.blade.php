@@ -12,6 +12,9 @@
       ol li{
         margin-bottom: 10px;
       }
+      table.table td{
+        border: none !important;
+      }
       table.table-info td{
         padding: 3px !important;
       }
@@ -41,7 +44,7 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <table class="table-info">
+            <table class="table table-info">
               <tr>
                 <td>a)</td>
                 <td colspan="3">
@@ -50,31 +53,31 @@
               </tr>
               <tr>
                 <td></td>
-                <td>Mata Pelajaran</td>
+                <td style="width: 250px">Mata Pelajaran</td>
                 <td>:</td>
                 <td style="font-weight: bold">{{ $mapel }}</td>
               </tr>
               <tr>
                 <td></td>
-                <td>Kelas</td>
+                <td style="width: 250px">Kelas</td>
                 <td>:</td>
                 <td style="font-weight: bold">{{ $kelas }}</td>
               </tr>
               <tr>
                 <td></td>
-                <td>Jumlah Peserta</td>
+                <td style="width: 250px">Jumlah Peserta</td>
                 <td>:</td>
                 <td style="font-weight: bold">{{ count(json_decode($jadwal->peserta)).' Orang' }}</td>
               </tr>
               <tr>
                 <td></td>
-                <td>Yang Hadir</td>
+                <td style="width: 250px">Yang Hadir</td>
                 <td>:</td>
                 <td style="font-weight: bold"> .......... Orang</td>
               </tr>
               <tr>
                 <td></td>
-                <td>Yang Tidak Hadir</td>
+                <td style="width: 250px">Yang Tidak Hadir</td>
                 <td>:</td>
                 <td style="font-weight: bold"> .......... Orang</td>
               </tr>
@@ -86,15 +89,15 @@
               </tr>
               <tr>
                 <td></td>
-                <td colspan="3" style="border-bottom: solid 1px;padding-top: 45px !important"></td>
+                <td colspan="3" style="border-bottom: solid 1px !important;padding-top: 45px !important"></td>
               </tr>
               <tr>
                 <td></td>
-                <td colspan="3" style="border-bottom: solid 1px;padding-top: 45px !important"></td>
+                <td colspan="3" style="border-bottom: solid 1px !important;padding-top: 45px !important"></td>
               </tr>
               <tr>
                 <td></td>
-                <td colspan="3" style="border-bottom: solid 1px;padding-top: 45px !important"></td>
+                <td colspan="3" style="border-bottom: solid 1px !important;padding-top: 45px !important"></td>
               </tr>
             </table>
           </div>
