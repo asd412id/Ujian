@@ -314,7 +314,9 @@ class JadwalUjianController extends Controller
     public function monitoringDetail($uuid)
     {
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
-      $login = $jadwal->login()->withTrashed()->get();
+      $login = $jadwal->login()->withTrashed()
+      ->orderBy('id','asc')
+      ->get();
       return view("Admin::monitoring.detail",[
         'jadwal'=>$jadwal,
         'login'=>$login,
@@ -327,7 +329,9 @@ class JadwalUjianController extends Controller
     {
       if ($r->ajax()) {
         $jadwal = JadwalUjian::where('uuid',$uuid)->first();
-        $login = $jadwal->login()->whereNotNull('_token')->get();
+        $login = $jadwal->login()->whereNotNull('_token')
+        ->orderBy('id','asc')
+        ->get();
         return view("Admin::monitoring.getdata",[
           'data'=>$login
         ]);
