@@ -9,6 +9,8 @@ use App\Models\Tes;
 use App\Models\JadwalUjian;
 use App\Models\Soal;
 use App\Models\ItemSoal;
+use App\Models\Kelas;
+use App\Models\Mapel;
 use App\Models\Siswa;
 use App\Modules\Admin\Helper;
 
@@ -68,7 +70,7 @@ class NilaiController extends Controller
     {
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
 
-      $filename = 'Nilai '.$jadwal->nama_ujian.'.xlsx';
+      $filename = 'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.xlsx';
 
       $spreadsheet = new Spreadsheet();
   		$sheet = $spreadsheet->getActiveSheet();
@@ -173,7 +175,7 @@ class NilaiController extends Controller
 
       $writer = new Xlsx($spreadsheet);
   		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      header('Content-Disposition: attachment; filename="'.$filename.'"');
+      header('Content-Disposition: attachment; filename="'.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'"');
   		$writer->save("php://output");
     }
 
@@ -181,15 +183,70 @@ class NilaiController extends Controller
     {
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
 
-      $filename = 'Nilai '.$jadwal->nama_ujian.'.pdf';
+      if (!$jadwal) {
+        return redirect()->route('nilai.index')->withErrors('Jadwal ujian tidak ditemukan');
+      }
+
+      $filename = 'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
 
       $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))
       ->orderBy('id','asc')
       ->get();
 
+      if (!$peserta) {
+        return redirect()->route('nilai.index')->withErrors('Peserta ujian tidak ditemukan');
+      }
+
+      $kelas = '';
+      $mapel = '';
+
+      $getKelas = Kelas::whereHas('siswa',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->peserta));
+      })
+      ->orderBy('tingkat','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getKelas)) {
+        foreach ($getKelas as $key => $k) {
+          $kelas .= $k->nama;
+          if ($key < count($getKelas)-2) {
+            $kelas .= ', ';
+          }elseif ($key == count($getKelas)-2) {
+            if (count($getKelas) > 2) {
+              $kelas .= ',';
+            }
+            $kelas .= ' dan ';
+          }
+        }
+      }
+
+      $getMapel = Mapel::whereHas('soal',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->soal));
+      })
+      ->orderBy('id','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getMapel)) {
+        foreach ($getMapel as $key => $m) {
+          $mapel .= $m->nama;
+          if ($key < count($getMapel)-2) {
+            $mapel .= ', ';
+          }elseif ($key == count($getMapel)-2) {
+            if (count($getMapel) > 2) {
+              $mapel .= ',';
+            }
+            $mapel .= ' dan ';
+          }
+        }
+      }
+
       $pdf = PDF::loadView('Admin::nilai.nilai-pdf',[
         'jadwal'=>$jadwal,
         'peserta'=>$peserta,
+        'kelas'=>$kelas,
+        'mapel'=>$mapel,
         'title'=>'Nilai '.$jadwal->nama_ujian,
         'sekolah'=>Sekolah::first(),
         'helper'=>new Helper
@@ -208,7 +265,7 @@ class NilaiController extends Controller
     {
       $jadwal = JadwalUjian::with('tes')->where('uuid',$uuid)->first();
       return view("Admin::nilai.detail",[
-        'title'=>'Nilai '.$jadwal->nama_ujian.' - Administrator',
+        'title'=>'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' - Administrator',
         'breadcrumb'=>'Nilai Ujian',
         'jadwal'=>$jadwal,
         'peserta'=>Siswa::whereIn('uuid',json_decode($jadwal->peserta))->orderBy('id','asc')->get(),
@@ -219,12 +276,34 @@ class NilaiController extends Controller
     {
       $nilai = 0;
       $nbenar = 0;
+      $mapel = '';
       $jadwal = JadwalUjian::with('tes')->where('uuid',$ujian)->first();
       $siswa = Siswa::where('uuid',$siswa)->first();
       $plogin = $siswa->attemptLogin()->where('pin',$jadwal->pin)->first();
       $jumlah_soal = count(json_decode($plogin->soal_ujian));
       $dtes = Tes::where('noujian',$siswa->noujian)
       ->where('pin',$jadwal->pin)->whereIn('soal_item',json_decode($plogin->soal_ujian))->get();
+
+      $getMapel = Mapel::whereHas('soal',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->soal));
+      })
+      ->orderBy('id','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getMapel)) {
+        foreach ($getMapel as $key => $m) {
+          $mapel .= $m->nama;
+          if ($key < count($getMapel)-2) {
+            $mapel .= ', ';
+          }elseif ($key == count($getMapel)-2) {
+            if (count($getMapel) > 2) {
+              $mapel .= ',';
+            }
+            $mapel .= ' dan ';
+          }
+        }
+      }
 
       $soal = [];
       $siswaSoal = json_decode($plogin->soal_ujian);
@@ -249,7 +328,7 @@ class NilaiController extends Controller
         $nilai += round($nbenar/$jumlah_soal*$jadwal->bobot,2);
       }
       // return view("Admin::nilai.detail-download",[
-      //   'title'=>'Nilai '.$jadwal->nama_ujian.' - ('.$siswa->noujian.') '.$siswa->nama,
+      //   'title'=>'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' - ('.$siswa->noujian.') '.$siswa->nama,
       //   'breadcrumb'=>'Nilai Ujian',
       //   'jadwal'=>$jadwal,
       //   'siswa'=>$siswa,
@@ -259,15 +338,15 @@ class NilaiController extends Controller
       //   'helper'=>new Helper
       // ]);
 
-      $filename = 'Nilai '.$jadwal->nama_ujian.'.pdf';
+      $filename = 'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
 
       $pdf = PDF::loadView("Admin::nilai.detail-download",[
-        'title'=>'Nilai '.$jadwal->nama_ujian.' - ('.$siswa->noujian.') '.$siswa->nama,
+        'title'=>'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' - ('.$siswa->noujian.') '.$siswa->nama,
         'breadcrumb'=>'Nilai Ujian',
         'jadwal'=>$jadwal,
         'siswa'=>$siswa,
         'soal'=>$soal,
-        'nilai'=>$nilai,
+        'mapel'=>$mapel,
         'nilai'=>$nilai,
         'benar'=>$nbenar,
         'sekolah'=>Sekolah::first(),

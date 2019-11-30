@@ -12,6 +12,6 @@ class Mapel extends Model
 
   public function soal()
   {
-    return $this->hasOne(Soal::class,'kode_mapel','kode');
+    return $this->hasMany(Soal::class,'kode_mapel','kode');
   }
 }

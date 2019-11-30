@@ -9,7 +9,7 @@
       <div class="col-md-4">
         <div class="form-group">
           <label class="bmd-label-floating">Nama Ujian</label>
-          <input type="text" class="form-control" id="nama_ujian" name="nama_ujian" value="">
+          <textarea name="nama_ujian" rows="4" class="form-control"></textarea>
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Jumlah Soal</label>

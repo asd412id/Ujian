@@ -55,6 +55,7 @@
                       @if ($v->peserta && count(json_decode($v->peserta)))
                         <a href="{{ route('jadwal.ujian.print.kartu',['uuid'=>$v->uuid]) }}" target="_blank" class="btn btn-sm btn-xs btn-success" title="Cetak Kartu Ujian"><i class="material-icons">subtitles</i></a>
                         <a href="{{ route('jadwal.ujian.print.absen',['uuid'=>$v->uuid]) }}" target="_blank" class="btn btn-sm btn-xs btn-warning" title="Cetak Daftar Hadir"><i class="material-icons">assignment</i></a>
+                        <a href="{{ route('jadwal.ujian.print.berita',['uuid'=>$v->uuid]) }}" target="_blank" class="btn btn-sm btn-xs btn-blue" title="Cetak Berita Acara"><i class="material-icons">book</i></a>
                       @endif
                       @if (!$v->aktif)
                       @if ($v->aktif||is_null($v->aktif))

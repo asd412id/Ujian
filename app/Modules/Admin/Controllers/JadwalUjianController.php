@@ -11,6 +11,7 @@ use App\Models\Login;
 use App\Models\Sekolah;
 use App\Models\Siswa;
 use App\Models\Kelas;
+use App\Models\Mapel;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Modules\Admin\Helper;
@@ -168,7 +169,7 @@ class JadwalUjianController extends Controller
         $jadwal->tes()->forceDelete();
       }
       if ($jadwal->save()) {
-        return redirect()->back()->with('message', 'Jadwal ujian '.$jadwal->nama_ujian.' '.($jadwal->aktif==1?'diaktifkan':'dinonaktifkan'));
+        return redirect()->back()->with('message', 'Jadwal ujian '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' '.($jadwal->aktif==1?'diaktifkan':'dinonaktifkan'));
       }
       return redirect()->back()->withErrors('Terjadi Kesalahan!');
     }
@@ -318,7 +319,7 @@ class JadwalUjianController extends Controller
         'jadwal'=>$jadwal,
         'login'=>$login,
         'title' => 'Monitoring Ujian - Administrator',
-        'breadcrumb' => 'Monitoring '.$jadwal->nama_ujian,
+        'breadcrumb' => 'Monitoring '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian),
       ]);
     }
 
@@ -363,7 +364,7 @@ class JadwalUjianController extends Controller
       $kelas = Kelas::where('uuid',$uuid)->first();
 
       if ($jadwal) {
-        $filename = 'Kartu Peserta Ujian '.$jadwal->nama_ujian.'.pdf';
+        $filename = 'Kartu Peserta Ujian '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
         $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->get();
         if (!count($peserta)) {
           return redirect()->back()->withErrors('Data siswa tidak tersedia');
@@ -427,7 +428,7 @@ class JadwalUjianController extends Controller
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
 
       if ($jadwal) {
-        $filename = 'Daftar Hadir Peserta Ujian '.$jadwal->nama_ujian.'.pdf';
+        $filename = 'Daftar Hadir Peserta Ujian '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
         $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->get();
         if (!count($peserta)) {
           return redirect()->back()->withErrors('Data siswa tidak tersedia');
@@ -436,36 +437,132 @@ class JadwalUjianController extends Controller
         return redirect()->back()->withErrors('Jadwal ujian tidak tersedia');
       }
 
-      // $view = view('Admin::master.jadwalujian.kartu',[
-      //   'jadwal'=>$jadwal,
-      //   'peserta'=>$peserta,
-      //   'title'=>$filename,
-      //   'sekolah'=>Sekolah::first(),
-      //   'helper'=>new Helper
-      // ])->render();
-      //
-      // $client = new Client;
-      // $res = $client->request('POST','http://docker.local:/pdf',[
-      //   'form_params'=>[
-      //     'html'=>str_replace(url('/'),'http://nginx_ujian/',$view),
-      //     'options[page-width]'=>'21.5cm',
-      //     'options[page-height]'=>'33cm',
-      //     'options[margin-top]'=>'0.5cm',
-      //     'options[margin-bottom]'=>'0',
-      //     'options[margin-left]'=>'0',
-      //     'options[margin-right]'=>'0',
-      //   ]
-      // ]);
-      //
-      // if ($res->getStatusCode() == 200) {
-      //   return response()->attachment($res->getBody()->getContents(),$filename,'application/pdf');
-      // }
-      //
-      // return redirect()->back()->withErrors(['Tidak dapat mendownload file! Silahkan hubungi operator']);
+      $kelas = '';
+      $mapel = '';
+
+      $getKelas = Kelas::whereHas('siswa',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->peserta));
+      })
+      ->orderBy('tingkat','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getKelas)) {
+        foreach ($getKelas as $key => $k) {
+          $kelas .= $k->nama;
+          if ($key < count($getKelas)-2) {
+            $kelas .= ', ';
+          }elseif ($key == count($getKelas)-2) {
+            if (count($getKelas) > 2) {
+              $kelas .= ',';
+            }
+            $kelas .= ' dan ';
+          }
+        }
+      }
+
+      $getMapel = Mapel::whereHas('soal',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->soal));
+      })
+      ->orderBy('id','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getMapel)) {
+        foreach ($getMapel as $key => $m) {
+          $mapel .= $m->nama;
+          if ($key < count($getMapel)-2) {
+            $mapel .= ', ';
+          }elseif ($key == count($getMapel)-2) {
+            if (count($getMapel) > 2) {
+              $mapel .= ',';
+            }
+            $mapel .= ' dan ';
+          }
+        }
+      }
 
       $pdf = PDF::loadView('Admin::master.jadwalujian.daftar-hadir',[
         'jadwal'=>$jadwal,
         'peserta'=>$peserta,
+        'kelas'=>$kelas,
+        'mapel'=>$mapel,
+        'title'=>str_replace('.pdf','',$filename),
+        'sekolah'=>Sekolah::first(),
+        'helper'=>new Helper
+      ]);
+
+      return $pdf->setOptions([
+        'page-width'=>'21.5cm',
+        'page-height'=>'33cm'
+      ])
+      ->stream($filename);
+    }
+
+    public function printBerita($uuid)
+    {
+      $jadwal = JadwalUjian::where('uuid',$uuid)->first();
+
+      if ($jadwal) {
+        $filename = 'Daftar Hadir Peserta Ujian '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
+        $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->get();
+        if (!count($peserta)) {
+          return redirect()->back()->withErrors('Data siswa tidak tersedia');
+        }
+      }else {
+        return redirect()->back()->withErrors('Jadwal ujian tidak tersedia');
+      }
+
+      $kelas = '';
+      $mapel = '';
+
+      $getKelas = Kelas::whereHas('siswa',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->peserta));
+      })
+      ->orderBy('tingkat','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getKelas)) {
+        foreach ($getKelas as $key => $k) {
+          $kelas .= $k->nama;
+          if ($key < count($getKelas)-2) {
+            $kelas .= ', ';
+          }elseif ($key == count($getKelas)-2) {
+            if (count($getKelas) > 2) {
+              $kelas .= ',';
+            }
+            $kelas .= ' dan ';
+          }
+        }
+      }
+
+      $getMapel = Mapel::whereHas('soal',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->soal));
+      })
+      ->orderBy('id','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getMapel)) {
+        foreach ($getMapel as $key => $m) {
+          $mapel .= $m->nama;
+          if ($key < count($getMapel)-2) {
+            $mapel .= ', ';
+          }elseif ($key == count($getMapel)-2) {
+            if (count($getMapel) > 2) {
+              $mapel .= ',';
+            }
+            $mapel .= ' dan ';
+          }
+        }
+      }
+
+      $pdf = PDF::loadView('Admin::master.jadwalujian.berita-acara',[
+        'jadwal'=>$jadwal,
+        'peserta'=>$peserta,
+        'kelas'=>$kelas,
+        'mapel'=>$mapel,
         'title'=>str_replace('.pdf','',$filename),
         'sekolah'=>Sekolah::first(),
         'helper'=>new Helper

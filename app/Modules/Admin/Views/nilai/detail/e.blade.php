@@ -13,7 +13,7 @@
       <tr>
         <td align="center">{{ ($key+1).'.' }}</td>
         <td class="col-sm-7">{!! nl2br(trim($s->soal)) !!}</td>
-        <td>
+        <td style="padding: 3px">
           {!! $ss?nl2br($ss->jawaban):'-' !!}
         </td>
       </tr>

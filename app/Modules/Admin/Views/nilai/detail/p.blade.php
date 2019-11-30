@@ -15,7 +15,7 @@
         <td align="center">{{ ($key+1).'.' }}</td>
         <td class="col-sm-7">{!! nl2br(trim($s->soal)) !!}</td>
         <td>
-          <ol type="A" style="margin: 0;padding: 0;padding-left: 20px">
+          <ol type="A" style="margin: 0;padding: 0;padding-left: 25px">
             @foreach ($opsis as $key => $o)
               <li class="{{ ($ss && (string)$ss->jawaban == (string)$key)?'font-weight-bold':'' }}{{ (string)$s->benar == (string)$key?' text-success':'' }}{{ $ss && (string)$ss->jawaban == (string)$key && (string)$s->benar != (string)$key?' text-danger':'' }}">{{ $o }}</li>
             @endforeach

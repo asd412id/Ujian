@@ -20,7 +20,7 @@ class KelasController extends Controller
         ->orWhere('jurusan','ilike',$role)
         ->orWhere('tingkat','ilike',$role);
       })
-      ->orderBy('id','asc')
+      ->orderBy('tingkat','asc')
       ->paginate(30)->appends(request()->except('page'));
       $data = [
         'title' => 'Master Kelas - Administrator',
