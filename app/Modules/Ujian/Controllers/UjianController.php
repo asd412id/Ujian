@@ -67,6 +67,8 @@ class UjianController extends Controller
             Auth::guard('siswa')->logout();
             return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain!'])->withInput($r->only('noujian'));
           }
+          Auth::guard('siswa')->logout();
+          session()->flush();
           Auth::guard('siswa')->attempt([
             'noujian'=>$r->noujian,
             'password'=>$r->password
@@ -76,9 +78,10 @@ class UjianController extends Controller
           $ujian->_token = $user->remember_token;
           $ujian->ip_address = $r->ip();
           $ujian->save();
-          session()->flush();
           return redirect()->back();
         }
+        Auth::guard('siswa')->logout();
+        session()->flush();
         Auth::guard('siswa')->attempt([
           'noujian'=>$r->noujian,
           'password'=>$r->password
@@ -102,10 +105,16 @@ class UjianController extends Controller
 
     public function cekData()
     {
+      $siswa = Auth::guard('siswa')->user();
+      if ($siswa->login) {
+        if ($siswa->login->end) {
+          return redirect()->route('ujian.nilai');
+        }
+      }
       return view('Ujian::cekdata',[
         'title'=>'Pemeriksaan Data Ujian',
         'breadcrumb'=>'Pemeriksaan Data Ujian',
-        'siswa'=>Auth::guard('siswa')->user()
+        'siswa'=>$siswa
       ]);
     }
 
@@ -265,6 +274,9 @@ class UjianController extends Controller
     public function nilai()
     {
       $siswa = Auth::guard('siswa')->user();
+      if (!$siswa && !$siswa->login) {
+        return redirect()->route('ujian.login');
+      }
       if (is_null($siswa->login->end)) {
         $siswa->login()->update([
           'end'=>Carbon::now()
@@ -274,24 +286,34 @@ class UjianController extends Controller
       $nbenar = null;
       $jadwal = $siswa->login->jadwal;
       $bobot = $jadwal->bobot;
-      $jumlah_soal = count(json_decode($siswa->login->soal_ujian));
-      $dtes = Tes::where('noujian',$siswa->noujian)
-      ->where('pin',$siswa->login->pin)->whereIn('soal_item',json_decode($siswa->login->soal_ujian))->get();
-      foreach ($dtes as $key => $tes) {
-        $benar = $tes->soalItem->benar;
-        if (!is_null($benar) && (string) $tes->jawaban == (string) $benar && $tes->soalItem->jenis_soal=='P') {
-          if (is_null($nbenar)) {
-            $nbenar = 0;
+      if ($siswa->login && !is_null($siswa->login->soal_ujian)) {
+        $jumlah_soal = count(json_decode($siswa->login->soal_ujian));
+        $dtes = Tes::where('noujian',$siswa->noujian)
+        ->where('pin',$siswa->login->pin)->whereIn('soal_item',json_decode($siswa->login->soal_ujian))->get();
+        foreach ($dtes as $key => $tes) {
+          $benar = $tes->soalItem->benar;
+          if (!is_null($benar) && (string) $tes->jawaban == (string) $benar && $tes->soalItem->jenis_soal=='P') {
+            if (is_null($nbenar)) {
+              $nbenar = 0;
+            }
+            $nbenar++;
           }
-          $nbenar++;
         }
-      }
-      if ($jumlah_soal) {
+        if ($jumlah_soal) {
+          $nilai = 0;
+        }
+        if (!is_null($nbenar)) {
+          $nilai += round($nbenar/$jumlah_soal*$bobot,2);
+        }
+      }elseif ($jadwal->jenis_soal == 'P') {
         $nilai = 0;
       }
-      if (!is_null($nbenar)) {
-        $nilai += round($nbenar/$jumlah_soal*$bobot,2);
+
+      if (Carbon::now() > Carbon::parse($siswa->login->end)->addMinutes(1)) {
+        Auth::guard('siswa')->logout();
+        session()->flush();
       }
+
       return view('Ujian::nilai',[
         'title'=>'Hasil Ujian',
         'breadcrumb'=>'Hasil Ujian',
@@ -318,7 +340,6 @@ class UjianController extends Controller
     {
       $siswa = Auth::guard('siswa');
       if ($siswa->user()) {
-        // $siswa->user()->login()->delete();
         $siswa->logout();
         session()->flush();
       }

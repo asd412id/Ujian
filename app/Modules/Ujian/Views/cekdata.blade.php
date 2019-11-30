@@ -96,12 +96,12 @@
 <div class="row" style="margin-top: -30px">
   <div class="col-md-12">
     <div class="card-body text-center">
-      @if (!$siswa->login->start)
+      @if (!$siswa->login->start && !$siswa->login->end)
         {{-- <a href="javascript:void(0)" data-url="{{ route('ujian.tes') }}" class="btn btn-lg btn-danger confirm" data-text="Waktu akan mulai berjalan!<br>Mulai ujian?">Mulai Ujian <i class="material-icons">send</i></a> --}}
         <a href="{{ route('ujian.tes') }}" class="btn btn-lg btn-danger native-confirm" data-text="Waktu akan mulai berjalan! MULAI UJIAN?">Mulai Ujian <i class="material-icons">send</i></a>
       @else
         @if ($siswa->login->end)
-          <h4 class="text-center">Ujian Telah Selesai!</h4>
+          <h4 class="text-center alert alert-primary">Ujian Telah Selesai!</h4>
           <a href="{{ route('ujian.nilai') }}" class="btn btn-lg btn-success">Lihat Nilai <i class="material-icons">send</i></a>
         @else
           <h4 class="text-center">Anda sudah memulai ujian!</h4>

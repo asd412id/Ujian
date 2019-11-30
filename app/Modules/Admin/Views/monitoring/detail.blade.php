@@ -10,6 +10,9 @@
         </div>
       </div>
       <div class="card-body">
+        <div class="text-right">
+          <input type="text" class="form-control" placeholder="Cari Peserta" id="cari-peserta">
+        </div>
         <div class="table-responsive" id="data-wrapper">
           <table class="table table-hover">
             <thead class=" text-primary">
@@ -22,7 +25,7 @@
               <th>Alamat IP</th>
               <th></th>
             </thead>
-            <tbody>
+            <tbody class="d-peserta">
               @if (count($login))
                 @foreach ($login as $key => $v)
                   @php
@@ -52,8 +55,8 @@
                     <td>{{ $v->start?date('d/m/Y H:i',strtotime($v->start)):'-' }}</td>
                     <td {{ $timer?'class=l-time':'' }} data-timer="{{ $timer }}">00:00:00</td>
                     <td>{{ $v->ip_address }}</td>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Login" data-text="Reset Login {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.reset',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">refresh</i></a>
                     <td style="white-space: nowrap;width: 50px" class="text-right">
+                      <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Login" data-text="Reset Login {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.reset',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">refresh</i></a>
                       <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-danger stop" title="Set Selesai" data-text="Set Selesai {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.stop',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">not_interested</i></a>
                     </td>
                   </tr>
@@ -78,6 +81,7 @@ function loader() {
   $.get('{{ route('jadwal.ujian.monitoring.getdata',['uuid'=>$jadwal->uuid]) }}',{},function(res){
     if (res) {
       $("#data-wrapper").html(res);
+      cariPeserta($("#cari-peserta").val());
       tm = setTimeout(()=>{
         loader()
       },10000)
@@ -87,8 +91,23 @@ function loader() {
     }
   });
 }
-
 loader()
+
+function cariPeserta(val) {
+  var dp = $(".d-peserta");
+  if (val != '') {
+    dp.find('tr').hide();
+    dp.find("td:contains('"+val+"')").closest('tr').show();
+  }else{
+    dp.find('tr').show();
+  }
+  $.expr[":"].contains = $.expr.createPseudo(function(arg) {
+    return function( elem ) {
+      return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+    };
+  });
+}
+
 $(document).ready(function(){
   $(".l-time").each(function(){
     var countDownDate = new Date($(this).data('timer')).getTime();
@@ -101,6 +120,9 @@ $(document).ready(function(){
     e.stopImmediatePropagation();
     stopUjian($(this));
   })
+  $("#cari-peserta").on('change keyup',function(){
+    cariPeserta($(this).val());
+  });
 })
 function timer(el,countDownDate,now) {
   var x = setInterval(function() {

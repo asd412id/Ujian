@@ -9,7 +9,7 @@
     <th>Alamat IP</th>
     <th></th>
   </thead>
-  <tbody>
+  <tbody class="d-peserta">
     @if (count($data))
       @foreach ($data as $key => $v)
         @php

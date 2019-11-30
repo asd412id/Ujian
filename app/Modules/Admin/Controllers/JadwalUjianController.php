@@ -282,9 +282,13 @@ class JadwalUjianController extends Controller
     public function destroy($uuid)
     {
         $jadwalUjian = JadwalUjian::where('uuid',$uuid)->first();
-        $jadwalUjian->login()->forceDelete();
+        if ($jadwalUjian->login) {
+          $jadwalUjian->login()->forceDelete();
+        }
+        if ($jadwalUjian->tes) {
+          $jadwalUjian->tes()->forceDelete();
+        }
         Auth::guard('siswa')->logout();
-        $jadwalUjian->tes()->forceDelete();
         if ($jadwalUjian->forceDelete()) {
           return redirect()->back()->with('message', 'Data berhasil dihapus');
         }

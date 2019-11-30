@@ -22,7 +22,7 @@ class Siswa extends Authenticatable
 
   public function attemptLogin()
   {
-    return $this->hasOne(Login::class,'noujian','noujian');
+    return $this->hasMany(Login::class,'noujian','noujian');
   }
 
   public function login()
@@ -32,6 +32,6 @@ class Siswa extends Authenticatable
 
   public function tes()
   {
-    return $this->hasmany(Tes::class,'noujian','noujian');
+    return $this->hasMany(Tes::class,'noujian','noujian');
   }
 }
