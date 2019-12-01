@@ -44,7 +44,7 @@
           <label class="bmd-label-floating">Soal Ujian</label>
           <select class="form-control select2-multiple" id="get_soal" multiple name="soal[]" data-url="{{ route('jadwal.ujian.ajax.getsoal') }}" data-placeholder="Cari bank soal">
             @foreach ($soal as $key => $v)
-              <option selected value="{{ $v->uuid }}">{{ '('.$v->kode.') '.$v->nama }}</option>
+              <option selected value="{{ $v->uuid }}">{{ '('.$v->kode.') - '.$v->nama.' -  Soal: '.$v->item()->count() }}</option>
             @endforeach
           </select>
         </div>
@@ -53,7 +53,7 @@
           <select class="form-control select2-multiple" id="get_peserta" name="peserta[]" data-url="{{ route('jadwal.ujian.ajax.getpeserta') }}" multiple data-placeholder="Cari peserta">
             @if (count($siswa))
               @foreach ($siswa as $key => $v)
-                <option selected value="{{ $v->uuid }}">{{ '('.$v->kelas->nama.') ('.$v->noujian.') '.$v->nama }}</option>
+                <option selected value="{{ $v->uuid }}">{{ '('.$v->noujian.') '.$v->nama.' - Kelas '.($v->kelas->nama??'-').'/'.($v->kelas->jurusan??'-') }}</option>
               @endforeach
             @endif
           </select>

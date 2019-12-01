@@ -154,20 +154,20 @@ class NilaiController extends Controller
           }
 
           if ($benar) {
-            $nilai += round($benar/$jadwal->jumlah_soal*$jadwal->bobot,2);
+            $nilai += round($benar/count(json_decode($login->soal_ujian))*$jadwal->bobot,2);
           }
 
         }
 
         $sheet->getStyle('E'.($i+1))->getAlignment()->setHorizontal('center');
-        $sheet->setCellValue('E'.($i+1),$jadwal->jumlah_soal);
+        $sheet->setCellValue('E'.($i+1),count(json_decode($login->soal_ujian??'[]')));
 
         if ($jadwal->jenis_soal=='P') {
           $sheet->getStyle('F'.($i+1))->getAlignment()->setHorizontal('center');
           $sheet->setCellValue('F'.($i+1),$benar);
 
           $sheet->getStyle('G'.($i+1))->getAlignment()->setHorizontal('center');
-          $sheet->setCellValue('G'.($i+1),$jadwal->jumlah_soal-$benar);
+          $sheet->setCellValue('G'.($i+1),count(json_decode($login->soal_ujian??'[]'))-$benar);
         }
 
         $sheet->getStyle('H'.($i+1))->getAlignment()->setHorizontal('center');

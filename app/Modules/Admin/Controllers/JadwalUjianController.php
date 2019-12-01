@@ -5,6 +5,7 @@ namespace App\Modules\Admin\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Soal;
+use App\Models\ItemSoal;
 use App\Models\JadwalUjian;
 use App\Models\Tes;
 use App\Models\Login;
@@ -105,6 +106,13 @@ class JadwalUjianController extends Controller
               }elseif ($mulai_ujian->addMinutes($r->lama_ujian) > $selesai_ujian) {
                 array_push($errs,'Lama ujian melebihi rentang waktu ujian');
               }
+            }
+            $jumlah_soal = ItemSoal::whereHas('getSoal',function($q) use($r){
+              $q->whereIn('uuid',$r->soal);
+            })
+            ->count();
+            if ($r->jumlah_soal > $jumlah_soal) {
+              array_push($errs,'Jumlah soal tidak boleh melebihi soal ujian yang tersedia!');
             }
           }
           if (count($errs)) {
@@ -244,6 +252,13 @@ class JadwalUjianController extends Controller
               }elseif ($mulai_ujian->addMinutes($r->lama_ujian) > $selesai_ujian) {
                 array_push($errs,'Lama ujian melebihi rentang waktu ujian');
               }
+            }
+            $jumlah_soal = ItemSoal::whereHas('getSoal',function($q) use($r){
+              $q->whereIn('uuid',$r->soal);
+            })
+            ->count();
+            if ($r->jumlah_soal > $jumlah_soal) {
+              array_push($errs,'Jumlah soal tidak boleh melebihi soal ujian yang tersedia!');
             }
           }
           if (count($errs)) {

@@ -103,8 +103,8 @@
                   $plogin = $p->attemptLogin()->where('pin',$jadwal->pin)->first();
                   if ($plogin && $plogin->soal_ujian != '' && !is_null($plogin->soal_ujian)) {
                     $dtes = \App\Models\Tes::where('noujian',$p->noujian)
-                    ->where('pin',$jadwal->pin)->whereIn('soal_item',json_decode($plogin->soal_ujian))->get();
-                    $jumlah_soal = count(json_decode($plogin->soal_ujian));
+                    ->where('pin',$jadwal->pin)->whereIn('soal_item',json_decode($plogin->soal_ujian??'[]'))->get();
+                    $jumlah_soal = count(json_decode($plogin->soal_ujian??'[]'));
                     foreach ($dtes as $key1 => $tes) {
                       $benar = $tes->soalItem->benar;
                       if (!is_null($benar) && (string) $tes->jawaban == (string) $benar && $tes->soalItem->jenis_soal=='P') {
@@ -124,9 +124,9 @@
                     <td>{{ $p->noujian }}</td>
                     <td>{{ $p->nama }}</td>
                     <td class="text-center">{{ $p->kelas->nama }}</td>
-                    <td class="text-center">{{ $jadwal->jumlah_soal }}</td>
+                    <td class="text-center">{{ $jumlah_soal }}</td>
                     <td class="text-center">{{ $nbenar }}</td>
-                    <td class="text-center">{{ $jadwal->jumlah_soal-$nbenar }}</td>
+                    <td class="text-center">{{ $jumlah_soal-$nbenar }}</td>
                     <td class="text-center">{{ $nilai }}</td>
                   </tr>
                 @endforeach
