@@ -397,7 +397,7 @@ class JadwalUjianController extends Controller
           return redirect()->back()->withErrors('Data siswa tidak tersedia');
         }
         $filename = 'Kartu Peserta Ujian Kelas '.$kelas->nama.' '.$kelas->jurusan.'.pdf';
-        $peserta = $kelas->siswa;
+        $peserta = $kelas->siswa()->orderBy('id','asc')->get();
       }
 
       // $view = view('Admin::master.jadwalujian.kartu',[
