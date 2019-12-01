@@ -93,12 +93,13 @@ function initModalScripts() {
         self.trigger('close');
       });
       $unselectAll.on('click', function (e) {
-        var $results = $rendered.find('.select2-results__option[aria-selected=true]');
-        $results.each(function () {
-          self.trigger('unselect', {
-            data: $(this).data('data')
-          });
-        });
+        // var $results = $rendered.find('.select2-results__option[aria-selected=true]');
+        // $results.each(function () {
+        //   self.trigger('unselect', {
+        //     data: $(this).data('data')
+        //   });
+        // });
+        self.$element.find('option').prop('selected',false).trigger('change');
         self.trigger('close');
       });
       return $rendered;

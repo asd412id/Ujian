@@ -101,7 +101,7 @@
                   $nilai = 0;
                   $nbenar = 0;
                   $plogin = $p->attemptLogin()->where('pin',$jadwal->pin)->first();
-                  if ($plogin) {
+                  if ($plogin && $plogin->soal_ujian != '' && !is_null($plogin->soal_ujian)) {
                     $dtes = \App\Models\Tes::where('noujian',$p->noujian)
                     ->where('pin',$jadwal->pin)->whereIn('soal_item',json_decode($plogin->soal_ujian))->get();
                     $jumlah_soal = count(json_decode($plogin->soal_ujian));

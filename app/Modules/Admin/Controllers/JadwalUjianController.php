@@ -373,7 +373,7 @@ class JadwalUjianController extends Controller
 
       if ($jadwal) {
         $filename = 'Kartu Peserta Ujian '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
-        $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->get();
+        $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->orderBy('id','asc')->get();
         if (!count($peserta)) {
           return redirect()->back()->withErrors('Data siswa tidak tersedia');
         }
@@ -437,7 +437,7 @@ class JadwalUjianController extends Controller
 
       if ($jadwal) {
         $filename = 'Daftar Hadir Peserta Ujian '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
-        $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->get();
+        $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->orderBy('id','asc')->get();
         if (!count($peserta)) {
           return redirect()->back()->withErrors('Data siswa tidak tersedia');
         }
@@ -513,7 +513,7 @@ class JadwalUjianController extends Controller
 
       if ($jadwal) {
         $filename = 'Berita Acara Pelaksanaan '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
-        $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->get();
+        $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))->orderBy('id','asc')->get();
         if (!count($peserta)) {
           return redirect()->back()->withErrors('Data siswa tidak tersedia');
         }

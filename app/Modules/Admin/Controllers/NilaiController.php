@@ -284,9 +284,9 @@ class NilaiController extends Controller
       $jadwal = JadwalUjian::with('tes')->where('uuid',$ujian)->first();
       $siswa = Siswa::where('uuid',$siswa)->first();
       $plogin = $siswa->attemptLogin()->where('pin',$jadwal->pin)->first();
-      $jumlah_soal = count(json_decode($plogin->soal_ujian));
+      $jumlah_soal = @count(json_decode($plogin->soal_ujian));
       $dtes = Tes::where('noujian',$siswa->noujian)
-      ->where('pin',$jadwal->pin)->whereIn('soal_item',json_decode($plogin->soal_ujian))->get();
+      ->where('pin',$jadwal->pin)->whereIn('soal_item',json_decode($plogin->soal_ujian??'[]'))->get();
 
       $getMapel = Mapel::whereHas('soal',function($q) use($jadwal){
         $q->whereIn('uuid',json_decode($jadwal->soal));
@@ -310,7 +310,7 @@ class NilaiController extends Controller
       }
 
       $soal = [];
-      $siswaSoal = json_decode($plogin->soal_ujian);
+      $siswaSoal = json_decode($plogin->soal_ujian??'[]');
       if (count($siswaSoal)) {
         foreach ($siswaSoal as $key => $s) {
           $gs = ItemSoal::where('uuid',$s)->first();

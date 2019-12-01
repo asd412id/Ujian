@@ -19,6 +19,10 @@
     <img src="{{ url('uploads/'.$sekolah->logo) }}" alt="" style="display: inline;height: 100%;max-height: 95px;">
   </div>
 @endif
-<p style="text-align: center;margin-bottom: 0;margin-top: 5px;padding: 0 125px"><em>{{ $sekolah->alamat }},&nbsp;<i class="fa fa-fw fa-phone"></i> {{ $sekolah->telp }}</em>,&nbsp;<i class="fa fa-fw fa-envelope"></i> {{ $sekolah->fax }}</em></p>
+<p style="text-align: center;margin-bottom: 0;margin-top: 5px;padding: 0 125px">
+  <em>
+    {{ $sekolah->alamat??'' }}{!! $sekolah->telp?',&nbsp;<span style="white-space: nowrap"><i class="fa fa-fw fa-phone"></i>'.$sekolah->telp.'</span>':'' !!}{!! $sekolah->kodepos?',&nbsp;<span style="white-space: nowrap"><i class="fa fa-fw fa-envelope"></i>'.$sekolah->kodepos.'</span>':'' !!}
+  </em>
+</p>
 <div style="border-top: solid 3px #000;border-bottom: solid 1px #000;margin-top: 3px;margin-bottom: 0;padding: 1px 0;"></div>
 <div class="clearfix"></div>
