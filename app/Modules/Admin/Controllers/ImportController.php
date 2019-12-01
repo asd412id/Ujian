@@ -303,8 +303,8 @@ class ImportController extends Controller
               if ($soal instanceof RichText) {
                 $newsoal = '';
                 foreach ($soal->getRichTextElements() as $richTextElement) {
-                  $st = 0;
                   if ($richTextElement->getFont()) {
+                    $st = 0;
                     $styles = '';
                     if ($richTextElement->getFont()->getBold() === true) {
                       $st = 1;
@@ -346,6 +346,8 @@ class ImportController extends Controller
                       $newsoal .= $richTextElement->getText();
                     }
                     $newsoal .= $styles;
+                  }else {
+                    $newsoal .= $richTextElement->getText();
                   }
                 }
                 $soal = $newsoal;
