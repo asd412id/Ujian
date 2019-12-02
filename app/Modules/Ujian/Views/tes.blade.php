@@ -63,7 +63,7 @@ function timer(countDownDate,now) {
 
     $(".timer").html(hours + ":" + minutes + ":" + seconds);
 
-    if (time==5) {
+    if (time==10) {
       if (ar) {
         checkingReq = $.ajax({
           url: '{{ route('ujian.getsoal') }}',
@@ -73,6 +73,10 @@ function timer(countDownDate,now) {
               location.href = '{{ route('ujian.selesai') }}';
             }else {
               time=0;
+              clearInterval(x);
+              countDownDate = new Date(res.timer).getTime();
+              now = new Date(res.now);
+              timer(countDownDate,now);
               if ($("meta[name='csrf-token']").length) {
                 $("meta[name='csrf-token']").prop('content',res.token);
               }

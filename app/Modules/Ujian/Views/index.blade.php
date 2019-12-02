@@ -34,7 +34,7 @@
 </head>
 <body>
 
-<form method="post" action="{{ route('ujian.dologin') }}">
+<form method="post" action="{{ route('ujian.dologin') }}" id="login">
   @if($sekolah)
   <div class="logo-wrap">
     @if (is_file(base_path('uploads/'.$sekolah->logo)))
@@ -82,11 +82,23 @@
 </div>
 <script src="{{ url('/') }}/assets/js/core/jquery.min.js"></script>
 <script type="text/javascript">
-  var token_gen = setInterval(()=>{
+  var lgin = false;
+  function loginProcess(form){
     $.get('{{ route('token.generate') }}',function(token){
-      $("input[name='_token']").val(token);
+      form.find("input[name='_token']").val(token);
+      lgin = true;
+      form.submit();
     })
-  },120000)
+  }
+
+  $("#login").on('submit',function(e){
+    if (lgin == false) {
+      e.preventDefault();
+      $(this).find("input[type=submit]").prop('disabled',true);
+      $(this).find("input[type=submit]").val('Memproses ...');
+      loginProcess($(this));
+    }
+  })
 </script>
 </body>
 </html>

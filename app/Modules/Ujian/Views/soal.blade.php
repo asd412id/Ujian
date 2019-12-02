@@ -58,6 +58,9 @@
 @endforeach
 </div>
 <script>
+if ($("meta[name='csrf-token']").length) {
+  $("meta[name='csrf-token']").prop('content','{{ csrf_token() }}');
+}
 $(".otext").click(function(){
   $(this).find('.jawab').prop('checked',true);
 })

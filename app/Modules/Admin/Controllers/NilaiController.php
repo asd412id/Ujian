@@ -24,7 +24,14 @@ class NilaiController extends Controller
 
     public function index()
     {
-      $jadwal = JadwalUjian::with('tes')->paginate(30)->appends(request()->except('page'));
+      $cari = request()->cari;
+      $jadwal = JadwalUjian::with('tes')
+      ->when($cari,function($jadwal,$role){
+        $r = '%'.$role.'%';
+        $jadwal->where('nama_ujian','ilike',$r)
+        ->orWhere('pin','ilike',$r);
+      })
+      ->paginate(30)->appends(request()->except('page'));
       return view("Admin::nilai.index",[
         'title'=>'Nilai Ujian - Administrator',
         'breadcrumb'=>'Nilai Ujian',
@@ -268,10 +275,58 @@ class NilaiController extends Controller
     public function detail($uuid)
     {
       $jadwal = JadwalUjian::with('tes')->where('uuid',$uuid)->first();
+
+      $kelas = '';
+      $mapel = '';
+
+      $getKelas = Kelas::whereHas('siswa',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->peserta));
+      })
+      ->orderBy('tingkat','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getKelas)) {
+        foreach ($getKelas as $key => $k) {
+          $kelas .= $k->nama;
+          if ($key < count($getKelas)-2) {
+            $kelas .= ', ';
+          }elseif ($key == count($getKelas)-2) {
+            if (count($getKelas) > 2) {
+              $kelas .= ',';
+            }
+            $kelas .= ' dan ';
+          }
+        }
+      }
+
+      $getMapel = Mapel::whereHas('soal',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->soal));
+      })
+      ->orderBy('id','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getMapel)) {
+        foreach ($getMapel as $key => $m) {
+          $mapel .= $m->nama;
+          if ($key < count($getMapel)-2) {
+            $mapel .= ', ';
+          }elseif ($key == count($getMapel)-2) {
+            if (count($getMapel) > 2) {
+              $mapel .= ',';
+            }
+            $mapel .= ' dan ';
+          }
+        }
+      }
+
       return view("Admin::nilai.detail",[
         'title'=>'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' - Administrator',
         'breadcrumb'=>'Nilai Ujian',
         'jadwal'=>$jadwal,
+        'kelas'=>$kelas,
+        'mapel'=>$mapel,
         'peserta'=>Siswa::whereIn('uuid',json_decode($jadwal->peserta))->orderBy('id','asc')->get(),
       ]);
     }

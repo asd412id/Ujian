@@ -186,9 +186,10 @@ class UjianController extends Controller
         }
 
         if ($r->has('checking')) {
-          sleep(3);
           return response()->json([
             'status' => 1,
+            'now'=>strtotime(Carbon::now())*1000,
+            'timer' => strtotime($this->timer())*1000,
             'token' => csrf_token()
           ]);
         }
@@ -310,8 +311,7 @@ class UjianController extends Controller
       }
 
       if (Carbon::now() > Carbon::parse($siswa->login->end)->addMinutes(1)) {
-        Auth::guard('siswa')->logout();
-        session()->flush();
+        return redirect()->route('ujian.logout');
       }
 
       return view('Ujian::nilai',[

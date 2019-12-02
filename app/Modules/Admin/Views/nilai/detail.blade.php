@@ -6,10 +6,8 @@
       <div class="card-header card-header-primary">
         <div class="pull-left">
           <h4 class="card-title ">Nilai {{ $jadwal->nama_ujian }} ({{ $jadwal->pin }})</h4>
-          <p class="card-category">
-            Jumlah Peserta: {{ count(json_decode($jadwal->peserta)) }}<br>
-            Jenis Soal: {{ $jadwal->jenis_soal=='P'?'Pilihan Ganda':'Essay' }}
-          </p>
+          <p class="card-category">Kelas: <strong>{{ $kelas }}</strong></p>
+          <p class="card-category">Mata Pelajaran: <strong>{{ $mapel }}</strong></p>
         </div>
       </div>
       <div class="card-body">

@@ -87,7 +87,7 @@
                     <td style="vertical-align: top">
                       {{ $v->nama_ujian }}<br>
                       <span class="badge badge-primary">{{ $mapel }}</span><br>
-                      <span class="badge badge-danger">{{ $kelas }}</span>
+                      <span class="badge badge-danger">Kelas {{ $kelas }}</span>
                     </td>
                     <td style="vertical-align: top">{{ @count(json_decode($v->peserta)) }}</td>
                     <td style="vertical-align: top">{{ $v->jumlah_soal }}</td>

@@ -336,8 +336,56 @@ class JadwalUjianController extends Controller
       $login = $jadwal->login()->withTrashed()
       ->orderBy('id','asc')
       ->get();
+
+      $kelas = '';
+      $mapel = '';
+
+      $getKelas = Kelas::whereHas('siswa',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->peserta));
+      })
+      ->orderBy('tingkat','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getKelas)) {
+        foreach ($getKelas as $key => $k) {
+          $kelas .= $k->nama;
+          if ($key < count($getKelas)-2) {
+            $kelas .= ', ';
+          }elseif ($key == count($getKelas)-2) {
+            if (count($getKelas) > 2) {
+              $kelas .= ',';
+            }
+            $kelas .= ' dan ';
+          }
+        }
+      }
+
+      $getMapel = Mapel::whereHas('soal',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->soal));
+      })
+      ->orderBy('id','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getMapel)) {
+        foreach ($getMapel as $key => $m) {
+          $mapel .= $m->nama;
+          if ($key < count($getMapel)-2) {
+            $mapel .= ', ';
+          }elseif ($key == count($getMapel)-2) {
+            if (count($getMapel) > 2) {
+              $mapel .= ',';
+            }
+            $mapel .= ' dan ';
+          }
+        }
+      }
+
       return view("Admin::monitoring.detail",[
         'jadwal'=>$jadwal,
+        'kelas'=>$kelas,
+        'mapel'=>$mapel,
         'login'=>$login,
         'title' => 'Monitoring Ujian - Administrator',
         'breadcrumb' => 'Monitoring '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian),
@@ -368,6 +416,7 @@ class JadwalUjianController extends Controller
       }
       return redirect()->route('admin.index');
     }
+
     public function monitoringReset($pin,$noujian)
     {
       if (request()->ajax()) {
@@ -375,8 +424,15 @@ class JadwalUjianController extends Controller
         $login->_token = null;
         $login->ip_address = null;
         $login->save();
-        // $login->tes()->where('noujian',$noujian)->forceDelete();
-        // $login->forceDelete();
+      }
+      return redirect()->route('admin.index');
+    }
+    public function monitoringRetest($pin,$noujian)
+    {
+      if (request()->ajax()) {
+        $login = Login::where('pin',$pin)->where('noujian',$noujian)->first();
+        $login->tes()->where('noujian',$noujian)->forceDelete();
+        $login->forceDelete();
       }
       return redirect()->route('admin.index');
     }

@@ -6,7 +6,9 @@
       <div class="card-header card-header-primary">
         <div class="pull-left">
           <h4 class="card-title ">Status Ujian {{ $jadwal->nama_ujian }}</h4>
-          <p class="card-category">Status Ujian Siswa</p>
+          <p class="card-category">Kelas: <strong>{{ $kelas }}</strong></p>
+          <p class="card-category">Mata Pelajaran: <strong>{{ $mapel }}</strong></p>
+          <p class="card-category">PIN: <strong>{{ $jadwal->pin }}</strong></p>
         </div>
       </div>
       <div class="card-body">
@@ -109,6 +111,8 @@ function cariPeserta(val) {
 }
 
 $(document).ready(function(){
+  $("#search-bar").hide();
+  $("#cari-peserta").focus();
   $(".l-time").each(function(){
     var countDownDate = new Date($(this).data('timer')).getTime();
     var now = new Date('{{ Carbon\Carbon::now() }}');
