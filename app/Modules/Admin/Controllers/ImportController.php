@@ -358,8 +358,8 @@ class ImportController extends Controller
               $opsi = null;
               $benar = null;
 
+              $opsi = [];
               if ($opsi_count) {
-                $opsi = [];
                 for ($i=0; $i < $opsi_count; $i++) {
                   array_push($opsi,$row[$i+3]);
 

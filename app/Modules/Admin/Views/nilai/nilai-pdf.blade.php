@@ -73,7 +73,7 @@
                 <th>{{ $jadwal->lama_ujian.' Menit' }}</th>
               </tr>
               <tr>
-                <td style="width: 150px">PIN</td>
+                <td style="width: 200px">PIN</td>
                 <td align="center" style="width: 15px">:</td>
                 <th>{{ $jadwal->pin }}</th>
               </tr>

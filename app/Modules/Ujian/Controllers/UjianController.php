@@ -209,7 +209,7 @@ class UjianController extends Controller
         if (!$cek) {
           if ($soal->jenis_soal=='P') {
             if ($soal->acak_opsi=='Y') {
-              $keys = array_keys(json_decode($soal->opsi));
+              $keys = array_keys(json_decode($soal->opsi??'[]'));
               shuffle($keys);
               foreach ($keys as $v) {
                 $opsis[$v] = json_decode($soal->opsi)[$v];

@@ -30,7 +30,7 @@
           <div class="col-sm-6" style="float: left !important;max-width: 450px">
             <table class="table table-info">
               <tr>
-                <td style="width: 150px">NOMOR UJIAN</td>
+                <td style="width: 200px">NOMOR UJIAN</td>
                 <td align="center" style="width: 15px">:</td>
                 <th>{{ $siswa->noujian }}</th>
               </tr>
