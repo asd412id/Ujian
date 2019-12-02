@@ -30,7 +30,7 @@
           <div class="col-sm-6" style="float: left !important;max-width: 450px">
             <table class="table table-info">
               <tr>
-                <td style="width: 200px;white-space: nowrap">NOMOR UJIAN</td>
+                <td style="white-space: nowrap">NOMOR UJIAN</td>
                 <td align="center" style="width: 15px">:</td>
                 <th>{{ $siswa->noujian }}</th>
               </tr>
@@ -54,7 +54,7 @@
           <div class="col-sm-6" style="float: right !important;max-width: 400px">
             <table class="table table-info">
               <tr>
-                <td style="width: 150px;white-space: nowrap">MATA PELAJARAN</td>
+                <td style="white-space: nowrap">MATA PELAJARAN</td>
                 <td align="center" style="width: 15px">:</td>
                 <th>{{ $mapel }}</th>
               </tr>

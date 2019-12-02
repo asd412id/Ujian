@@ -38,7 +38,7 @@
           <div class="col-sm-6 pull-left" style="max-width: 550px">
             <table class="table table-info">
               <tr>
-                <td style="width: 150px;white-space: nowrap">MATA PELAJARAN</td>
+                <td style="white-space: nowrap">MATA PELAJARAN</td>
                 <td align="center" style="width: 15px">:</td>
                 <th>{{ $mapel }}</th>
               </tr>
@@ -77,7 +77,7 @@
                 <th>{{ $jadwal->lama_ujian.' Menit' }}</th>
               </tr>
               <tr>
-                <td style="width: 200px">PIN</td>
+                <td>PIN</td>
                 <td align="center" style="width: 15px">:</td>
                 <th>{{ $jadwal->pin }}</th>
               </tr>

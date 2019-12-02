@@ -54,31 +54,31 @@
               <tr>
                 <td></td>
                 <td style="width: 250px;white-space: nowrap">Mata Pelajaran</td>
-                <td>:</td>
+                <td style="width: 3px !important">:</td>
                 <td style="font-weight: bold">{{ $mapel }}</td>
               </tr>
               <tr>
                 <td></td>
                 <td style="width: 250px">Kelas</td>
-                <td>:</td>
+                <td style="width: 3px !important">:</td>
                 <td style="font-weight: bold">{{ $kelas }}</td>
               </tr>
               <tr>
                 <td></td>
                 <td style="width: 250px">Jumlah Peserta</td>
-                <td>:</td>
+                <td style="width: 3px !important">:</td>
                 <td style="font-weight: bold">{{ count(json_decode($jadwal->peserta)).' Orang' }}</td>
               </tr>
               <tr>
                 <td></td>
                 <td style="width: 250px">Yang Hadir</td>
-                <td>:</td>
+                <td style="width: 3px !important">:</td>
                 <td style="font-weight: bold"> .......... Orang</td>
               </tr>
               <tr>
                 <td></td>
                 <td style="width: 250px">Yang Tidak Hadir</td>
-                <td>:</td>
+                <td style="width: 3px !important">:</td>
                 <td style="font-weight: bold"> .......... Orang</td>
               </tr>
               <tr>
