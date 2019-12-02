@@ -41,11 +41,11 @@
                     ->get();
 
                     if (count($getKelas)) {
-                      foreach ($getKelas as $key => $k) {
+                      foreach ($getKelas as $key1 => $k) {
                         $kelas .= $k->nama;
-                        if ($key < count($getKelas)-2) {
+                        if ($key1 < count($getKelas)-2) {
                           $kelas .= ', ';
-                        }elseif ($key == count($getKelas)-2) {
+                        }elseif ($key1 == count($getKelas)-2) {
                           if (count($getKelas) > 2) {
                             $kelas .= ',';
                           }
@@ -62,11 +62,11 @@
                     ->get();
 
                     if (count($getMapel)) {
-                      foreach ($getMapel as $key => $m) {
+                      foreach ($getMapel as $key2 => $m) {
                         $mapel .= $m->nama;
-                        if ($key < count($getMapel)-2) {
+                        if ($key2 < count($getMapel)-2) {
                           $mapel .= ', ';
-                        }elseif ($key == count($getMapel)-2) {
+                        }elseif ($key2 == count($getMapel)-2) {
                           if (count($getMapel) > 2) {
                             $mapel .= ',';
                           }

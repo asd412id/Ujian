@@ -32,50 +32,52 @@
               @if (count($jadwal))
                 @foreach ($jadwal as $key => $v)
                   @php
-                    $kelas = '';
-                    $mapel = '';
+                  $sdata = [];
+                  $soal = json_decode($v->soal);
+                  $kelas = '';
+                  $mapel = '';
 
-                    $getKelas = App\Models\Kelas::whereHas('siswa',function($q) use($v){
-                      $q->whereIn('uuid',json_decode($v->peserta));
-                    })
-                    ->orderBy('tingkat','asc')
-                    ->select('nama')
-                    ->get();
+                  $getKelas = App\Models\Kelas::whereHas('siswa',function($q) use($v){
+                    $q->whereIn('uuid',json_decode($v->peserta));
+                  })
+                  ->orderBy('tingkat','asc')
+                  ->select('nama')
+                  ->get();
 
-                    if (count($getKelas)) {
-                      foreach ($getKelas as $key => $k) {
-                        $kelas .= $k->nama;
-                        if ($key < count($getKelas)-2) {
-                          $kelas .= ', ';
-                        }elseif ($key == count($getKelas)-2) {
-                          if (count($getKelas) > 2) {
-                            $kelas .= ',';
-                          }
-                          $kelas .= ' dan ';
+                  if (count($getKelas)) {
+                    foreach ($getKelas as $key1 => $k) {
+                      $kelas .= $k->nama;
+                      if ($key1 < count($getKelas)-2) {
+                        $kelas .= ', ';
+                      }elseif ($key1 == count($getKelas)-2) {
+                        if (count($getKelas) > 2) {
+                          $kelas .= ',';
                         }
+                        $kelas .= ' dan ';
                       }
                     }
+                  }
 
-                    $getMapel = App\Models\Mapel::whereHas('soal',function($q) use($v){
-                      $q->whereIn('uuid',json_decode($v->soal));
-                    })
-                    ->orderBy('id','asc')
-                    ->select('nama')
-                    ->get();
+                  $getMapel = App\Models\Mapel::whereHas('soal',function($q) use($v){
+                    $q->whereIn('uuid',json_decode($v->soal));
+                  })
+                  ->orderBy('id','asc')
+                  ->select('nama')
+                  ->get();
 
-                    if (count($getMapel)) {
-                      foreach ($getMapel as $key => $m) {
-                        $mapel .= $m->nama;
-                        if ($key < count($getMapel)-2) {
-                          $mapel .= ', ';
-                        }elseif ($key == count($getMapel)-2) {
-                          if (count($getMapel) > 2) {
-                            $mapel .= ',';
-                          }
-                          $mapel .= ' dan ';
+                  if (count($getMapel)) {
+                    foreach ($getMapel as $key2 => $m) {
+                      $mapel .= $m->nama;
+                      if ($key2 < count($getMapel)-2) {
+                        $mapel .= ', ';
+                      }elseif ($key2 == count($getMapel)-2) {
+                        if (count($getMapel) > 2) {
+                          $mapel .= ',';
                         }
+                        $mapel .= ' dan ';
                       }
                     }
+                  }
                   @endphp
                   <tr>
                     @php
