@@ -15,6 +15,8 @@
             <thead class=" text-primary">
               <th>No</th>
               <th>Nama Ujian</th>
+              <th>Kelas</th>
+              <th>Mapel</th>
               <th>PIN</th>
               <th>Soal</th>
               <th>Jenis</th>
@@ -28,13 +30,59 @@
                   @php
                     $sdata = [];
                     $soal = json_decode($v->soal);
+                    $kelas = '';
+                    $mapel = '';
+
+                    $getKelas = App\Models\Kelas::whereHas('siswa',function($q) use($v){
+                      $q->whereIn('uuid',json_decode($v->peserta));
+                    })
+                    ->orderBy('tingkat','asc')
+                    ->select('nama')
+                    ->get();
+
+                    if (count($getKelas)) {
+                      foreach ($getKelas as $key => $k) {
+                        $kelas .= $k->nama;
+                        if ($key < count($getKelas)-2) {
+                          $kelas .= ', ';
+                        }elseif ($key == count($getKelas)-2) {
+                          if (count($getKelas) > 2) {
+                            $kelas .= ',';
+                          }
+                          $kelas .= ' dan ';
+                        }
+                      }
+                    }
+
+                    $getMapel = App\Models\Mapel::whereHas('soal',function($q) use($v){
+                      $q->whereIn('uuid',json_decode($v->soal));
+                    })
+                    ->orderBy('id','asc')
+                    ->select('nama')
+                    ->get();
+
+                    if (count($getMapel)) {
+                      foreach ($getMapel as $key => $m) {
+                        $mapel .= $m->nama;
+                        if ($key < count($getMapel)-2) {
+                          $mapel .= ', ';
+                        }elseif ($key == count($getMapel)-2) {
+                          if (count($getMapel) > 2) {
+                            $mapel .= ',';
+                          }
+                          $mapel .= ' dan ';
+                        }
+                      }
+                    }
                   @endphp
                   <tr>
                     @php
                     $index = Request::get('page')??1;
                     @endphp
                     <td>{{ (($index-1)*30)+$key+1 }}</td>
-                    <td>{{ $v->nama_ujian }}</td>
+                    <td style="vertical-align: top">{{ $v->nama_ujian }}</td>
+                    <td style="vertical-align: top">{{ $kelas }}</td>
+                    <td style="vertical-align: top">{{ $mapel }}</td>
                     <td>{{ $v->pin }}</td>
                     <td>{{ $v->jumlah_soal }}</td>
                     <td>{{ $v->jenis_soal=='P'?'Pilihan Ganda':'Essay' }}</td>
