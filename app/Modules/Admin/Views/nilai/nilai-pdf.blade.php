@@ -34,7 +34,7 @@
           <div class="col-sm-6 pull-left" style="max-width: 550px">
             <table class="table table-info">
               <tr>
-                <td style="width: 150px">MATA PELAJARAN</td>
+                <td style="width: 200px;white-space: nowrap">MATA PELAJARAN</td>
                 <td align="center" style="width: 15px">:</td>
                 <th>{{ $mapel }}</th>
               </tr>
@@ -63,7 +63,7 @@
                 <th>{{ $kelas }}</th>
               </tr>
               <tr>
-                <td>JUMLAH PESERTA</td>
+                <td style="white-space: nowrap">JUMLAH PESERTA</td>
                 <td align="center">:</td>
                 <th>{{ count(json_decode($jadwal->peserta)).' Orang' }}</th>
               </tr>

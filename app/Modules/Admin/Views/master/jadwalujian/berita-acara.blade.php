@@ -53,7 +53,7 @@
               </tr>
               <tr>
                 <td></td>
-                <td style="width: 250px">Mata Pelajaran</td>
+                <td style="width: 250px;white-space: nowrap">Mata Pelajaran</td>
                 <td>:</td>
                 <td style="font-weight: bold">{{ $mapel }}</td>
               </tr>
