@@ -29,11 +29,8 @@ class JadwalUjianController extends Controller
     {
       $jadwalUjian = JadwalUjian::when($r->cari,function($q,$role){
         $role = '%'.$role.'%';
-        $q->where('kode','ilike',$role)
-        ->orWhere('nama','ilike',$role)
-        ->orWhereHas('getSoal',function($q) use($role){
-          $q->where('nama','ilike',$role);
-        });
+        $q->where('nama_ujian','ilike',$role)
+        ->orWhere('pin','ilike',$role);
       })
       ->orderBy('aktif','desc')
       ->orderBy('updated_at','desc')
