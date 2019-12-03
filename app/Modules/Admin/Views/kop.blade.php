@@ -8,13 +8,13 @@
     $kop = explode("\n",$sekolah->kop_kartu);
     if (count($kop)) {
       foreach ($kop as $key => $k) {
-        printf('<h3 class="font-weight-bold" style="text-align: center;margin: 0;padding: 0 115px">%s</h3>',$k);
+        printf('<h3 class="font-weight-bold" style="text-align: center;margin: 0">%s</h3>',$k);
       }
     }
   }
 @endphp
-<h3 class="font-weight-bold" style="text-align: center;margin: 0;padding: 0 115px">{{ $sekolah->nama }}</h3>
-<p style="text-align: center;margin-bottom: 0;margin-top: 5px;padding: 0 125px">
+<h3 class="font-weight-bold" style="text-align: center;margin: 0">{{ $sekolah->nama }}</h3>
+<p style="text-align: center;margin-bottom: 0;margin-top: 5px">
   <em>
     {{ $sekolah->alamat??'' }}{!! $sekolah->telp?',&nbsp;<span style="white-space: nowrap"><i class="fa fa-fw fa-phone"></i>'.$sekolah->telp.'</span>':'' !!}{!! $sekolah->kodepos?',&nbsp;<span style="white-space: nowrap"><i class="fa fa-fw fa-envelope"></i>'.$sekolah->kodepos.'</span>':'' !!}
   </em>
