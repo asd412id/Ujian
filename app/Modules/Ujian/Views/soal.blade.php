@@ -58,9 +58,6 @@
 @endforeach
 </div>
 <script>
-if ($("meta[name='csrf-token']").length) {
-  $("meta[name='csrf-token']").prop('content','{{ csrf_token() }}');
-}
 $(".otext").click(function(){
   $(this).find('.jawab').prop('checked',true);
 })
@@ -71,34 +68,49 @@ $(".btn-soal-nav").click(function(){
   getSoal(soal,key,$(_btn.data('btn')));
 })
 
+var submit = false;
+function loginProcess(form){
+  $.get('{{ route('token.generate') }}',function(token){
+    if ($("meta[name='csrf-token']").length) {
+      $("meta[name='csrf-token']").prop('content',token);
+    }
+    submit = true;
+    form.submit();
+  })
+}
+
 $("#form-ujian").submit(function(e){
   e.preventDefault();
-  $(".mask-container").show();
-  var _this = $(this);
-  $.ajax({
-    url: _this.attr('action'),
-    data: _this.serialize(),
-    type: 'POST',
-    headers: {
+  if (submit == true) {
+    $(".mask-container").show();
+    var _this = $(this);
+    $.ajax({
+      url: _this.attr('action'),
+      data: _this.serialize(),
+      type: 'POST',
+      headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-    success: function(res){
-      if (res.success) {
-        var tbtn = $("#soal-{{ $soal->uuid }}");
-        if (!tbtn.hasClass('btn-success')&&(_this.find("input[name='jawab']").is(":checked")&&_this.find("input[name='jawab']").val()!='')) {
-          tbtn.removeClass('btn-default');
-          tbtn.addClass('btn-success');
-        }
-        if ($(".btn-next").length) {
-          $(".btn-next").click();
-        }else {
-          var btn = '#soal-{{ json_decode($allSoal)[0] }}';
-          var soal = '{{ json_decode($allSoal)[0] }}';
-          getSoal(soal,1,$(btn));
+      },
+      success: function(res){
+        if (res.success) {
+          var tbtn = $("#soal-{{ $soal->uuid }}");
+          if (!tbtn.hasClass('btn-success')&&(_this.find("input[name='jawab']").is(":checked")&&_this.find("input[name='jawab']").val()!='')) {
+            tbtn.removeClass('btn-default');
+            tbtn.addClass('btn-success');
+          }
+          if ($(".btn-next").length) {
+            $(".btn-next").click();
+          }else {
+            var btn = '#soal-{{ json_decode($allSoal)[0] }}';
+            var soal = '{{ json_decode($allSoal)[0] }}';
+            getSoal(soal,1,$(btn));
+          }
         }
       }
-    }
-  })
+    })
+  }else {
+    loginProcess($(this));
+  }
 })
 
 $("#btn-submit").click(function(){

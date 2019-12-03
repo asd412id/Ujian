@@ -97,7 +97,7 @@
                     <td style="vertical-align: top">{{ date('d/m/Y H:i',strtotime($v->selesai_ujian)) }}</td>
                     <td style="vertical-align: top">{{ $v->lama_ujian.' Menit' }}</td>
                     <td style="font-weight:bold;vertical-align: top" class="text-primary">{{ $v->pin }}</td>
-                    <td style="width: 150px;vertical-align: top" class="text-center">
+                    <td style="width: 125px;vertical-align: top" class="text-center">
                       @if (($v->aktif||is_null($v->aktif)))
                       <a class="btn btn-sm btn-xs {{ $v->aktif?'btn-yellow':'btn-primary' }} confirm" title="{{ $v->aktif?'Nonaktifkan':'Aktifkan' }} Jadwal Ujian" data-text="{{ $v->aktif?'Nonaktifkan Jadwal Ujian?<br>Semua peserta akan logout!':'Hasil ujian sebelumnya akan terhapus!<br>Aktifkan Jadwal Ujian?' }}" href="#" data-url="{{ route('jadwal.ujian.activate',['uuid'=>$v->uuid]) }}">{!! $v->aktif?'<i class="material-icons">close</i>':'<i class="material-icons">check</i>' !!}</a>
                       @if ($v->aktif)
@@ -110,8 +110,8 @@
                         <a href="{{ route('jadwal.ujian.print.berita',['uuid'=>$v->uuid]) }}" target="_blank" class="btn btn-sm btn-xs btn-blue" title="Cetak Berita Acara"><i class="material-icons">book</i></a>
                       @endif
                       @if (!$v->aktif)
-                      @if ($v->aktif||is_null($v->aktif))
-                      <a class="btn btn-sm btn-xs btn-info" title="Ubah" href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#modalEdit" data-url="{{ route('jadwal.ujian.edit',['uuid'=>$v->uuid]) }}" class="text-info"><i class="material-icons">edit</i></a>
+                        <a class="btn btn-sm btn-xs btn-info" title="Ubah" href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#modalEdit" data-url="{{ route('jadwal.ujian.edit',['uuid'=>$v->uuid]) }}" class="text-info"><i class="material-icons">edit</i></a>
+                      @if (is_null($v->aktif))
                       @endif
                       <a class="btn btn-sm btn-xs btn-danger confirm" title="Hapus" data-text="Semua jawaban & nilai peserta akan terhapus untuk jadwal ini!<br><b>Hapus Jadwal Ujian {{ $v->nama_ujian }}</b>" href="#" data-url="{{ route('jadwal.ujian.destroy',['uuid'=>$v->uuid]) }}"><i class="material-icons">delete</i></a>
                        @endif

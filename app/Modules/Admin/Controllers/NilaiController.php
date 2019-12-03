@@ -29,7 +29,13 @@ class NilaiController extends Controller
       ->when($cari,function($jadwal,$role){
         $r = '%'.$role.'%';
         $jadwal->where('nama_ujian','ilike',$r)
-        ->orWhere('pin','ilike',$r);
+        ->orWhere('pin','ilike',$r)
+        ->orWhereHas('login.tes.soalItem.getSoal.mapel',function($soal) use($jadwal,$r){
+          $soal->where('nama','ilike',$r);
+        })
+        ->orWhereHas('login.siswa.kelas',function($kelas) use($jadwal,$r){
+          $kelas->where('nama','ilike',$r);
+        });
       })
       ->paginate(30)->appends(request()->except('page'));
       return view("Admin::nilai.index",[

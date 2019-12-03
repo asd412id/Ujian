@@ -108,11 +108,13 @@
           </div>
         </div>
         <div class="row" style="margin-bottom: 45px;margin-top: 30px;page-break-inside: avoid !important;">
-          <div class="pull-right" style="white-space: nowrap">
-            <p>{{ $sekolah->kota.', '.date('d',$mulai).' '.$helper->bulan(date('m',$mulai)).' '.date('Y',$mulai) }}</p>
-            <p>Yang Membuat Berita Acara,</p>
-            <p style="margin-bottom: 125px">Pengawas</p>
-            <p>[.......................................................]</p>
+          <div class="col-sm-12">
+            <div class="pull-right" style="white-space: nowrap">
+              <p>{{ $sekolah->kota.', '.date('d',$mulai).' '.$helper->bulan(date('m',$mulai)).' '.date('Y',$mulai) }}</p>
+              <p>Yang Membuat Berita Acara,</p>
+              <p style="margin-bottom: 125px">Pengawas</p>
+              <p>[.......................................................]</p>
+            </div>
           </div>
         </div>
       </div>

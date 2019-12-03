@@ -181,7 +181,7 @@ class UjianController extends Controller
       if ($r->ajax()) {
         $siswa = Auth::guard('siswa')->user();
 
-        if (!$siswa || !$siswa->login || @$siswa->login->end) {
+        if (!$siswa || !$siswa->login || !is_null(@$siswa->login->end)) {
           return $err = 0;
         }
 
@@ -189,12 +189,11 @@ class UjianController extends Controller
           return response()->json([
             'status' => 1,
             'now'=>strtotime(Carbon::now())*1000,
-            'timer' => strtotime($this->timer())*1000,
-            'token' => csrf_token()
+            'timer' => strtotime($this->timer())*1000
           ]);
         }
 
-        $current_number  = array_search($r->soal,json_decode($siswa->login->soal_ujian));
+        $current_number = array_search($r->soal,json_decode($siswa->login->soal_ujian));
 
         $siswa->login->update(['current_number'=>$current_number]);
 
@@ -283,6 +282,8 @@ class UjianController extends Controller
           'end'=>Carbon::now()
         ]);
       }
+      Auth::guard('siswa')->logout();
+      session()->flush();
       $nilai = null;
       $nbenar = null;
       $jadwal = $siswa->login->jadwal;
@@ -308,10 +309,6 @@ class UjianController extends Controller
         }
       }elseif ($jadwal->jenis_soal == 'P') {
         $nilai = 0;
-      }
-
-      if (Carbon::now() > Carbon::parse($siswa->login->end)->addMinutes(1)) {
-        return redirect()->route('ujian.logout');
       }
 
       return view('Ujian::nilai',[

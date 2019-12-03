@@ -9,7 +9,7 @@
       <div class="col-md-12">
         <div class="form-group">
           <label class="bmd-label-floating">Kode Soal</label>
-          <input type="text" class="form-control" name="kode" value="{{ $data->kode }}">
+          <input type="text" class="form-control" name="kode" value="{{ $data->kode }}" {{ $data->tes->count()?'readonly':'' }}>
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Nama Bank Soal</label>
