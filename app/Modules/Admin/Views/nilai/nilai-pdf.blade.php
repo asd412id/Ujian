@@ -68,7 +68,7 @@
                 <th>{{ count(json_decode($jadwal->peserta)).' Orang' }}</th>
               </tr>
               <tr>
-                <td style="white-space: nowrap">JUMLAH PESERTA</td>
+                <td style="white-space: nowrap">LAMA UJIAN</td>
                 <td align="center">:</td>
                 <th>{{ $jadwal->lama_ujian.' Menit' }}</th>
               </tr>
