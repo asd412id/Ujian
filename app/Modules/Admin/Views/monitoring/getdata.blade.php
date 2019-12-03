@@ -6,7 +6,8 @@
     <th>Status</th>
     <th>Mulai</th>
     <th>Sisa Waktu</th>
-    <th>Alamat IP</th>
+    <th>Nilai</th>
+    <th>Status</th>
     <th></th>
   </thead>
   <tbody class="d-peserta">
@@ -49,6 +50,27 @@
           }
 
         }
+
+        $jadwal = $v->jadwal;
+        $nilai = 0;
+        $nbenar = 0;
+        $siswa = $v->siswa;
+        $plogin = $siswa->attemptLogin()->where('pin',$jadwal->pin)->first();
+        $jumlah_soal = @count(json_decode($plogin->soal_ujian));
+        $dtes = App\Models\Tes::where('noujian',$siswa->noujian)
+        ->where('pin',$jadwal->pin)->whereNotNull('jawaban')->whereIn('soal_item',json_decode($plogin->soal_ujian??'[]'))->get();
+        foreach ($dtes as $key1 => $tes) {
+          $benar = $tes->soalItem->benar;
+          if (!is_null($benar) && (string) $tes->jawaban == (string) $benar && $tes->soalItem->jenis_soal=='P') {
+            $nbenar++;
+          }
+        }
+        if ($jumlah_soal) {
+          $nilai = 0;
+        }
+        if ($nbenar) {
+          $nilai += round($nbenar/$jumlah_soal*$jadwal->bobot,2);
+        }
         @endphp
         <tr>
           <td>{{ $key+1 }}</td>
@@ -71,13 +93,16 @@
               {{ $h.':'.$m.':'.$s }}
             @endif
           </td>
-          <td>{{ $v->ip_address }}</td>
+          <td><strong>{{ $nilai }}</strong></td>
+          <td>
+            <span class="badge badge-primary">Soal Dikerjakan: {{ $dtes->count().'/'.$jumlah_soal }}</span><br>
+            <span class="badge badge-success">Benar: {{ $nbenar }}</span>
+            <span class="badge badge-danger">Salah: {{ $jumlah_soal-$nbenar }}</span>
+          </td>
           <td style="white-space: nowrap;width: 50px" class="text-right">
+            <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Login" data-text="Reset Login {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.reset',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">refresh</i></a>
             @if (!$v->end)
-              <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Login" data-text="Reset Login {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.reset',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">refresh</i></a>
               <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-danger stop" title="Set Selesai" data-text="Set Selesai {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.stop',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">not_interested</i></a>
-            @else
-              <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-info stop" title="Ulang Ujian" data-text="Semua jawaban sebelumnya akan terhapus!<br><strong>Ulang Ujian {{ $v->siswa->nama }}?</strong>" data-url="{{ route('jadwal.ujian.retest',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">refresh</i></a>
             @endif
           </td>
         </tr>

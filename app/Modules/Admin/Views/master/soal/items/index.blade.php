@@ -44,7 +44,9 @@
                     <td style="white-space: nowrap;width: 50px;vertical-align: top" class="text-right">
                       <a class="btn btn-sm btn-xs btn-success" title="Lihat Soal" href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#modalEdit" data-url="{{ route('soal.item.show',['uuid'=>$v->uuid]) }}" class="text-info"><i class="material-icons">search</i></a>
                       <a class="btn btn-sm btn-xs btn-info" title="Ubah" href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#modalEdit" data-url="{{ route('soal.item.edit',['uuid'=>$v->uuid]) }}" class="text-info"><i class="material-icons">edit</i></a>
-                      <a class="btn btn-sm btn-xs btn-danger delete" title="Hapus" data-text="soal nomor {{ $key+1 }}" href="#" data-url="{{ route('soal.item.destroy',['uuid'=>$v->uuid]) }}"><i class="material-icons">delete</i></a>
+                      @if (!$v->getSoal->tes->count())
+                        <a class="btn btn-sm btn-xs btn-danger delete" title="Hapus" data-text="soal nomor {{ $key+1 }}" href="#" data-url="{{ route('soal.item.destroy',['uuid'=>$v->uuid]) }}"><i class="material-icons">delete</i></a>
+                      @endif
                     </td>
                   </tr>
                 @endforeach

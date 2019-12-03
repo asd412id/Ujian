@@ -15,7 +15,7 @@
       @if (Request::url() == route('ujian.cekdata'))
         <li class="nav-item">
           <a class="nav-link" href="javascript:void(0)" style="font-size: 1em">
-            Silahkan cek kembali data pribadi dan sesi ujian Anda
+            Silahkan cek kembali data ujian Anda!
           </a>
         </li>
         <li class="nav-item">
@@ -62,7 +62,10 @@
       @elseif (Request::url() == route('ujian.nilai'))
         <li class="nav-item">
           <a class="nav-link" href="javascript:void(0)" style="font-size: 1em">
-            Selamat, Anda telah selesai melaksanakan ujian <b>{{ $siswa->login->jadwal->nama_ujian }}</b><br><br>
+            Selamat, Anda telah selesai melaksanakan ujian <strong>{{ $siswa->login->jadwal->nama_ujian }}</strong><br><br>
+            Pada Mata Pelajaran:
+            <strong>{{ $mapel }}</strong><br><br>
+
             Berikut hasil ujian yang telah Anda ikuti.
           </a>
         </li>

@@ -27,18 +27,14 @@
       <h3 class="text-center" style="padding:0;margin: 0;margin-bottom: 15px;font-size: 1.5em;text-transform: uppercase">{!! nl2br($jadwal->nama_ujian) !!}</h3>
       <div style="font-size: 1.2em">
         <div class="row">
-          <div class="col-sm-6" style="float: left !important;max-width: 450px">
+          <div class="col-sm-6" style="float: left !important;max-width: 450px;white-space: nowrap">
             <table class="table table-info">
               <tr>
-                <td style="white-space: nowrap">NOMOR UJIAN</td>
+                <td>NOMOR UJIAN</td>
                 <td align="center" style="width: 15px">:</td>
                 <th>{{ $siswa->noujian }}</th>
               </tr>
               <tr>
-                <td>NO. UJIAN</td>
-                <td align="center">:</td>
-                <th>{{ $siswa->nik }}</th>
-              </tr>
               <tr>
                 <td>NAMA</td>
                 <td align="center">:</td>
@@ -51,10 +47,10 @@
               </tr>
             </table>
           </div>
-          <div class="col-sm-6" style="float: right !important;max-width: 400px">
+          <div class="col-sm-6" style="float: right !important;max-width: 400px;white-space: nowrap">
             <table class="table table-info">
               <tr>
-                <td style="white-space: nowrap">MATA PELAJARAN</td>
+                <td>MATA PELAJARAN</td>
                 <td align="center" style="width: 15px">:</td>
                 <th>{{ $mapel }}</th>
               </tr>
@@ -67,11 +63,6 @@
                 <td>BOBOT</td>
                 <td align="center">:</td>
                 <th>{{ $jadwal->bobot }}</th>
-              </tr>
-              <tr>
-                <td style="width: 150px">PIN</td>
-                <td align="center" style="width: 15px">:</td>
-                <th>{{ $jadwal->pin }}</th>
               </tr>
               @if ($jadwal->jenis_soal=='P')
                 <tr>
@@ -91,40 +82,42 @@
           </div>
         </div>
         <div class="row" style="margin-bottom: 45px;page-break-inside: avoid !important;">
-          <div class="col-sm-6 pull-left" style="width: 235px">
-            <table class="table table-bordered">
-              <tr>
-                <th colspan="3">Keterangan</th>
-              </tr>
-              @php
-                $terjawab = App\Models\Tes::where('noujian',$siswa->noujian)->where('pin',$siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->pin)->whereIn('soal_item',json_decode($siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->soal_ujian??'[]'))->whereNotNull('jawaban')->count();
-              @endphp
-              <tr>
-                <td>Terjawab</td>
-                <td>:</td>
-                <td>{{ $terjawab }}</td>
-              </tr>
-              <tr>
-                <td>Tidak Dijawab</td>
-                <td>:</td>
-                <td>{{ (count(json_decode($siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->soal_ujian??'[]')))-$terjawab }}</td>
-              </tr>
-              <tr>
-                <td>Jawaban Benar</td>
-                <td>:</td>
-                <td>{{ $benar }}</td>
-              </tr>
-              <tr>
-                <td>Jawaban Salah</td>
-                <td>:</td>
-                <td>{{ $jadwal->jumlah_soal-$benar }}</td>
-              </tr>
-            </table>
-          </div>
-          <div class="pull-right" style="white-space: nowrap">
-            <p>{{ $sekolah->kota.', '.date('d').' '.$helper->bulan(date('m')).' '.date('Y') }}</p>
-            <p style="margin-bottom: 125px">Orang Tua/Wali Murid</p>
-            <p>[.........................................................]</p>
+          <div class="col-sm-12">
+            <div class="pull-left" style="white-space: nowrap">
+              <table class="table table-bordered">
+                <tr>
+                  <th colspan="3">Keterangan</th>
+                </tr>
+                @php
+                  $terjawab = App\Models\Tes::where('noujian',$siswa->noujian)->where('pin',$siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->pin)->whereIn('soal_item',json_decode($siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->soal_ujian??'[]'))->whereNotNull('jawaban')->count();
+                @endphp
+                <tr>
+                  <td>Terjawab</td>
+                  <td>:</td>
+                  <td>{{ $terjawab }}</td>
+                </tr>
+                <tr>
+                  <td>Tidak Dijawab</td>
+                  <td>:</td>
+                  <td>{{ (count(json_decode($siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->soal_ujian??'[]')))-$terjawab }}</td>
+                </tr>
+                <tr>
+                  <td>Jawaban Benar</td>
+                  <td>:</td>
+                  <td>{{ $benar }}</td>
+                </tr>
+                <tr>
+                  <td>Jawaban Salah</td>
+                  <td>:</td>
+                  <td>{{ $jadwal->jumlah_soal-$benar }}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="pull-right" style="white-space: nowrap">
+              <p>{{ $sekolah->kota.', '.date('d').' '.$helper->bulan(date('m')).' '.date('Y') }}</p>
+              <p style="margin-bottom: 125px">Orang Tua/Wali Murid</p>
+              <p>[.........................................................]</p>
+            </div>
           </div>
         </div>
       </div>

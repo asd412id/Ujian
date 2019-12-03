@@ -41,6 +41,29 @@
       </div>
       @php
         $ujian = $siswa->login;
+        $jadwal = $ujian->jadwal;
+        $mapel = '';
+
+        $getMapel = App\Models\Mapel::whereHas('soal',function($q) use($jadwal){
+          $q->whereIn('uuid',json_decode($jadwal->soal));
+        })
+        ->orderBy('id','asc')
+        ->select('nama')
+        ->get();
+
+        if (count($getMapel)) {
+          foreach ($getMapel as $key => $m) {
+            $mapel .= $m->nama;
+            if ($key < count($getMapel)-2) {
+              $mapel .= ', ';
+            }elseif ($key == count($getMapel)-2) {
+              if (count($getMapel) > 2) {
+                $mapel .= ',';
+              }
+              $mapel .= ' dan ';
+            }
+          }
+        }
       @endphp
       <div class="card-body">
         <table class="table" style="font-weight: bold">
@@ -48,6 +71,11 @@
             <td width="150">Nama Ujian</td>
             <td width="10">:</td>
             <td>{{ $ujian->jadwal->nama_ujian }}</td>
+          </tr>
+          <tr>
+            <td width="150">Mata Pelajaran</td>
+            <td width="10">:</td>
+            <td>{{ $mapel }}</td>
           </tr>
           <tr>
             <td width="150">Jumlah Soal</td>

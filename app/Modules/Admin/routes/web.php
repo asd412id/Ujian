@@ -107,7 +107,6 @@ Route::group(['module' => 'Admin', 'middleware' => ['web'], 'namespace' => 'App\
         Route::get('/detail/{uuid}','JadwalUjianController@monitoringDetail')->name('jadwal.ujian.monitoring.detail');
         Route::get('/getdata/{uuid}','JadwalUjianController@monitoringGetData')->name('jadwal.ujian.monitoring.getdata');
         Route::get('/reset/{pin}/{noujian}','JadwalUjianController@monitoringReset')->name('jadwal.ujian.reset');
-        Route::get('/retest/{pin}/{noujian}','JadwalUjianController@monitoringRetest')->name('jadwal.ujian.retest');
         Route::get('/stop/{pin}/{noujian}','JadwalUjianController@monitoringStop')->name('jadwal.ujian.stop');
       });
 

@@ -31,13 +31,27 @@
       <h3 class="text-center" style="padding:0;margin: 0;margin-bottom: 15px;font-size: 1.5em;text-transform: uppercase">{!! nl2br($jadwal->nama_ujian) !!}</h3>
       <div style="font-size: 1.2em">
         <div class="row">
-          <div class="col-sm-6 pull-left" style="max-width: 550px">
+          <div class="col-sm-6 pull-left" style="max-width: 550px;white-space: nowrap">
             <table class="table table-info">
               <tr>
-                <td style="white-space: nowrap">MATA PELAJARAN</td>
+                <td>MATA PELAJARAN</td>
                 <td align="center" style="width: 15px">:</td>
                 <th>{{ $mapel }}</th>
               </tr>
+              <tr>
+                <td>KELAS</td>
+                <td align="center">:</td>
+                <th>{{ $kelas }}</th>
+              </tr>
+              <tr>
+                <td>JUMLAH PESERTA</td>
+                <td align="center">:</td>
+                <th>{{ count(json_decode($jadwal->peserta)).' Orang' }}</th>
+              </tr>
+            </table>
+          </div>
+          <div class="col-sm-6 pull-right" style="max-width: 350px;white-space: nowrap">
+            <table class="table table-info">
               <tr>
                 <td>JENIS SOAL</td>
                 <td align="center">:</td>
@@ -52,30 +66,6 @@
                 <td>BOBOT</td>
                 <td align="center">:</td>
                 <th>{{ $jadwal->bobot }}</th>
-              </tr>
-            </table>
-          </div>
-          <div class="col-sm-6 pull-right" style="max-width: 350px">
-            <table class="table table-info">
-              <tr>
-                <td>KELAS</td>
-                <td align="center">:</td>
-                <th>{{ $kelas }}</th>
-              </tr>
-              <tr>
-                <td style="white-space: nowrap">JUMLAH PESERTA</td>
-                <td align="center">:</td>
-                <th>{{ count(json_decode($jadwal->peserta)).' Orang' }}</th>
-              </tr>
-              <tr>
-                <td style="white-space: nowrap">LAMA UJIAN</td>
-                <td align="center">:</td>
-                <th>{{ $jadwal->lama_ujian.' Menit' }}</th>
-              </tr>
-              <tr>
-                <td>PIN</td>
-                <td align="center" style="width: 15px">:</td>
-                <th>{{ $jadwal->pin }}</th>
               </tr>
             </table>
           </div>
@@ -136,11 +126,19 @@
           </div>
         </div>
         <div class="row" style="margin-bottom: 45px;margin-top: 30px;page-break-inside: avoid !important;">
-          <div class="pull-right" style="white-space: nowrap">
-            <p>{{ $sekolah->kota.', '.date('d',$mulai).' '.$helper->bulan(date('m',$mulai)).' '.date('Y',$mulai) }}</p>
-            <p>Mengetahui</p>
-            <p style="margin-bottom: 125px">Kepala {{ $sekolah->nama }}</p>
-            <p>[.......................................................]</p>
+          <div class="col-sm-12">
+            <div class="pull-left" style="white-space: nowrap">
+              <p>&nbsp;</p>
+              <p>Mengetahui,</p>
+              <p style="margin-bottom: 125px">Kepala {{ $sekolah->nama }}</p>
+              <p>[.......................................................]</p>
+            </div>
+            <div class="pull-right" style="white-space: nowrap">
+              <p>{{ $sekolah->kota.', '.date('d',$mulai).' '.$helper->bulan(date('m',$mulai)).' '.date('Y',$mulai) }}</p>
+              <p>&nbsp;</p>
+              <p style="margin-bottom: 125px">Guru Mata Pelajaran</p>
+              <p>[.......................................................]</p>
+            </div>
           </div>
         </div>
       </div>

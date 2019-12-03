@@ -63,19 +63,20 @@ function timer(countDownDate,now) {
 
     $(".timer").html(hours + ":" + minutes + ":" + seconds);
 
-    if (time==10) {
+    if (time==15) {
       if (ar) {
         checkingReq = $.ajax({
           url: '{{ route('ujian.getsoal') }}',
           data: {'checking': 'status'},
           success: function(res){
-            time=0;
-            clearInterval(x);
-            countDownDate = new Date(res.timer).getTime();
-            now = new Date(res.now);
-            timer(countDownDate,now);
-            if ($("meta[name='csrf-token']").length) {
-              $("meta[name='csrf-token']").prop('content',res.token);
+            if (res != 0 && res != '0') {
+              time=0;
+              clearInterval(x);
+              countDownDate = new Date(res.timer).getTime();
+              now = new Date(res.now);
+              timer(countDownDate,now);
+            }else {
+              location.href = '{{ route('ujian.selesai') }}';
             }
           }
         });
@@ -107,9 +108,7 @@ function getSoal(soal,key,btn) {
     url: '{{ route('ujian.getsoal') }}',
     data: {'soal': soal,'key': key},
     success: function(res){
-      if (res==0) {
-        location.href = '{{ route('ujian.selesai') }}';
-      }else {
+      if (res != 0 && res != '0') {
         ar = true;
         time = 0;
         $('html, body').animate({
@@ -134,6 +133,8 @@ function getSoal(soal,key,btn) {
             }
           })
         }
+      }else {
+        location.href = '{{ route('ujian.selesai') }}';
       }
     }
   });

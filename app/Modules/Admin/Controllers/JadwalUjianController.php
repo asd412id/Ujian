@@ -27,10 +27,16 @@ class JadwalUjianController extends Controller
 
     public function index(Request $r)
     {
-      $jadwalUjian = JadwalUjian::when($r->cari,function($q,$role){
+      $jadwalUjian = JadwalUjian::when($r->cari,function($jadwal,$role){
         $role = '%'.$role.'%';
-        $q->where('nama_ujian','ilike',$role)
-        ->orWhere('pin','ilike',$role);
+        $jadwal->where('nama_ujian','ilike',$role)
+        ->orWhere('pin','ilike',$role)
+        ->orWhereHas('login.tes.soalItem.getSoal.mapel',function($soal) use($jadwal,$role){
+          $soal->where('nama','ilike',$role);
+        })
+        ->orWhereHas('login.siswa.kelas',function($kelas) use($jadwal,$role){
+          $kelas->where('nama','ilike',$role);
+        });
       })
       ->orderBy('aktif','desc')
       ->orderBy('updated_at','desc')
@@ -309,10 +315,16 @@ class JadwalUjianController extends Controller
 
     public function monitoring(Request $r)
     {
-      $jadwalUjian = JadwalUjian::when($r->cari,function($q,$role){
+      $jadwalUjian = JadwalUjian::when($r->cari,function($jadwal,$role){
         $role = '%'.$role.'%';
-        $q->where('nama_ujian','ilike',$role)
-        ->orWhere('pin','ilike',$role);
+        $jadwal->where('nama_ujian','ilike',$role)
+        ->orWhere('pin','ilike',$role)
+        ->orWhereHas('login.tes.soalItem.getSoal.mapel',function($soal) use($jadwal,$role){
+          $soal->where('nama','ilike',$role);
+        })
+        ->orWhereHas('login.siswa.kelas',function($kelas) use($jadwal,$role){
+          $kelas->where('nama','ilike',$role);
+        });
       })
       ->where('aktif',1)
       ->paginate(30)->appends(request()->except('page'));
@@ -416,17 +428,9 @@ class JadwalUjianController extends Controller
       if (request()->ajax()) {
         $login = Login::where('pin',$pin)->where('noujian',$noujian)->first();
         $login->_token = null;
+        $login->end = null;
         $login->ip_address = null;
         $login->save();
-      }
-      return redirect()->route('admin.index');
-    }
-    public function monitoringRetest($pin,$noujian)
-    {
-      if (request()->ajax()) {
-        $login = Login::where('pin',$pin)->where('noujian',$noujian)->first();
-        $login->tes()->where('noujian',$noujian)->forceDelete();
-        $login->forceDelete();
       }
       return redirect()->route('admin.index');
     }

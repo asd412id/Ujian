@@ -109,6 +109,9 @@
     .card-body{
       position: relative;
     }
+    .card-body .table td{
+      vertical-align: top;
+    }
     .mask-container{
       display: none;
     }

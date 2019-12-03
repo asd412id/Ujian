@@ -48,7 +48,9 @@
                     <td style="white-space: nowrap;width: 50px" class="text-right">
                       <a class="btn btn-sm btn-xs btn-success" title="Lihat Bank Soal" href="{{ route('soal.detail',['uuid'=>$v->uuid]) }}" class="text-info"><i class="material-icons">file_copy</i></a>
                       <a class="btn btn-sm btn-xs btn-info" title="Ubah" href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#modalEdit" data-url="{{ route('soal.edit',['uuid'=>$v->uuid]) }}" class="text-info"><i class="material-icons">edit</i></a>
-                      <a class="btn btn-sm btn-xs btn-danger delete" title="Hapus" data-text="{{ $v->nama }}" href="#" data-url="{{ route('soal.destroy',['uuid'=>$v->uuid]) }}"><i class="material-icons">delete</i></a>
+                      @if (!$v->tes->count())
+                        <a class="btn btn-sm btn-xs btn-danger delete" title="Hapus" data-text="{{ $v->nama }}" href="#" data-url="{{ route('soal.destroy',['uuid'=>$v->uuid]) }}"><i class="material-icons">delete</i></a>
+                      @endif
                     </td>
                   </tr>
                 @endforeach

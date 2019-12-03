@@ -10,11 +10,6 @@ class JadwalUjian extends Model
   use SoftDeletes;
   protected $table = 'jadwal_ujian';
 
-  public function kelas()
-  {
-    return $this->belongsTo(Kelas::class,'kode_kelas','kode');
-  }
-
   public function login()
   {
     return $this->hasMany(Login::class,'pin','pin');
