@@ -121,7 +121,7 @@
               </tr>
             </table>
           </div>
-          <div class="pull-right" style="width: 300px">
+          <div class="pull-right" style="white-space: nowrap">
             <p>{{ $sekolah->kota.', '.date('d').' '.$helper->bulan(date('m')).' '.date('Y') }}</p>
             <p style="margin-bottom: 125px">Orang Tua/Wali Murid</p>
             <p>[.........................................................]</p>
