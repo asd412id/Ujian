@@ -48,7 +48,7 @@
               <tr>
                 <td>a)</td>
                 <td colspan="3">
-                  Telah dilaksanakan {{ $jadwal->nama_ujian }} dari pukul <strong>.........................</strong> sampai dengan pukul <strong>.........................</strong>
+                  Telah dilaksanakan {{ $jadwal->nama_ujian }} dari pukul <strong>.............</strong> sampai dengan pukul <strong>.............</strong>
                 </td>
               </tr>
               <tr>
