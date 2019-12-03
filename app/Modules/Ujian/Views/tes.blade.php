@@ -69,17 +69,13 @@ function timer(countDownDate,now) {
           url: '{{ route('ujian.getsoal') }}',
           data: {'checking': 'status'},
           success: function(res){
-            if (res==0) {
-              location.href = '{{ route('ujian.selesai') }}';
-            }else {
-              time=0;
-              clearInterval(x);
-              countDownDate = new Date(res.timer).getTime();
-              now = new Date(res.now);
-              timer(countDownDate,now);
-              if ($("meta[name='csrf-token']").length) {
-                $("meta[name='csrf-token']").prop('content',res.token);
-              }
+            time=0;
+            clearInterval(x);
+            countDownDate = new Date(res.timer).getTime();
+            now = new Date(res.now);
+            timer(countDownDate,now);
+            if ($("meta[name='csrf-token']").length) {
+              $("meta[name='csrf-token']").prop('content',res.token);
             }
           }
         });
