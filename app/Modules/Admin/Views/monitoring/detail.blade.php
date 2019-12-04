@@ -222,6 +222,7 @@ function stopUjian(btn) {
         $.get('{{ route('jadwal.ujian.monitoring.getdata',['uuid'=>$jadwal->uuid]) }}',{},function(res){
           if (res) {
             $("#data-wrapper").html(res);
+            cariPeserta($("#cari-peserta").val());
           }else {
             console.log('error fetch data');
           }
