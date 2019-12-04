@@ -72,7 +72,7 @@ class UjianController extends Controller
           Auth::guard('siswa')->attempt([
             'noujian'=>$r->noujian,
             'password'=>$r->password
-          ],1);
+          ],0);
           $user = Auth::guard('siswa')->user();
           $ujian = Auth::guard('siswa')->user()->attemptLogin()->where('pin',$r->pin)->first();
           $ujian->_token = $user->remember_token;
@@ -85,7 +85,7 @@ class UjianController extends Controller
         Auth::guard('siswa')->attempt([
           'noujian'=>$r->noujian,
           'password'=>$r->password
-        ],1);
+        ],0);
         $user = Auth::guard('siswa')->user();
         $ujian = new Login;
         $ujian->uuid = (string)Str::uuid();
