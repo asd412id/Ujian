@@ -68,7 +68,6 @@ class UjianController extends Controller
             return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain!'])->withInput($r->only('noujian'));
           }
           Auth::guard('siswa')->logout();
-          session()->flush();
           Auth::guard('siswa')->attempt([
             'noujian'=>$r->noujian,
             'password'=>$r->password
@@ -81,7 +80,6 @@ class UjianController extends Controller
           return redirect()->back();
         }
         Auth::guard('siswa')->logout();
-        session()->flush();
         Auth::guard('siswa')->attempt([
           'noujian'=>$r->noujian,
           'password'=>$r->password
@@ -96,7 +94,6 @@ class UjianController extends Controller
         $ujian->end = null;
         $ujian->ip_address = $r->ip();
         $ujian->save();
-        session()->flush();
         return redirect()->back();
       }
 
@@ -283,7 +280,6 @@ class UjianController extends Controller
         ]);
       }
       Auth::guard('siswa')->logout();
-      session()->flush();
       $nilai = null;
       $nbenar = null;
       $jadwal = $siswa->login->jadwal;
@@ -338,7 +334,6 @@ class UjianController extends Controller
       $siswa = Auth::guard('siswa');
       if ($siswa->user()) {
         $siswa->logout();
-        session()->flush();
       }
       return redirect()->route('ujian.login');
     }
