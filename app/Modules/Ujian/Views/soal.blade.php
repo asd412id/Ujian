@@ -48,7 +48,7 @@
         Soal Sebelumnya
       </a>
     @endif
-    <button type="button" class="btn btn-success" id="btn-submit">Simpan & Lanjutkan</button>
+    <button type="button" class="btn btn-success" id="btn-submit">Simpan Jawaban & Lanjutkan</button>
     @if (array_key_exists($key+1,json_decode($allSoal)))
       <a class="btn btn-sm btn-default btn-soal-nav btn-next" data-btn="#soal-{{ json_decode($allSoal)[$key+1] }}" data-soal="{{ json_decode($allSoal)[$key+1] }}" data-key="{{ $key+2 }}" href="javascript:void(0)">
         Soal Berikutnya
