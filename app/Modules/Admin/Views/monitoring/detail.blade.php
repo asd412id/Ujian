@@ -216,10 +216,16 @@ function stopUjian(btn) {
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
-    $.get(url,{},function(res){
-      if (res) {
+    $.get(url,{},function(stat){
+      if (stat) {
         $(".modal-confirm").modal('hide');
-        loader();
+        $.get('{{ route('jadwal.ujian.monitoring.getdata',['uuid'=>$jadwal->uuid]) }}',{},function(res){
+          if (res) {
+            $("#data-wrapper").html(res);
+          }else {
+            console.log('error fetch data');
+          }
+        });
       }
     })
   })
