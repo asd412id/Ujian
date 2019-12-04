@@ -106,6 +106,8 @@ class UjianController extends Controller
       if ($siswa->login) {
         if ($siswa->login->end) {
           return redirect()->route('ujian.nilai');
+        }elseif ($siswa->login->start) {
+          return redirect()->route('ujian.tes');
         }
       }
       return view('Ujian::cekdata',[
@@ -275,9 +277,7 @@ class UjianController extends Controller
         return redirect()->route('ujian.login');
       }
       if (is_null($siswa->login->end)) {
-        $siswa->login()->update([
-          'end'=>Carbon::now()
-        ]);
+        return redirect()->route('ujian.login');
       }
       Auth::guard('siswa')->logout();
       $nilai = null;
