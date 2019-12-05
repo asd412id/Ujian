@@ -136,8 +136,7 @@ function initModalScripts() {
     });
   });
   $('#dstart').bootstrapMaterialDatePicker({
-    format : 'DD/MM/YYYY - HH:mm',
-    minDate: $("meta[name='time-now']").attr('content')
+    format : 'DD/MM/YYYY - HH:mm'
   });
   $('#dend').bootstrapMaterialDatePicker({
     format : 'DD/MM/YYYY - HH:mm',
