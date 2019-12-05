@@ -97,7 +97,7 @@
           <td>
             <span class="badge badge-primary">Soal Dikerjakan: {{ $dtes->count().'/'.$jumlah_soal }}</span><br>
             <span class="badge badge-success">Benar: {{ $nbenar }}</span>
-            <span class="badge badge-danger">Salah: {{ $jumlah_soal-$nbenar }}</span>
+            <span class="badge badge-danger">Salah: {{ $dtes->count()-$nbenar }}</span>
           </td>
           <td style="white-space: nowrap;width: 50px" class="text-right">
             <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Login" data-text="Reset Login {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.reset',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">refresh</i></a>

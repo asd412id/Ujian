@@ -20,6 +20,9 @@
         padding-top: 15px !important;
         padding-bottom: 15px !important;
       }
+      table.table-info tr th{
+        white-space: normal;
+      }
     </style>
   </head>
   <body>

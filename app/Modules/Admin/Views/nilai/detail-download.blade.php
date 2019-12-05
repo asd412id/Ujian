@@ -16,6 +16,9 @@
         border: none !important;
         padding: 3px !important;
       }
+      table.table-info tr th{
+        white-space: normal;
+      }
     </style>
   </head>
   <body>
@@ -27,7 +30,7 @@
       <h3 class="text-center" style="padding:0;margin: 0;margin-bottom: 15px;font-size: 1.5em;text-transform: uppercase">{!! nl2br($jadwal->nama_ujian) !!}</h3>
       <div style="font-size: 1.2em">
         <div class="row">
-          <div class="col-sm-6" style="float: left !important;max-width: 450px;white-space: nowrap">
+          <div class="col-sm-6" style="float: left !important;max-width: 350px;white-space: nowrap">
             <table class="table table-info">
               <tr>
                 <td>NOMOR UJIAN</td>
@@ -47,7 +50,7 @@
               </tr>
             </table>
           </div>
-          <div class="col-sm-6" style="float: right !important;max-width: 400px;white-space: nowrap">
+          <div class="col-sm-6" style="float: right !important;max-width: 550px;white-space: nowrap">
             <table class="table table-info">
               <tr>
                 <td>MATA PELAJARAN</td>

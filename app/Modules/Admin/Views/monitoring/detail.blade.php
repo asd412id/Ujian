@@ -48,7 +48,7 @@
                   $plogin = $siswa->attemptLogin()->where('pin',$jadwal->pin)->first();
                   $jumlah_soal = @count(json_decode($plogin->soal_ujian));
                   $dtes = App\Models\Tes::where('noujian',$siswa->noujian)
-                  ->where('pin',$jadwal->pin)->whereIn('soal_item',json_decode($plogin->soal_ujian??'[]'))->get();
+                  ->where('pin',$jadwal->pin)->whereNotNull('jawaban')->whereIn('soal_item',json_decode($plogin->soal_ujian??'[]'))->get();
                   foreach ($dtes as $key1 => $tes) {
                     $benar = $tes->soalItem->benar;
                     if (!is_null($benar) && (string) $tes->jawaban == (string) $benar && $tes->soalItem->jenis_soal=='P') {
@@ -81,7 +81,7 @@
                     <td>
                       <span class="badge badge-primary">Soal Dikerjakan: {{ $dtes->count().'/'.$jumlah_soal }}</span><br>
                       <span class="badge badge-success">Benar: {{ $nbenar }}</span>
-                      <span class="badge badge-danger">Salah: {{ $jumlah_soal-$nbenar }}</span>
+                      <span class="badge badge-danger">Salah: {{ $dtes->count()-$nbenar }}</span>
                     </td>
                     <td style="white-space: nowrap;width: 50px" class="text-right">
                       <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Login" data-text="Reset Login {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.reset',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">refresh</i></a>
