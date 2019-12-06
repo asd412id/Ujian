@@ -30,6 +30,7 @@ var now = new Date('{{ $now }}');
 var checkingReq = null;
 var ar = true;
 var time = 0;
+var loadProcess = false;
 timer(countDownDate,now);
 
 function timer(countDownDate,now) {
@@ -104,40 +105,47 @@ function getSoal(soal,key,btn) {
     checkingReq.abort();
   }
   $(".mask-container").show();
-  $.ajax({
-    url: '{{ route('ujian.getsoal') }}',
-    data: {'soal': soal,'key': key},
-    success: function(res){
-      if (res != 0 && res != '0') {
-        ar = true;
-        time = 0;
-        $('html, body').animate({
-          scrollTop: $(".content").offset().top
-        }, 500);
-        $(".mask-container").hide();
-        $("#soal-wrapper").html(res);
-        $(".btn-soal").closest('li').removeClass('active');
-        btn.closest('li').addClass('active');
-        if ($(".audio-play").length) {
-          $(".audio-play").each(function(i,v){
-            var a = $(this);
-            var pl = a.data('play');
-            if (pl>0) {
-              var ad = '';
-              if (a.parent().data('count')>=pl) {
-                ad = 'disabled';
+  if (loadProcess == false) {
+    loadProcess = true;
+    $.ajax({
+      url: '{{ route('ujian.getsoal') }}',
+      data: {'soal': soal,'key': key},
+      success: function(res){
+        if (res != 0 && res != '0') {
+          ar = true;
+          time = 0;
+          loadProcess = false;
+          $('html, body').animate({
+            scrollTop: $(".content").offset().top
+          }, 500);
+          $('.main-panel').animate({
+            scrollTop: $(".content").offset().top
+          }, 500);
+          $(".mask-container").hide();
+          $("#soal-wrapper").html(res);
+          $(".btn-soal").closest('li').removeClass('active');
+          btn.closest('li').addClass('active');
+          if ($(".audio-play").length) {
+            $(".audio-play").each(function(i,v){
+              var a = $(this);
+              var pl = a.data('play');
+              if (pl>0) {
+                var ad = '';
+                if (a.parent().data('count')>=pl) {
+                  ad = 'disabled';
+                }
+                a.parent().append('<button type="button" class="btn btn-success btn-play" data-play="'+i+'" '+ad+'><i class="material-icons">play_arrow</i>&nbsp;&nbsp;Audio '+(i+1)+'</button>');
+                a.css('display','none');
+                setPlay(a,pl);
               }
-              a.parent().append('<button type="button" class="btn btn-success btn-play" data-play="'+i+'" '+ad+'><i class="material-icons">play_arrow</i>&nbsp;&nbsp;Audio '+(i+1)+'</button>');
-              a.css('display','none');
-              setPlay(a,pl);
-            }
-          })
+            })
+          }
+        }else {
+          location.href = '{{ route('ujian.selesai') }}';
         }
-      }else {
-        location.href = '{{ route('ujian.selesai') }}';
       }
-    }
-  });
+    });
+  }
 }
 
 function setPlay(a,pl) {

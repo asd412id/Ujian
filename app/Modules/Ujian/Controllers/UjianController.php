@@ -66,18 +66,19 @@ class UjianController extends Controller
           }elseif (!is_null($siswa->attemptLogin()->where('pin',$r->pin)->first()->_token)) {
             Auth::guard('siswa')->logout();
             return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain!'])->withInput($r->only('noujian'));
+          }else{
+            Auth::guard('siswa')->logout();
+            Auth::guard('siswa')->attempt([
+              'noujian'=>$r->noujian,
+              'password'=>$r->password
+            ],0);
+            $user = Auth::guard('siswa')->user();
+            $ujian = Auth::guard('siswa')->user()->attemptLogin()->where('pin',$r->pin)->first();
+            $ujian->_token = $user->remember_token;
+            $ujian->ip_address = $r->ip();
+            $ujian->save();
+            return redirect()->back();
           }
-          Auth::guard('siswa')->logout();
-          Auth::guard('siswa')->attempt([
-            'noujian'=>$r->noujian,
-            'password'=>$r->password
-          ],0);
-          $user = Auth::guard('siswa')->user();
-          $ujian = Auth::guard('siswa')->user()->attemptLogin()->where('pin',$r->pin)->first();
-          $ujian->_token = $user->remember_token;
-          $ujian->ip_address = $r->ip();
-          $ujian->save();
-          return redirect()->back();
         }
         Auth::guard('siswa')->logout();
         Auth::guard('siswa')->attempt([
@@ -198,7 +199,7 @@ class UjianController extends Controller
 
         $soal = ItemSoal::where('uuid',$r->soal)->first();
 
-        $opsis = null;
+        $opsis = [];
 
         $cek = Tes::where('noujian',$siswa->noujian)
         ->where('pin',$siswa->login->pin)
@@ -246,10 +247,9 @@ class UjianController extends Controller
     {
       if ($r->ajax()) {
         $siswa = Auth::guard('siswa')->user();
-        $soal = ItemSoal::where('uuid',$uuid)->first();
         $tes = Tes::where('noujian',$siswa->noujian)
         ->where('pin',$siswa->login->pin)
-        ->where('soal_item',$soal->uuid)
+        ->where('soal_item',$uuid)
         ->first();
 
         $tes->jawaban = $r->jawab;
