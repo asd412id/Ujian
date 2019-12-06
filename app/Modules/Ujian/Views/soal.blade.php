@@ -81,8 +81,9 @@ function loginProcess(form){
 
 $("#form-ujian").submit(function(e){
   e.preventDefault();
+  $(".mask-container").show();
   if (submit == true) {
-    $(".mask-container").show();
+    submit = false;
     var _this = $(this);
     $.ajax({
       url: _this.attr('action'),
