@@ -114,6 +114,7 @@ $("#form-ujian").submit(function(e){
 })
 
 $("#btn-submit").click(function(){
+  $(this).prop('disabled',true);
   $("#form-ujian").submit();
 })
 lightbox.option({
