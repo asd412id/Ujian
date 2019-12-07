@@ -53,7 +53,7 @@
 
         }
 
-        if ($jadwalUjian == 'P') {
+        if ($jadwalUjian->jenis_soal == 'P') {
           $jadwal = $v->jadwal;
           $nilai = 0;
           $nbenar = 0;
@@ -97,7 +97,7 @@
               {{ $h.':'.$m.':'.$s }}
             @endif
           </td>
-          @if ($jadwalUjian == 'P')
+          @if ($jadwalUjian->jenis_soal == 'P')
             <td><strong>{{ $nilai }}</strong></td>
             <td>
               <span class="badge badge-primary">Soal Dikerjakan: {{ $dtes->count().'/'.$jumlah_soal }}</span><br>

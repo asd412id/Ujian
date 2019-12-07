@@ -24,7 +24,7 @@
               <th>Status</th>
               <th>Mulai</th>
               <th>Sisa Waktu</th>
-              @if ($jadwalUjian == 'P')
+              @if ($jadwalUjian->jenis_soal == 'P')
                 <th>Nilai</th>
                 <th>Status</th>
               @endif
@@ -44,7 +44,7 @@
                     $timer = $timerNow->subSeconds($intval);
                   }
 
-                  if ($jadwalUjian == 'P') {
+                  if ($jadwalUjian->jenis_soal == 'P') {
                     $nilai = 0;
                     $nbenar = 0;
                     $siswa = $v->siswa;
@@ -81,7 +81,7 @@
                     </td>
                     <td>{{ $v->start?date('d/m/Y H:i',strtotime($v->start)):'-' }}</td>
                     <td {{ $timer?'class=l-time':'' }} data-timer="{{ $timer }}">00:00:00</td>
-                    @if ($jadwalUjian == 'P')
+                    @if ($jadwalUjian->jenis_soal == 'P')
                       <td><strong>{{ $nilai }}</strong></td>
                       <td>
                         <span class="badge badge-primary">Soal Dikerjakan: {{ $dtes->count().'/'.$jumlah_soal }}</span><br>
