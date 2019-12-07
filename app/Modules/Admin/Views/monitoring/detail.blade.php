@@ -5,10 +5,10 @@
     <div class="card">
       <div class="card-header card-header-primary">
         <div class="pull-left">
-          <h4 class="card-title ">Status Ujian {{ $jadwal->nama_ujian }}</h4>
+          <h4 class="card-title ">Status Ujian {{ $jadwalUjian->nama_ujian }}</h4>
           <p class="card-category">Kelas: <strong>{{ $kelas }}</strong></p>
           <p class="card-category">Mata Pelajaran: <strong>{{ $mapel }}</strong></p>
-          <p class="card-category">PIN: <strong>{{ $jadwal->pin }}</strong></p>
+          <p class="card-category">PIN: <strong>{{ $jadwalUjian->pin }}</strong></p>
         </div>
       </div>
       <div class="card-body">
@@ -24,8 +24,10 @@
               <th>Status</th>
               <th>Mulai</th>
               <th>Sisa Waktu</th>
-              <th>Nilai</th>
-              <th>Status</th>
+              @if ($jadwalUjian == 'P')
+                <th>Nilai</th>
+                <th>Status</th>
+              @endif
               <th></th>
             </thead>
             <tbody class="d-peserta">
@@ -42,24 +44,26 @@
                     $timer = $timerNow->subSeconds($intval);
                   }
 
-                  $nilai = 0;
-                  $nbenar = 0;
-                  $siswa = $v->siswa;
-                  $plogin = $siswa->attemptLogin()->where('pin',$jadwal->pin)->first();
-                  $jumlah_soal = @count(json_decode($plogin->soal_ujian));
-                  $dtes = App\Models\Tes::where('noujian',$siswa->noujian)
-                  ->where('pin',$jadwal->pin)->whereNotNull('jawaban')->whereIn('soal_item',json_decode($plogin->soal_ujian??'[]'))->get();
-                  foreach ($dtes as $key1 => $tes) {
-                    $benar = $tes->soalItem->benar;
-                    if (!is_null($benar) && (string) $tes->jawaban == (string) $benar && $tes->soalItem->jenis_soal=='P') {
-                      $nbenar++;
-                    }
-                  }
-                  if ($jumlah_soal) {
+                  if ($jadwalUjian == 'P') {
                     $nilai = 0;
-                  }
-                  if ($nbenar) {
-                    $nilai += round($nbenar/$jumlah_soal*$jadwal->bobot,2);
+                    $nbenar = 0;
+                    $siswa = $v->siswa;
+                    $plogin = $siswa->attemptLogin()->where('pin',$jadwal->pin)->first();
+                    $jumlah_soal = @count(json_decode($plogin->soal_ujian));
+                    $dtes = App\Models\Tes::where('noujian',$siswa->noujian)
+                    ->where('pin',$jadwal->pin)->whereNotNull('jawaban')->whereIn('soal_item',json_decode($plogin->soal_ujian??'[]'))->get();
+                    foreach ($dtes as $key1 => $tes) {
+                      $benar = $tes->soalItem->benar;
+                      if (!is_null($benar) && (string) $tes->jawaban == (string) $benar && $tes->soalItem->jenis_soal=='P') {
+                        $nbenar++;
+                      }
+                    }
+                    if ($jumlah_soal) {
+                      $nilai = 0;
+                    }
+                    if ($nbenar) {
+                      $nilai += round($nbenar/$jumlah_soal*$jadwal->bobot,2);
+                    }
                   }
                   @endphp
                   <tr>
@@ -77,12 +81,14 @@
                     </td>
                     <td>{{ $v->start?date('d/m/Y H:i',strtotime($v->start)):'-' }}</td>
                     <td {{ $timer?'class=l-time':'' }} data-timer="{{ $timer }}">00:00:00</td>
-                    <td><strong>{{ $nilai }}</strong></td>
-                    <td>
-                      <span class="badge badge-primary">Soal Dikerjakan: {{ $dtes->count().'/'.$jumlah_soal }}</span><br>
-                      <span class="badge badge-success">Benar: {{ $nbenar }}</span>
-                      <span class="badge badge-danger">Salah: {{ $dtes->count()-$nbenar }}</span>
-                    </td>
+                    @if ($jadwalUjian == 'P')
+                      <td><strong>{{ $nilai }}</strong></td>
+                      <td>
+                        <span class="badge badge-primary">Soal Dikerjakan: {{ $dtes->count().'/'.$jumlah_soal }}</span><br>
+                        <span class="badge badge-success">Benar: {{ $nbenar }}</span>
+                        <span class="badge badge-danger">Salah: {{ $dtes->count()-$nbenar }}</span>
+                      </td>
+                    @endif
                     <td style="white-space: nowrap;width: 50px" class="text-right">
                       <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Login" data-text="Reset Login {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.reset',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">refresh</i></a>
                       @if (!$v->end)

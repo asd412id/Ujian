@@ -109,7 +109,7 @@
             <tr>
               <td width="150">Nilai Akhir</td>
               <td width="10">:</td>
-              <td>{{ is_null($nilai)?'Nilai segera diperiksa':$nilai }}</td>
+              <td>{{ $ujian->jadwal->jenis_soal=='E'?'Nilai segera diperiksa':$nilai }}</td>
             </tr>
           @endif
         </table>

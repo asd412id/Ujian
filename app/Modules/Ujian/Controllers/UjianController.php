@@ -232,11 +232,17 @@ class UjianController extends Controller
           $opsis = json_decode($cek->opsi);
         }
 
+        $jawaban = Tes::where('soal_item',$soal->uuid)
+        ->where('noujian',$siswa->noujian)
+        ->where('pin',$siswa->login->pin)
+        ->first()->jawaban;
+
         return view('Ujian::soal',[
           'soal'=>$soal,
           'siswa'=>$siswa,
           'allSoal'=>$siswa->login->soal_ujian,
           'opsis'=>$opsis,
+          'jawaban'=>$jawaban,
           'key'=>$r->key
         ]);
       }
