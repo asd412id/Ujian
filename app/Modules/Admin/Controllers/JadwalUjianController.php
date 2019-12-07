@@ -389,7 +389,7 @@ class JadwalUjianController extends Controller
       }
 
       return view("Admin::monitoring.detail",[
-        'jadwal'=>$jadwal,
+        'jadwalUjian'=>$jadwal,
         'kelas'=>$kelas,
         'mapel'=>$mapel,
         'login'=>$login,
@@ -406,7 +406,8 @@ class JadwalUjianController extends Controller
         ->orderBy('id','asc')
         ->get();
         return view("Admin::monitoring.getdata",[
-          'data'=>$login
+          'data'=>$login,
+          'jadwalUjian'=>$jadwal
         ]);
       }
       return redirect()->route('admin.index');

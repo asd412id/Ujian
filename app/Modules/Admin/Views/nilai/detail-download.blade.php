@@ -30,7 +30,7 @@
       <h3 class="text-center" style="padding:0;margin: 0;margin-bottom: 15px;font-size: 1.5em;text-transform: uppercase">{!! nl2br($jadwal->nama_ujian) !!}</h3>
       <div style="font-size: 1.2em">
         <div class="row">
-          <div class="col-sm-6" style="float: left !important;max-width: 350px;white-space: nowrap">
+          <div class="col-sm-6" style="float: left !important;max-width: 45% !important;white-space: nowrap">
             <table class="table table-info">
               <tr>
                 <td>NOMOR UJIAN</td>
@@ -50,7 +50,7 @@
               </tr>
             </table>
           </div>
-          <div class="col-sm-6" style="float: right !important;max-width: 550px;white-space: nowrap">
+          <div class="col-sm-6" style="float: right !important;max-width: 45% !important;white-space: nowrap">
             <table class="table table-info">
               <tr>
                 <td>MATA PELAJARAN</td>
@@ -104,21 +104,23 @@
                   <td>:</td>
                   <td>{{ (count(json_decode($siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->soal_ujian??'[]')))-$terjawab }}</td>
                 </tr>
-                <tr>
-                  <td>Jawaban Benar</td>
-                  <td>:</td>
-                  <td>{{ $benar }}</td>
-                </tr>
-                <tr>
-                  <td>Jawaban Salah</td>
-                  <td>:</td>
-                  <td>{{ $jadwal->jumlah_soal-$benar }}</td>
-                </tr>
+                @if ($jadwal->jenis_soal == 'P')
+                  <tr>
+                    <td>Jawaban Benar</td>
+                    <td>:</td>
+                    <td>{{ $benar }}</td>
+                  </tr>
+                  <tr>
+                    <td>Jawaban Salah</td>
+                    <td>:</td>
+                    <td>{{ $jadwal->jumlah_soal-$benar }}</td>
+                  </tr>
+                @endif
               </table>
             </div>
             <div class="pull-right" style="white-space: nowrap">
               <p>{{ $sekolah->kota.', '.date('d').' '.$helper->bulan(date('m')).' '.date('Y') }}</p>
-              <p style="margin-bottom: 125px">Orang Tua/Wali Murid</p>
+              <p style="margin-bottom: 125px">Guru Mata Pelajaran</p>
               <p>[.........................................................]</p>
             </div>
           </div>

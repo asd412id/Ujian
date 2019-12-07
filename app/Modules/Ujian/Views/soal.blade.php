@@ -17,13 +17,7 @@
           @endphp
           <tr class="otext" style="cursor: pointer">
             <td width="40" style="vertical-align: top;white-space: nowrap;padding: 5px 0">
-              @php
-                $select = App\Models\Tes::where('soal_item',$soal->uuid)
-                ->where('noujian',$siswa->noujian)
-                ->where('pin',$siswa->login->pin)
-                ->first()->jawaban;
-              @endphp
-              <input type="radio" {{ !is_null($select)&&$select==$key?'checked':'' }} name="jawab" class="jawab" value="{{ $key }}">
+              <input type="radio" {{ !is_null($jawaban)&&$jawaban==$key?'checked':'' }} name="jawab" class="jawab" value="{{ $key }}">
               {{ $range[$i++].'.' }}
             </td>
             <td style="vertical-align: top;padding: 5px 0">{{ $opsi }}</td>
@@ -33,7 +27,7 @@
         <tr>
           <td colspan="2">
             <h4 style="font-weight: bold">Jawaban Anda:</h4>
-            <textarea name="jawab" rows="5" class="form-control" placeholder="Jawaban Anda...">{{ \Auth::guard('siswa')->user()->login->tes()->where('soal_item',$soal->uuid)->first()->jawaban }}</textarea>
+            <textarea name="jawab" rows="5" class="form-control" placeholder="Ketik Jawaban Anda di Sini...">{{ $jawaban }}</textarea>
           </td>
         </tr>
       @endif
@@ -95,7 +89,7 @@ $("#form-ujian").submit(function(e){
       success: function(res){
         if (res.success) {
           var tbtn = $("#soal-{{ $soal->uuid }}");
-          if (!tbtn.hasClass('btn-success')&&((_this.find("input[name='jawab']").is(":checked")&&_this.find("input[name='jawab']").val()!='')||this.find("textarea[name='jawab']").val()!='')) {
+          if (!tbtn.hasClass('btn-success')&&((_this.find("input[name='jawab']").is(":checked")&&_this.find("input[name='jawab']").val()!='')||_this.find("textarea[name='jawab']").val()!='')) {
             tbtn.removeClass('btn-default');
             tbtn.addClass('btn-success');
           }
