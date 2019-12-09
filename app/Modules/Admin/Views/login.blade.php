@@ -76,7 +76,7 @@
     <p>Aplikasi Ujian {{ $sekolah->nama }}</p>
     <p>{{ $sekolah->alamat }}</p>
     <p>{{ 'Kab. '.$sekolah->kota.', Propinsi '.$sekolah->propinsi }}</p>
-    <p>{{ 'Telp: '.$sekolah->telp.', Fax: '.$sekolah->fax }}</p>
+    <p>{{ 'Telp: '.($sekolah->telp??'-').', Fax: '.($sekolah->fax??'-').', Kodepos: '.($sekolah->kodepos??'-') }}</p>
   @endif
   <p>&copy; {{ date('Y') }} by <a style="color: #fff" target="_blank" href="https://www.facebook.com/aezdar">Asdar Bin Syam</a></p>
 </div>
