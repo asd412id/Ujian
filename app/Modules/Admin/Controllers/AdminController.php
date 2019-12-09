@@ -197,12 +197,12 @@ class AdminController extends Controller
         case 'media':
           $files = glob(base_path('uploads/*'));
           foreach($files as $file){
-            if(is_file($file))
+            if(is_file($file) && $file != ".gitignore")
               unlink($file);
           }
           $files = glob(base_path('thumbs/*'));
           foreach($files as $file){
-            if(is_file($file))
+            if(is_file($file) && $file != ".gitignore")
               unlink($file);
           }
           return redirect()->back()->with('message','Media telah dihapus');
