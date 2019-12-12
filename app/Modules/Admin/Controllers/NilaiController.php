@@ -392,31 +392,25 @@ class NilaiController extends Controller
       if ($nbenar) {
         $nilai += round($nbenar/$jumlah_soal*$jadwal->bobot,2);
       }
-      // return view("Admin::nilai.detail-download",[
-      //   'title'=>'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' - ('.$siswa->noujian.') '.$siswa->nama,
-      //   'breadcrumb'=>'Nilai Ujian',
-      //   'jadwal'=>$jadwal,
-      //   'siswa'=>$siswa,
-      //   'soal'=>$soal,
-      //   'nilai'=>$nilai,
-      //   'sekolah'=>Sekolah::first(),
-      //   'helper'=>new Helper
-      // ]);
+
+      if (request()->view) {
+        return view("Admin::nilai.detail-download",[
+          'title'=>'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' - ('.$siswa->noujian.') '.$siswa->nama,
+          'breadcrumb'=>'Nilai Ujian',
+          'jadwal'=>$jadwal,
+          'siswa'=>$siswa,
+          'soal'=>$soal,
+          'mapel'=>$mapel,
+          'nilai'=>$nilai,
+          'benar'=>$nbenar,
+          'sekolah'=>Sekolah::first(),
+          'helper'=>new Helper
+        ]);
+      }
 
       $filename = 'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
 
-      $pdf = PDF::loadView("Admin::nilai.detail-download",[
-        'title'=>'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' - ('.$siswa->noujian.') '.$siswa->nama,
-        'breadcrumb'=>'Nilai Ujian',
-        'jadwal'=>$jadwal,
-        'siswa'=>$siswa,
-        'soal'=>$soal,
-        'mapel'=>$mapel,
-        'nilai'=>$nilai,
-        'benar'=>$nbenar,
-        'sekolah'=>Sekolah::first(),
-        'helper'=>new Helper
-      ]);
+      $pdf = PDF::loadFile(route('nilai.detail.download',['jadwal'=>$ujian,'siswa'=>$siswa->uuid,'view'=>true]));
 
       return $pdf->setOption('page-width','21.5cm')
       ->setOption('page-height','33cm')
