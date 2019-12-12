@@ -119,7 +119,7 @@ Route::group(['module' => 'Admin', 'middleware' => ['web'], 'namespace' => 'App\
       });
     });
 
-    Route::get('nilai/detail/{jadwal}.{siswa}','NilaiController@detailDownload')->name('nilai.detail.download')->middleware('shortcode');
+    Route::get('nilai/detail/{jadwal}.{siswa}','NilaiController@detailDownload')->name('nilai.detail.download')->middleware('shortcode:view');
 
   });
 

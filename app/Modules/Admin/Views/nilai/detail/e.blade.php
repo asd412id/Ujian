@@ -12,7 +12,7 @@
       @endphp
       <tr>
         <td align="center">{{ ($key+1).'.' }}</td>
-        <td class="col-sm-7" style="width: 60% !important">{!! nl2br(trim($s->soal)) !!}</td>
+        <td class="soal" style="width: 60% !important">{!! nl2br(trim($s->soal)) !!}</td>
         <td style="padding: 7px;width: 40% !important">
           {!! $ss&&$ss->jawaban?nl2br($ss->jawaban):'-' !!}
         </td>
