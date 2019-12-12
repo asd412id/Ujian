@@ -19,8 +19,11 @@
       table.table-info tr th{
         white-space: normal;
       }
-      img{
-        max-width: 100% !important;
+      .soal img{
+        max-width: 557px !important;
+      }
+      .jawaban img{
+        vertical-align: top;
       }
     </style>
   </head>

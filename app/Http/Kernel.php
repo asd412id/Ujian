@@ -37,10 +37,6 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'shortcode'=>[
-          \App\Http\Middleware\ShortcodeMiddleware::class,
-        ],
-
         'api' => [
             'throttle:60,1',
             'bindings',
@@ -66,6 +62,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'login' => \App\Http\Middleware\LoginMiddleware::class,
         'ujian' => \App\Http\Middleware\UjianMiddleware::class,
+        'shortcode' => \App\Http\Middleware\ShortcodeMiddleware::class,
     ];
 
     /**
