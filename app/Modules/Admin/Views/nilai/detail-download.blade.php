@@ -19,6 +19,9 @@
       table.table-info tr th{
         white-space: normal;
       }
+      img{
+        max-width: 100%;
+      }
     </style>
   </head>
   <body>
