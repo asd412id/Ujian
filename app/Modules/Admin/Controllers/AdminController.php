@@ -195,22 +195,35 @@ class AdminController extends Controller
           return redirect()->back()->with('message','Data jadwal telah direset');
           break;
         case 'media':
-          $files = glob(base_path('uploads/*'));
-          foreach($files as $file){
-            if(is_file($file) && $file != ".gitignore")
-              unlink($file);
-          }
-          $files = glob(base_path('thumbs/*'));
-          foreach($files as $file){
-            if(is_file($file) && $file != ".gitignore")
-              unlink($file);
-          }
+          $files = base_path('uploads');
+          $this->delete_files($files);
+
+          $files = base_path('thumbs');
+          $this->delete_files($files);
+
           return redirect()->back()->with('message','Media telah dihapus');
           break;
 
         default:
           // code...
           break;
+      }
+    }
+
+    public function delete_files($dir=null)
+    {
+      if (!$dir) {
+        return redirect()->route('admin.login');
+      }
+      $files = glob($dir.'/*');
+      foreach($files as $file) {
+        if(is_dir($file)){
+          $this->delete_files($file);
+          rmdir($file);
+        }else {
+          if(is_file($file) && $file != ".gitignore")
+            unlink($file);
+        }
       }
     }
 
