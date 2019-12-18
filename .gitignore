@@ -10,3 +10,7 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 composer.lock
+docker-composer.yml
+php-cust.ini
+php-fpm.conf
+site.conf
