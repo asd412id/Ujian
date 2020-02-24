@@ -361,7 +361,39 @@ class ImportController extends Controller
               $opsi = [];
               if ($opsi_count) {
                 for ($i=0; $i < $opsi_count; $i++) {
-                  array_push($opsi,$row[$i+3]);
+                  // array_push($opsi,$row[$i+3]);
+
+                  $getopsi = $spreadsheet->getSheet(1)->getCell($cols[$i+3].($key+1))->getValue();
+
+                  if ($getopsi instanceof RichText) {
+                    $newopsi = '';
+                    foreach ($getopsi->getRichTextElements() as $richTextElement) {
+                      if ($richTextElement->getFont()) {
+                        $st = 0;
+                        $styles = '';
+                        if ($richTextElement->getFont()->getSuperscript() === true) {
+                          $st = 1;
+                          $styles = $styles == '' ? $richTextElement->getText() : $styles;
+                          $styles = sprintf('<sup>%s</sup>',$styles);
+                        }
+                        if ($richTextElement->getFont()->getSubscript() === true) {
+                          $st = 1;
+                          $styles = $styles == '' ? $richTextElement->getText() : $styles;
+                          $styles = sprintf('<sub>%s</sub>',$styles);
+                        }
+
+                        if (!$st) {
+                          $newopsi .= $richTextElement->getText();
+                        }
+                        $newopsi .= $styles;
+                      }else {
+                        $newopsi .= $richTextElement->getText();
+                      }
+                    }
+                    $getopsi = $newopsi;
+                  }
+
+                  array_push($opsi,$getopsi);
 
                   if ($spreadsheet->getSheet(1)->getStyle($cols[$i+3].($key+1))->getFont()->getBold()) {
                     $benar = $i;

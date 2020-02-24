@@ -81,25 +81,41 @@
       $.get(_data.data('url'),{},function(res){
         _this.find('.modal-dialog').animate({'max-width':'600px'},150,function(){
           _this.find('.modal-content').html(res)
-          tinymce.remove();
-          tinymce.init({
-            selector: '#soal',
-            auto_focus: 'soal',
-            menubar: false,
-            statusbar: false,
-            height: 250,
-            toolbar1: "undo redo bold italic underline strikethrough forecolor removeformat superscript subscript",
-            plugins:["advlist autolink link image lists charmap print preview hr anchor pagebreak","searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking","table contextmenu directionality emoticons paste textcolor responsivefilemanager fontawesome noneditable code"],
-            setup: function (editor) {
-              editor.on('change', function () {
-                tinymce.triggerSave();
-              });
-            }
-          });
+          initEditor();
         })
       });
     });
   })
+  function initEditor() {
+    tinymce.remove();
+    tinymce.init({
+      selector: '#soal',
+      auto_focus: 'soal',
+      menubar: false,
+      statusbar: false,
+      height: 250,
+      toolbar1: "undo redo bold italic underline strikethrough forecolor removeformat superscript subscript",
+      plugins:["advlist autolink link image lists charmap print preview hr anchor pagebreak","searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking","table contextmenu directionality emoticons paste textcolor responsivefilemanager fontawesome noneditable code"],
+      setup: function (editor) {
+        editor.on('change', function () {
+          tinymce.triggerSave();
+        });
+      }
+    });
+    tinymce.init({
+      selector: '.opsi',
+      auto_focus: 'opsi',
+      menubar: false,
+      statusbar: false,
+      height: 50,
+      toolbar1: "removeformat superscript subscript",
+      setup: function (editor) {
+        editor.on('change', function () {
+          tinymce.triggerSave();
+        });
+      }
+    });
+  }
   @if (session()->has('message'))
     md.showNotification('bottom','right','{{ session()->get('message') }}','success','check');
   @endif
