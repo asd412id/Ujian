@@ -20,7 +20,7 @@
               <input type="radio" {{ !is_null($jawaban)&&$jawaban==$key?'checked':'' }} name="jawab" class="jawab" value="{{ $key }}">
               {{ $range[$i++].'.' }}
             </td>
-            <td style="vertical-align: top;padding: 5px 0">{{ $opsi }}</td>
+            <td style="vertical-align: top;padding: 5px 0">{!! nl2br($opsi) !!}</td>
           </tr>
         @endforeach
       @else

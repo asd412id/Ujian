@@ -13,7 +13,7 @@
     @foreach (json_decode($item->opsi) as $key => $v)
       <tr class="{{ $key==$item->benar?'text-success text-bold':'' }}">
         <td style="vertical-align: top !important;width: 15px">{{ $huruf[$key].'.' }}</td>
-        <td style="vertical-align: top !important">{{ $v }}</td>
+        <td style="vertical-align: top !important">{!! nl2br($v) !!}</td>
       </tr>
     @endforeach
   </table>
