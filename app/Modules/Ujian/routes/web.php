@@ -3,7 +3,7 @@
 Route::group(['module' => 'Ujian', 'middleware' => ['web'], 'namespace' => 'App\Modules\Ujian\Controllers'], function() {
 
     Route::get('/','UjianController@index')->name('ujian.login')->middleware('guest:siswa');
-    Route::post('/login','UjianController@login')->name('ujian.dologin');
+    Route::post('/','UjianController@login')->name('ujian.dologin');
 
     Route::get('/tokengenerate', function()
     {
