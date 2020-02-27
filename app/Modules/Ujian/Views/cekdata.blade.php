@@ -28,9 +28,9 @@
             <td>{{ $siswa->nik }}</td>
           </tr>
           <tr>
-            <td width="100">Kelas/Jurusan/Tingkat</td>
+            <td width="100">Kelas</td>
             <td width="10">:</td>
-            <td>{{ $siswa->kelas->nama.'/'.($siswa->kelas->jurusan??'-').'/'.$siswa->kelas->tingkat }}</td>
+            <td>{{ $siswa->kelas->nama.($siswa->kelas->jurusan?' '.$siswa->kelas->jurusan:null) }}</td>
           </tr>
         </table>
       </div>

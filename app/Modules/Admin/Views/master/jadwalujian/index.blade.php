@@ -41,12 +41,12 @@
                     $q->whereIn('uuid',json_decode($v->peserta));
                   })
                   ->orderBy('tingkat','asc')
-                  ->select('nama')
+                  ->select('nama','jurusan')
                   ->get();
 
                   if (count($getKelas)) {
                     foreach ($getKelas as $key1 => $k) {
-                      $kelas .= $k->nama;
+                      $kelas .= $k->nama.($k->jurusan?' '.$k->jurusan:null);
                       if ($key1 < count($getKelas)-2) {
                         $kelas .= ', ';
                       }elseif ($key1 == count($getKelas)-2) {
