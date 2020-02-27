@@ -114,7 +114,7 @@
 <script type="text/javascript">
 function loader() {
   var tm;
-  $.get('{{ route('jadwal.ujian.monitoring.getdata',['uuid'=>$jadwal->uuid]) }}',{},function(res){
+  $.get('{{ route('jadwal.ujian.monitoring.getdata',['uuid'=>$jadwalUjian->uuid]) }}',{},function(res){
     if (res) {
       $("#data-wrapper").html(res);
       cariPeserta($("#cari-peserta").val());
@@ -225,7 +225,7 @@ function stopUjian(btn) {
     $.get(url,{},function(stat){
       if (stat) {
         $(".modal-confirm").modal('hide');
-        $.get('{{ route('jadwal.ujian.monitoring.getdata',['uuid'=>$jadwal->uuid]) }}',{},function(res){
+        $.get('{{ route('jadwal.ujian.monitoring.getdata',['uuid'=>$jadwalUjian->uuid]) }}',{},function(res){
           if (res) {
             $("#data-wrapper").html(res);
             cariPeserta($("#cari-peserta").val());

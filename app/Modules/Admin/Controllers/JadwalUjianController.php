@@ -431,6 +431,7 @@ class JadwalUjianController extends Controller
         $login->_token = null;
         $login->end = null;
         $login->ip_address = null;
+        $login->created_at = Carbon::now()->toDateTimeString();
         $login->save();
       }
       return redirect()->route('admin.index');
@@ -659,7 +660,9 @@ class JadwalUjianController extends Controller
         $result = [];
         $search = $r->term;
         $data = Siswa::whereHas('kelas',function($q) use($search){
-          $q->where('nama','ilike','%'.$search.'%');
+          $q->where('kode',$search)
+          ->orWhere('nama','ilike','%'.$search.'%')
+          ->orWhere('tingkat',$search);
         })
         ->orWhere('nama','ilike','%'.$search.'%')
         ->select('uuid','noujian','kode_kelas','nama')
