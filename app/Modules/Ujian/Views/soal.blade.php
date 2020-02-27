@@ -89,7 +89,7 @@ $("#form-ujian").submit(function(e){
       success: function(res){
         if (res.success) {
           var tbtn = $("#soal-{{ $soal->uuid }}");
-          if (!tbtn.hasClass('btn-success')&&((_this.find("input[name='jawab']").is(":checked")&&_this.find("input[name='jawab']").val()!='')||_this.find("textarea[name='jawab']").val()!='')) {
+          if (!tbtn.hasClass('btn-success')&&((_this.find("input[name='jawab']").length>0&&_this.find("input[name='jawab']").is(":checked")&&_this.find("input[name='jawab']").val()!='')||(_this.find("textarea[name='jawab']").length>0&&_this.find("textarea[name='jawab']").val()!=''))) {
             tbtn.removeClass('btn-default');
             tbtn.addClass('btn-success');
           }
