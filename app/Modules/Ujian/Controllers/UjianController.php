@@ -341,9 +341,9 @@ class UjianController extends Controller
     public function logout()
     {
       $siswa = Auth::guard('siswa');
-      if ($siswa->user) {
-		$siswa->user->_token = null;
-		$siswa->user->save();
+      if ($siswa->user()) {
+    		$siswa->user()->_token = null;
+    		$siswa->user()->save();
         $siswa->logout();
       }
       return redirect()->route('ujian.login');
