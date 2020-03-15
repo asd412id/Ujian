@@ -39,6 +39,8 @@ class UjianController extends Controller
         'pin.required'=>'Pin harus diisi',
       ])->validate();
 
+      $_token = Str::random(100);
+
       $siswa = Siswa::where('noujian',$r->noujian)->first();
 
       if (!$siswa) {
@@ -67,29 +69,31 @@ class UjianController extends Controller
             Auth::guard('siswa')->logout();
             return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain!'])->withInput($r->only('noujian'));
           }else{
-            Auth::guard('siswa')->logout();
             Auth::guard('siswa')->attempt([
               'noujian'=>$r->noujian,
               'password'=>$r->password
-            ],0);
+            ],1);
             $user = Auth::guard('siswa')->user();
+            $user->_token = $_token;
+            $user->save();
             $ujian = Auth::guard('siswa')->user()->attemptLogin()->where('pin',$r->pin)->first();
-            $ujian->_token = $user->remember_token;
+            $ujian->_token = $user->_token;
             $ujian->ip_address = $r->ip();
             $ujian->save();
             return redirect()->back();
           }
         }
-        Auth::guard('siswa')->logout();
         Auth::guard('siswa')->attempt([
           'noujian'=>$r->noujian,
           'password'=>$r->password
-        ],0);
+        ],1);
         $user = Auth::guard('siswa')->user();
+        $user->_token = $_token;
+        $user->save();
         $ujian = new Login;
         $ujian->uuid = (string)Str::uuid();
         $ujian->noujian = $user->noujian;
-        $ujian->_token = $user->remember_token;
+        $ujian->_token = $user->_token;
         $ujian->pin = $r->pin;
         $ujian->start = null;
         $ujian->end = null;
@@ -285,7 +289,6 @@ class UjianController extends Controller
       if (is_null($siswa->login->end)) {
         return redirect()->route('ujian.login');
       }
-      Auth::guard('siswa')->logout();
       $nilai = null;
       $nbenar = null;
       $jadwal = $siswa->login->jadwal;

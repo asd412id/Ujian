@@ -16,14 +16,14 @@ class SiswaController extends Controller
     {
       $siswa = Siswa::when($r->cari,function($q,$role){
         $s = [$role,'%'.$role.'%'];
-        $q->where('noujian','ilike',$s[1])
-        ->orWhere('nama','ilike',$s[1])
+        $q->where('noujian','like',$s[1])
+        ->orWhere('nama','like',$s[1])
         ->orWhereHas('kelas',function($q) use($s){
           $q->where('kode',$s[0])
-          ->orWhere('nama','ilike',$s[1])
-          ->orWhere('nik','ilike',$s[1])
-          ->orWhere('jurusan','ilike',$s[1])
-          ->orWhere('tingkat','ilike',$s[1]);
+          ->orWhere('nama','like',$s[1])
+          ->orWhere('nik','like',$s[1])
+          ->orWhere('jurusan','like',$s[1])
+          ->orWhere('tingkat','like',$s[1]);
         });
       })
       ->orderBy('id','asc')

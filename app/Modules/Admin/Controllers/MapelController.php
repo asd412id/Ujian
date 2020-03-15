@@ -15,8 +15,8 @@ class MapelController extends Controller
     {
       $mapel = Mapel::when($r->cari,function($q,$role){
         $role = '%'.$role.'%';
-        $q->where('kode','ilike',$role)
-        ->orWhere('nama','ilike',$role);
+        $q->where('kode','like',$role)
+        ->orWhere('nama','like',$role);
       })
       ->orderBy('id','asc')
       ->paginate(30)->appends(request()->except('page'));

@@ -24,6 +24,7 @@ class CreateSiswaTable extends Migration
             $table->string('kode_kelas');
             $table->string('photo')->nullable();
             $table->string('remember_token')->nullable();
+            $table->string('_token')->nullable();
             $table->timestamps();
             $table->softdeletes();
         });

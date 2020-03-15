@@ -24,16 +24,16 @@ class SoalController extends Controller
     {
       $soal = Soal::when($r->cari,function($q,$role){
         $role = [$role,'%'.$role.'%'];
-        $q->where('kode','ilike',$role[1])
-        ->orWhere('nama','ilike',$role[1])
+        $q->where('kode','like',$role[1])
+        ->orWhere('nama','like',$role[1])
         ->orWhereHas('kelas',function($q) use($role){
           $q->where('kode',$role[0])
-          ->orWhere('nama','ilike',$role[1])
-          ->orWhere('tingkat','ilike',$role[1]);
+          ->orWhere('nama','like',$role[1])
+          ->orWhere('tingkat','like',$role[1]);
         })
         ->orWhereHas('mapel',function($q) use($role){
           $q->where('kode',$role[0])
-          ->orWhere('nama','ilike',$role[1]);
+          ->orWhere('nama','like',$role[1]);
         });
       })
       ->orderBy('id','asc')
@@ -146,8 +146,8 @@ class SoalController extends Controller
       $soalItem = $soal->item()
       ->when($r->cari,function($q,$role){
         $role = [$role,'%'.$role.'%'];
-        $q->where('soal','ilike',$role[1])
-        ->orWhere('opsi','ilike',$role[1]);
+        $q->where('soal','like',$role[1])
+        ->orWhere('opsi','like',$role[1]);
         })
       ->orderBy('id','asc')
       ->paginate(30)->appends(request()->except('page'));

@@ -28,13 +28,13 @@ class NilaiController extends Controller
       $jadwal = JadwalUjian::with('tes')
       ->when($cari,function($jadwal,$role){
         $r = '%'.$role.'%';
-        $jadwal->where('nama_ujian','ilike',$r)
-        ->orWhere('pin','ilike',$r)
+        $jadwal->where('nama_ujian','like',$r)
+        ->orWhere('pin','like',$r)
         ->orWhereHas('login.tes.soalItem.getSoal.mapel',function($soal) use($jadwal,$r){
-          $soal->where('nama','ilike',$r);
+          $soal->where('nama','like',$r);
         })
         ->orWhereHas('login.siswa.kelas',function($kelas) use($jadwal,$r){
-          $kelas->where('nama','ilike',$r);
+          $kelas->where('nama','like',$r);
         });
       })
       ->paginate(30)->appends(request()->except('page'));

@@ -29,13 +29,13 @@ class JadwalUjianController extends Controller
     {
       $jadwalUjian = JadwalUjian::when($r->cari,function($jadwal,$role){
         $role = '%'.$role.'%';
-        $jadwal->where('nama_ujian','ilike',$role)
-        ->orWhere('pin','ilike',$role)
+        $jadwal->where('nama_ujian','like',$role)
+        ->orWhere('pin','like',$role)
         ->orWhereHas('login.tes.soalItem.getSoal.mapel',function($soal) use($jadwal,$role){
-          $soal->where('nama','ilike',$role);
+          $soal->where('nama','like',$role);
         })
         ->orWhereHas('login.siswa.kelas',function($kelas) use($jadwal,$role){
-          $kelas->where('nama','ilike',$role);
+          $kelas->where('nama','like',$role);
         });
       })
       ->orderBy('aktif','desc')
@@ -317,13 +317,13 @@ class JadwalUjianController extends Controller
     {
       $jadwalUjian = JadwalUjian::when($r->cari,function($jadwal,$role){
         $role = '%'.$role.'%';
-        $jadwal->where('nama_ujian','ilike',$role)
-        ->orWhere('pin','ilike',$role)
+        $jadwal->where('nama_ujian','like',$role)
+        ->orWhere('pin','like',$role)
         ->orWhereHas('login.tes.soalItem.getSoal.mapel',function($soal) use($jadwal,$role){
-          $soal->where('nama','ilike',$role);
+          $soal->where('nama','like',$role);
         })
         ->orWhereHas('login.siswa.kelas',function($kelas) use($jadwal,$role){
-          $kelas->where('nama','ilike',$role);
+          $kelas->where('nama','like',$role);
         });
       })
       ->where('aktif',1)
@@ -660,10 +660,10 @@ class JadwalUjianController extends Controller
         $search = $r->term;
         $data = Siswa::whereHas('kelas',function($q) use($search){
           $q->where('kode',$search)
-          ->orWhere('nama','ilike','%'.$search.'%')
+          ->orWhere('nama','like','%'.$search.'%')
           ->orWhere('tingkat',$search);
         })
-        ->orWhere('nama','ilike','%'.$search.'%')
+        ->orWhere('nama','like','%'.$search.'%')
         ->select('uuid','noujian','kode_kelas','nama')
         ->with('kelas')
         ->orderBy('nama','asc')
@@ -689,10 +689,10 @@ class JadwalUjianController extends Controller
         $result = [];
         $search = $r->term;
         $data = Soal::whereHas('mapel',function($q) use($search){
-          $q->where('nama','ilike','%'.$search.'%');
+          $q->where('nama','like','%'.$search.'%');
         })
-        ->orWhere('nama','ilike','%'.$search.'%')
-        ->orWhere('kode','ilike','%'.$search.'%')
+        ->orWhere('nama','like','%'.$search.'%')
+        ->orWhere('kode','like','%'.$search.'%')
         ->select('uuid','kode','nama')
         ->orderBy('nama','asc')
         ->get();

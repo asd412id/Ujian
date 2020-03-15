@@ -15,10 +15,10 @@ class KelasController extends Controller
     {
       $kelas = Kelas::when($r->cari,function($q,$role){
         $role = '%'.$role.'%';
-        $q->where('kode','ilike',$role)
-        ->orWhere('nama','ilike',$role)
-        ->orWhere('jurusan','ilike',$role)
-        ->orWhere('tingkat','ilike',$role);
+        $q->where('kode','like',$role)
+        ->orWhere('nama','like',$role)
+        ->orWhere('jurusan','like',$role)
+        ->orWhere('tingkat','like',$role);
       })
       ->orderBy('tingkat','asc')
       ->paginate(30)->appends(request()->except('page'));
