@@ -8,7 +8,7 @@
         <p class="card-category">Data pribadi peserta ujian.</p>
       </div>
       <div class="card-body">
-        <table class="table" style="font-weight: bold">
+        <table class="table" style="font-weight: bold;word-break: break-word">
           <tr>
             <td width="100">Nomor Ujian</td>
             <td width="10">:</td>
@@ -25,9 +25,9 @@
             <td>{{ $siswa->nik }}</td>
           </tr>
           <tr>
-            <td width="100">Kelas/Jurusan/Tingkat</td>
+            <td width="100">Kelas</td>
             <td width="10">:</td>
-            <td>{{ $siswa->kelas->nama.'/'.($siswa->kelas->jurusan??'-').'/'.$siswa->kelas->tingkat }}</td>
+            <td>{{ $siswa->kelas->nama.($siswa->kelas->jurusan?' '.$siswa->kelas->jurusan:null) }}</td>
           </tr>
         </table>
       </div>
@@ -66,7 +66,7 @@
         }
       @endphp
       <div class="card-body">
-        <table class="table" style="font-weight: bold">
+        <table class="table" style="font-weight: bold;word-break: break-word">
           <tr>
             <td width="150">Nama Ujian</td>
             <td width="10">:</td>
@@ -115,6 +115,9 @@
         </table>
       </div>
     </div>
+  </div>
+  <div class="col-sm-12 text-center d-md-none" style="margin-bottom: 15px;margin-top: -15px">
+    <a href="{{ route('ujian.logout') }}" class="btn btn-danger">Keluar</a>
   </div>
 </div>
 @endsection

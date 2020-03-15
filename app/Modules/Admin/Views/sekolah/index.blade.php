@@ -80,9 +80,9 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group">
+              <div class="form-group is-focused">
                 <label class="bmd-label-floating">Kop Dokumen</label>
-                <textarea name="kop_kartu" rows="4" class="form-control" placeholder="PEMERINTAH KABUPATEN SINJAI&#10;DINAS PENDIDIKAN" autofocus>{{ old('kop_kartu')?old('kop_kartu'):@$sekolah->kop_kartu }}</textarea>
+                <textarea name="kop_kartu" rows="4" class="form-control" placeholder="PEMERINTAH KABUPATEN SINJAI&#10;DINAS PENDIDIKAN">{{ old('kop_kartu')?old('kop_kartu'):@$sekolah->kop_kartu }}</textarea>
               </div>
             </div>
           </div>

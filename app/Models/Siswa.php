@@ -27,7 +27,7 @@ class Siswa extends Authenticatable
 
   public function login()
   {
-    return $this->hasOne(Login::class,'_token','remember_token');
+    return $this->hasOne(Login::class,'_token','_token');
   }
 
   public function tes()
