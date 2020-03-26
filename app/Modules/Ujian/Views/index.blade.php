@@ -56,15 +56,15 @@
   @endif
   <p>
     <label for="email">NOMOR UJIAN</label>
-    <input type="text" name="noujian" value="{{ old('noujian') }}" required>
+    <input type="text" name="noujian" value="{{ old('noujian') }}">
   </p>
   <p>
     <label for="password">PASSWORD</label>
-    <input type="password" name="password" required>
+    <input type="password" name="password">
   </p>
   <p>
     <label for="password">PIN SESI UJIAN</label>
-    <input type="text" name="pin" value="{{ old('pin') }}" autocomplete="off" required>
+    <input type="text" name="pin" value="{{ old('pin') }}" autocomplete="off">
   </p>
   </div>
   <p class="p-container">
