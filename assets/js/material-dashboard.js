@@ -164,7 +164,7 @@ md = {
     }
   },
 
-  showNotification: function(from, align, message='Notification Message',color='primary',icon='add_alert') {
+  showNotification: function(from, align, message,color,icon) {
     //type = ['', 'info', 'danger', 'success', 'warning', 'rose', 'primary'];
 
     //color = Math.floor((Math.random() * 6) + 1);
@@ -465,7 +465,7 @@ md = {
 
       // insert the navbar form before the sidebar list
       $nav_content = $(nav_content);
-      $navbar_form = $(navbar_form);
+      // $navbar_form = $(navbar_form);
       $nav_content.insertBefore($sidebar_nav);
       $navbar_form.insertBefore($nav_content);
 
