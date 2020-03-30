@@ -467,7 +467,7 @@ md = {
       $nav_content = $(nav_content);
       // $navbar_form = $(navbar_form);
       $nav_content.insertBefore($sidebar_nav);
-      $navbar_form.insertBefore($nav_content);
+      // $navbar_form.insertBefore($nav_content);
 
       $(".sidebar-wrapper .dropdown .dropdown-menu > li > a").click(function(event) {
         event.stopPropagation();
