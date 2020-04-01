@@ -70,14 +70,14 @@ function timer(countDownDate,now) {
           url: '{{ route('ujian.getsoal') }}',
           data: {'checking': 'status'},
           success: function(res){
-            if (res != 0 && res != '0') {
+            if (res === 'error') {
+              location.href = '{{ route('ujian.selesai') }}';
+            }else {
               time=0;
               clearInterval(x);
               countDownDate = new Date(res.timer).getTime();
               now = new Date(res.now);
               timer(countDownDate,now);
-            }else {
-              location.href = '{{ route('ujian.selesai') }}';
             }
           }
         });
@@ -111,7 +111,9 @@ function getSoal(soal,key,btn) {
       url: '{{ route('ujian.getsoal') }}',
       data: {'soal': soal,'key': key},
       success: function(res){
-        if (res != 0 && res != '0') {
+        if (res === 'error') {
+          location.href = '{{ route('ujian.selesai') }}';
+        }else {
           ar = true;
           time = 0;
           loadProcess = false;
@@ -140,8 +142,6 @@ function getSoal(soal,key,btn) {
               }
             })
           }
-        }else {
-          location.href = '{{ route('ujian.selesai') }}';
         }
       }
     });
