@@ -168,7 +168,7 @@ md = {
     //type = ['', 'info', 'danger', 'success', 'warning', 'rose', 'primary'];
 
     //color = Math.floor((Math.random() * 6) + 1);
-	
+
     $.notify({
       icon: icon,
       message: message
@@ -455,18 +455,18 @@ md = {
 
       mobile_menu_content = '';
 
-      nav_content = $navbar.html();
+      // nav_content = $navbar.html();
+      //
+      // nav_content = '<ul class="nav navbar-nav nav-mobile-menu">' + nav_content + '</ul>';
 
-      nav_content = '<ul class="nav navbar-nav nav-mobile-menu">' + nav_content + '</ul>';
+      // navbar_form = $('nav').find('.navbar-form').get(0).outerHTML;
 
-      navbar_form = $('nav').find('.navbar-form').get(0).outerHTML;
-
-      $sidebar_nav = $sidebar_wrapper.find(' > .nav');
+      // $sidebar_nav = $sidebar_wrapper.find(' > .nav');
 
       // insert the navbar form before the sidebar list
-      $nav_content = $(nav_content);
+      // $nav_content = $(nav_content);
       // $navbar_form = $(navbar_form);
-      $nav_content.insertBefore($sidebar_nav);
+      // $nav_content.insertBefore($sidebar_nav);
       // $navbar_form.insertBefore($nav_content);
 
       $(".sidebar-wrapper .dropdown .dropdown-menu > li > a").click(function(event) {

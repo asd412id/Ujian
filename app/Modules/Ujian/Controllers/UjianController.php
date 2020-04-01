@@ -186,7 +186,8 @@ class UjianController extends Controller
         $siswa = Auth::guard('siswa')->user();
 
         if (!$siswa || !$siswa->login || !is_null(@$siswa->login->end)) {
-          return $err = 0;
+          $err = 'error';
+          return $err;
         }
 
         if ($r->has('checking')) {
