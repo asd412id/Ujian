@@ -100,7 +100,8 @@
           @if ($jadwalUjian->jenis_soal == 'P')
             <td><strong>{{ $nilai }}</strong></td>
             <td>
-              <span class="badge badge-primary">Soal Dikerjakan: {{ $dtes->count().'/'.$jumlah_soal }}</span><br>
+              <span class="badge badge-primary">Soal Dikerjakan: {{ $dtes->count().'/'.$jumlah_soal }}</span>
+              <span class="badge badge-info">Soal Sekarang: {{ $v->current_number+1 }}</span><br>
               <span class="badge badge-success">Benar: {{ $nbenar }}</span>
               <span class="badge badge-danger">Salah: {{ $dtes->count()-$nbenar }}</span>
             </td>
