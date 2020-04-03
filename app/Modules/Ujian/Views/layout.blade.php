@@ -229,7 +229,7 @@
       <footer class="footer">
         <div class="container-fluid">
           <div class="copyright float-right">
-            &copy; {{ date('Y') }} Aplikasi Ujian by <a href="https://www.facebook.com/aezdar"> Asdar Bin Syam </a>
+            &copy; {{ date('Y') }} by asd412id
           </div>
           <script src="{{ url('/') }}/assets/js/core/jquery.min.js"></script>
           <script src="{{ url('/') }}/assets/js/core/popper.min.js"></script>
