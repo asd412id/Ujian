@@ -20,12 +20,12 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="javascript:void(0)" style="font-size: 1em">
-            Apabila terdapat kesalahan data (Nomor Ujian) dan Sesi Ujian, Silahkan hubungi operator untuk memperbaikinya sebelum ujian dimulai.
+            <span class="text-danger" style="font-weight:bold;text-transform: uppercase !important">Perhatian!!! Jangan pernah login pada lebih dari 1 (satu) perangkat dan jangan menutup halaman ujian atau sesi ujian Anda akan berakhir!</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="javascript:void(0)" style="font-size: 1em">
-            <span class="text-danger" style="font-weight:bold;text-transform: uppercase !important">Perhatian!!! Jangan pernah login pada lebih dari 1 (satu) perangkat atau sesi ujian Anda akan berakhir!</span>
+            Apabila terdapat kesalahan data (Nomor Ujian) dan Sesi Ujian, Silahkan hubungi operator untuk memperbaikinya sebelum ujian dimulai.
           </a>
         </li>
         <li class="nav-item">

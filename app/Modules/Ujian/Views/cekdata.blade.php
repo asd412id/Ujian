@@ -2,7 +2,7 @@
 @section('content')
 <div class="row">
   <div class="col-md-12 warning text-center">
-    <span class="text-danger" style="font-weight:bold;text-transform: uppercase !important">Perhatian!!!<br>Jangan pernah login pada lebih dari 1 (satu) perangkat atau sesi ujian Anda akan berakhir!</span>
+    <span class="text-danger" style="font-weight:bold;text-transform: uppercase !important">Perhatian!!!<br>Jangan pernah login pada lebih dari 1 (satu) perangkat dan jangan menutup halaman ujian atau sesi ujian Anda akan berakhir!</span>
   </div>
   <div class="col-md-6">
     <div class="card">
