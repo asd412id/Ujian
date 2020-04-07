@@ -135,11 +135,9 @@
   $(".native-confirm").click(function(){
     return confirm($(this).data('text'));
   })
-  function refresh() {
+  var refresh = function() {
     $.get('{{ route('token.generate') }}',function(res){
-      setTimeout(()=>{
-        refresh();
-      },15000);
+      setTimeout(refresh,15000);
     });
   }
   refresh();
