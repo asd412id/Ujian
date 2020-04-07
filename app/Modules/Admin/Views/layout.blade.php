@@ -186,6 +186,26 @@
   <script src="{{ url('/') }}/assets/js/moment.min.js" type="text/javascript"></script>
   <script src="{{ url('/') }}/assets/js/bootstrap-material-datetimepicker.js" type="text/javascript"></script>
   <script src="{{ url('/') }}/assets/js/scripts.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  var lgin = false;
+  function loginProcess(form){
+    $.get('{{ route('token.generate') }}',function(token){
+      form.find("input[name='_token']").val(token);
+      lgin = true;
+      form.submit();
+    })
+  }
+  $(document).ready(function(){
+    $("form").on('submit',function(e){
+      if (lgin == false) {
+        e.preventDefault();
+        $(this).find("*[type=submit]").prop('disabled',true);
+        $(this).find("*[type=button]").prop('disabled',true);
+        loginProcess($(this));
+      }
+    })
+  })
+  </script>
   @yield('footer')
 </body>
 

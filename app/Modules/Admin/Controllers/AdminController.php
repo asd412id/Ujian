@@ -31,18 +31,6 @@ class AdminController extends Controller
 
     public function login()
     {
-      // try {
-      //   DB::connection()->getPdo();
-      // } catch (\Exception $e) {
-      //   $pdo = new PDO(sprintf('mysql:host=%s;port=%d;', env('DB_HOST'), env('DB_PORT')), env('DB_USERNAME'), env('DB_PASSWORD'));
-      //   $ok = $pdo->exec(sprintf(
-      //       'CREATE DATABASE IF NOT EXISTS %s',
-      //       env('DB_DATABASE',false)
-      //   ));
-      //   Artisan::call('migrate:fresh');
-      //   Artisan::call('db:seed');
-      // }
-
       return view("Admin::login",[
         'sekolah'=>Sekolah::first()
       ]);
@@ -61,7 +49,7 @@ class AdminController extends Controller
       if (Auth::guard('admin')->attempt([
         'username'=>$r->username,
         'password'=>$r->password
-      ],($r->remember?true:false))) {
+      ],true)) {
         return redirect()->back();
       }
 

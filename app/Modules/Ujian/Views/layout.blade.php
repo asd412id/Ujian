@@ -147,18 +147,6 @@
     a.btn-soal {
       margin: 10px 7px 0 !important;
     }
-    .btn-reload{
-      position: fixed;
-      right: -10px;
-      top: 250px;
-      z-index: 1000;
-      opacity: 0.2;
-      padding: 13px;
-      padding-right: 20px;
-    }
-    .btn-reload:hover,.btn-reload:active{
-      opacity: 1;
-    }
     @media screen and (max-width: 800px) {
       .soal-title{
         display: block;
@@ -211,7 +199,6 @@
           <div class="navbar-wrapper">
             <a class="navbar-brand" href="javascript:void(0)">{{ $breadcrumb??'Periksa Data' }}</a>
           </div>
-          <button type="button" class="btn-reload btn btn-primary" onclick="location.reload()" title="Muat Ulang Halaman"><i class="fa fa-fw fa-refresh"></i></button>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
             <span class="navbar-toggler-icon icon-bar"></span>

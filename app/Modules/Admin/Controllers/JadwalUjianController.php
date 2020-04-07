@@ -156,7 +156,7 @@ class JadwalUjianController extends Controller
     public function generatePin($digit=4)
     {
         if ($digit<1) {
-          $ditig = 4;
+          $digit = 4;
         }
         $pin = strtoupper(Str::random($digit));
         $cek = JadwalUjian::where('pin',$pin)->count();
@@ -340,6 +340,7 @@ class JadwalUjianController extends Controller
     {
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
       $login = $jadwal->login()->withTrashed()
+      ->whereNotNull('_token')
       ->orderBy('id','asc')
       ->get();
 
