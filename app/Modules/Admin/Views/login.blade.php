@@ -34,7 +34,7 @@
 </head>
 <body>
 
-<form method="post" action="{{ route('admin.dologin') }}">
+<form method="post" id="login" action="{{ route('admin.dologin') }}">
   @if($sekolah)
   <div class="logo-wrap">
     @if (is_file(base_path('uploads/'.$sekolah->logo)))
@@ -62,10 +62,6 @@
     <label for="password">PASSWORD</label>
     <input type="password" name="password">
   </p>
-  <p>
-    <input type="checkbox" name="remember" id="remember">
-    <label for="remember" {{ old('remember')=='on'?'checked':'' }} style="position: relative; top: -5px">Remember me</label>
-  </p>
   </div>
   <p class="p-container">
     <input type="submit" name="go" id="go" value="Masuk">
@@ -80,5 +76,25 @@
   @endif
   <p>&copy; {{ date('Y') }} by <a style="color: #fff" target="_blank" href="https://www.facebook.com/aezdar">Asdar Bin Syam</a></p>
 </div>
+<script src="{{ url('/') }}/assets/js/core/jquery.min.js"></script>
+<script type="text/javascript">
+  var lgin = false;
+  function loginProcess(form){
+    $.get('{{ route('token.generate') }}',function(token){
+      form.find("input[name='_token']").val(token);
+      lgin = true;
+      form.submit();
+    })
+  }
+
+  $("#login").on('submit',function(e){
+    if (lgin == false) {
+      e.preventDefault();
+      $(this).find("input[type=submit]").prop('disabled',true);
+      $(this).find("input[type=submit]").val('Memproses ...');
+      loginProcess($(this));
+    }
+  })
+</script>
 </body>
 </html>

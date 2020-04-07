@@ -34,7 +34,7 @@ class UjianController extends Controller
         'password'=>'required',
         'pin'=>'required',
       ],[
-        'noujian.required'=>'No ujian tidak boleh kosong',
+        'noujian.required'=>'Nomor ujian tidak boleh kosong',
         'password.required'=>'Password tidak boleh kosong',
         'pin.required'=>'Pin harus diisi',
       ])->validate();
@@ -57,7 +57,7 @@ class UjianController extends Controller
           return redirect()->route('ujian.login')->withErrors(['Sesi ujian telah berakhir'])->withInput($r->only('noujian'));
         }elseif (!in_array($siswa->uuid,json_decode($jadwal->peserta))) {
           return redirect()->route('ujian.login')->withErrors(['Anda tidak dapat mengikuti ujian ini'])->withInput($r->only('noujian'));
-        }elseif ($siswa->attemptLogin()->where('pin',$r->pin)->first()) {
+        }elseif ($siswa->attemptLogin()->where('pin',$r->pin)->count()) {
           if (!is_null($siswa->attemptLogin()->where('pin',$r->pin)->first()->end)) {
             return redirect()->route('ujian.login')->withErrors(['Anda sudah selesai ujian'])->withInput($r->only('noujian'));
           }elseif (!is_null($siswa->attemptLogin()->where('pin',$r->pin)->first()->_token)) {
@@ -66,7 +66,7 @@ class UjianController extends Controller
             Auth::guard('siswa')->attempt([
               'noujian'=>$r->noujian,
               'password'=>$r->password
-            ],1);
+            ],false);
             $user = Auth::guard('siswa')->user();
             $user->_token = $_token;
             $user->save();
@@ -77,10 +77,12 @@ class UjianController extends Controller
             return redirect()->back();
           }
         }
+        $siswa->attemptLogin()
+        ->update(['end'=>Carbon::now()->toDateTimeString()]);
         Auth::guard('siswa')->attempt([
           'noujian'=>$r->noujian,
           'password'=>$r->password
-        ],1);
+        ],false);
         $user = Auth::guard('siswa')->user();
         $user->_token = $_token;
         $user->save();
