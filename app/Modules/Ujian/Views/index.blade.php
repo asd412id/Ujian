@@ -84,7 +84,7 @@
 <script type="text/javascript">
   var lgin = false;
   function loginProcess(form){
-    $.get('{{ route('token.generate') }}',function(token){
+    $.get('{{ route('token.request') }}',function(token){
       form.find("input[name='_token']").val(token);
       lgin = true;
       form.submit();

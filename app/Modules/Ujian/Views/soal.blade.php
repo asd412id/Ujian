@@ -64,7 +64,7 @@ $(".btn-soal-nav").click(function(){
 
 var submit = false;
 function loginProcess(form){
-  $.get('{{ route('token.generate') }}',function(token){
+  $.get('{{ route('token.ujian.generate') }}',function(token){
     if ($("meta[name='csrf-token']").length) {
       $("meta[name='csrf-token']").prop('content',token);
     }

@@ -82,6 +82,13 @@
         color: #333;
         border: none !important;
     }
+    li.s-left a{
+      background: #f44336 !important;
+      color: #fff !important;
+    }
+    li.s-left a:hover,li.s-left a:active{
+      background: #bf180b !important;
+    }
     li.nav-soal{
       float: left;
       padding: 0 !important;
@@ -216,7 +223,7 @@
       <footer class="footer">
         <div class="container-fluid">
           <div class="copyright float-right">
-            &copy; {{ date('Y') }} by asd412id
+            &copy; {{ date('Y') }} Aplikasi Ujian by <a href="https://www.facebook.com/aezdar">Asdar Bin Syam</a>
           </div>
           <script src="{{ url('/') }}/assets/js/core/jquery.min.js"></script>
           <script src="{{ url('/') }}/assets/js/core/popper.min.js"></script>

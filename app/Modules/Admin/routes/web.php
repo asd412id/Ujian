@@ -4,11 +4,16 @@ Route::group(['module' => 'Admin', 'middleware' => ['web'], 'namespace' => 'App\
 
   Route::group(['prefix'=>'admin'],function(){
     Route::get('/','AdminController@login')->name('admin.login')->middleware('guest:admin');
-    Route::post('/dologin','AdminController@dologin')->name('admin.dologin');
-    Route::get('/logout','AdminController@logout')->name('admin.logout');
+    Route::post('/dologin','AdminController@dologin')->name('admin.dologin')->middleware('guest:admin');
 
     Route::group(['middleware'=>['auth:admin']], function()
     {
+      Route::get('/logout','AdminController@logout')->name('admin.logout');
+      Route::get('/tokengenerate', function()
+      {
+        return csrf_token();
+      })->name('token.admin.generate');
+
       Route::group(['prefix'=>'reset'], function()
       {
         Route::get('/','AdminController@reset')->name('admin.reset.index');
