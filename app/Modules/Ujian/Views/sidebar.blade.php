@@ -40,7 +40,7 @@
           </a>
         </li>
         <li class="nav-item text-center s-left">
-          <a href="{{ route('ujian.selesai') }}" class="btn btn-danger" onclick="return confirm($(this).data('text'))" style="color: #fff" data-text="Ujian akan selesai dan jawaban tidak dapat diubah kembali! ANDA YAKIN?" data-url="{{ route('ujian.selesai') }}">Selesai Ujian</a>
+          <a href="{{ route('ujian.selesai') }}" class="btn btn-danger" onclick="return confirm($(this).data('text'))"data-text="Ujian akan selesai dan jawaban tidak dapat diubah kembali! ANDA YAKIN?" data-url="{{ route('ujian.selesai') }}">Selesai Ujian</a>
           </a>
         </li>
         <li style="margin-top: 45px">

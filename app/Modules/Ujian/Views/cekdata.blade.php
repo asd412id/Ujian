@@ -136,7 +136,7 @@
     return confirm($(this).data('text'));
   })
   var refresh = function() {
-    $.get('{{ route('token.generate') }}',function(res){
+    $.get('{{ route('token.ujian.generate') }}',function(res){
       setTimeout(refresh,15000);
     });
   }

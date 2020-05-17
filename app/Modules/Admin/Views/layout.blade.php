@@ -165,7 +165,7 @@
       <footer class="footer">
         <div class="container-fluid">
           <div class="copyright float-right">
-            &copy; {{ date('Y') }} Aplikasi Ujian by <a href="https://www.facebook.com/aezdar"> Asdar Bin Syam </a>
+            &copy; {{ date('Y') }} Aplikasi Ujian by <a href="https://www.facebook.com/aezdar">Asdar Bin Syam</a>
           </div>
           <div class="modal fade modal-confirm" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
             <div class="modal-dialog">
@@ -189,7 +189,7 @@
   <script type="text/javascript">
   var lgin = false;
   function loginProcess(form){
-    $.get('{{ route('token.generate') }}',function(token){
+    $.get('{{ route('token.admin.generate') }}',function(token){
       form.find("input[name='_token']").val(token);
       lgin = true;
       form.submit();
