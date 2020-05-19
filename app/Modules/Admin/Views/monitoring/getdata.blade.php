@@ -31,18 +31,18 @@
 
           $distance = Carbon\Carbon::now()->diffInSeconds($timer,false);
 
-          $h = floor(($distance % (60 * 60 * 24)) / (60 * 60));
-          $m = floor(($distance % (60 * 60)) / 60);
-          $s = floor($distance % 60)+1;
+          $hours = floor(($distance % (60 * 60 * 24)) / (60 * 60));
+          $minutes = floor(($distance % (60 * 60)) / 60);
+          $seconds = floor($distance % 60)+1;
 
           if ($h<10) {
-            $h = '0'.$h;
+            $h = '0'.$hours;
           }
           if ($m<10) {
-            $m = '0'.$m;
+            $m = '0'.$minutes;
           }
           if ($s<10) {
-            $s = '0'.$s;
+            $s = '0'.$seconds;
           }
 
           if ($distance<0) {
@@ -92,9 +92,9 @@
           <td>{{ $v->start?date('d/m/Y H:i',strtotime($v->start)):'-' }}</td>
           <td {{ $timer&&!$v->end?'class=l-time':'' }} data-timer="{{ $timer }}">
             @if ($v->end || (@$distance <= 0 && $v->start))
-              Waktu Habis
+              <span class="text-danger">Waktu Habis</span>
             @else
-              {{ $h.':'.$m.':'.$s }}
+              <span class="{{ ($hours==0&&$minutes<10?'text-warning':'') }}">{{ $h.':'.$m.':'.$s }}</span>
             @endif
           </td>
           @if ($jadwalUjian->jenis_soal == 'P')
