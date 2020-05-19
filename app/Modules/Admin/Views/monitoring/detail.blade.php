@@ -197,6 +197,8 @@ function timer(el,countDownDate,now) {
 
     if (distance < 0) {
       clearInterval(x);
+      el.removeClass('text-warning');
+      el.addClass('text-danger');
       el.html('Waktu Habis');
     }
   }, 1000);
