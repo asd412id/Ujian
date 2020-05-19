@@ -8,6 +8,7 @@
           <h4 class="card-title ">Status Ujian {{ $jadwalUjian->nama_ujian }}</h4>
           <p class="card-category">Kelas: <strong>{{ $kelas }}</strong></p>
           <p class="card-category">Mata Pelajaran: <strong>{{ $mapel }}</strong></p>
+          <p class="card-category">Lama Ujian: <strong>{{ $jadwalUjian->lama_ujian.' Menit' }}</strong></p>
           <p class="card-category">PIN: <strong>{{ $jadwalUjian->pin }}</strong></p>
         </div>
       </div>
@@ -187,7 +188,7 @@ function timer(el,countDownDate,now) {
     }
 
     if (hours==0&&minutes<10) {
-      $("#timer").addClass('text-warning');
+      el.addClass('text-warning');
     }
 
     el.html(hours + ":"
