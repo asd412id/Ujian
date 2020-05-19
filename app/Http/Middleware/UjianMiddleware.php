@@ -22,7 +22,7 @@ class UjianMiddleware
       $ujian = new Ujian;
       if ($siswa->login->end) {
         return redirect()->route('ujian.nilai');
-      }elseif(!$ujian->timer()->diffInSeconds(Carbon::now(),false)){
+      }elseif(@$siswa->login && !$ujian->timer()->diffInSeconds(Carbon::now(),false)){
         return redirect()->route('ujian.selesai');
       }
       return $next($request);
