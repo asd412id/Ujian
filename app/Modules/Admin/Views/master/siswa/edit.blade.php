@@ -24,7 +24,7 @@
           <select class="form-control" name="kode_kelas">
             @if (count($kelas))
               @foreach ($kelas as $key => $v)
-                <option {{ $data->kode==$v->kode_kelas?'selected':'' }} value="{{ $v->kode }}">{{ $v->nama.' '.$v->jurusan.' ('.$v->tingkat.')' }}</option>
+                <option {{ $data->kode_kelas==$v->kode?'selected':'' }} value="{{ $v->kode }}">{{ $v->nama.' '.$v->jurusan.' ('.$v->tingkat.')' }}</option>
               @endforeach
             @endif
           </select>
