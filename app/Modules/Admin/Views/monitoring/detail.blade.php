@@ -4,11 +4,15 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header card-header-primary">
+        <h4 class="card-title ">Status Ujian {{ $jadwalUjian->nama_ujian }}</h4>
         <div class="pull-left">
-          <h4 class="card-title ">Status Ujian {{ $jadwalUjian->nama_ujian }}</h4>
-          <p class="card-category">Kelas: <strong>{{ $kelas }}</strong></p>
           <p class="card-category">Mata Pelajaran: <strong>{{ $mapel }}</strong></p>
+          <p class="card-category">Kelas: <strong>{{ $kelas }}</strong></p>
+          <p class="card-category">Jumlah Peserta: <strong>{{ @count(json_decode($jadwalUjian->peserta)).' Orang' }}</strong></p>
+        </div>
+        <div class="pull-right">
           <p class="card-category">Lama Ujian: <strong>{{ $jadwalUjian->lama_ujian.' Menit' }}</strong></p>
+          <p class="card-category">Jenis Ujian: <strong>{{ $jadwalUjian->jenis_soal=='P'?'Pilihan Ganda':'Essay' }}</strong></p>
           <p class="card-category">PIN: <strong>{{ $jadwalUjian->pin }}</strong></p>
         </div>
       </div>
@@ -40,7 +44,7 @@
                   if ($v->start) {
                     $timerNow = Carbon\Carbon::now()->addMinutes($jadwal->lama_ujian) <= Carbon\Carbon::parse($jadwal->selesai_ujian) ? Carbon\Carbon::now()->addMinutes($jadwal->lama_ujian) : Carbon\Carbon::parse($jadwal->selesai_ujian);
 
-                    $intval = $timerNow->diffInSeconds(Carbon\Carbon::parse($v->start)->addMinutes($jadwal->lama_ujian));
+                    $intval = $timerNow->diffInSeconds(Carbon\Carbon::parse($v->created_at)->addMinutes($jadwal->lama_ujian));
 
                     $timer = $timerNow->subSeconds($intval);
                   }

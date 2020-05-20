@@ -25,23 +25,37 @@
           $jadwal = $v->jadwal;
           $timerNow = Carbon\Carbon::now()->addMinutes($jadwal->lama_ujian) <= Carbon\Carbon::parse($jadwal->selesai_ujian) ? Carbon\Carbon::now()->addMinutes($jadwal->lama_ujian) : Carbon\Carbon::parse($jadwal->selesai_ujian);
 
-          $intval = $timerNow->diffInSeconds(Carbon\Carbon::parse($v->start)->addMinutes($jadwal->lama_ujian));
+          if (is_null($v->end) && !is_null($v->_token)) {
+            $intval = $timerNow->diffInSeconds($v->created_at->addMinutes($jadwal->lama_ujian));
+          }else {
+            $intval = $timerNow->diffInSeconds(Carbon\Carbon::now()->subSeconds($v->created_at->diffInSeconds($v->updated_at,false))->addMinutes($jadwal->lama_ujian));
+          }
+
 
           $timer = $timerNow->subSeconds($intval);
 
           $distance = Carbon\Carbon::now()->diffInSeconds($timer,false);
 
+          if ($distance <= 0) {
+            $v->end = Carbon\Carbon::now();
+            $v->save();
+          }
+
           $hours = floor(($distance % (60 * 60 * 24)) / (60 * 60));
           $minutes = floor(($distance % (60 * 60)) / 60);
           $seconds = floor($distance % 60)+1;
 
-          if ($h<10) {
+          $h = $hours;
+          $m = $minutes;
+          $s = $seconds;
+
+          if ($hours<10) {
             $h = '0'.$hours;
           }
-          if ($m<10) {
+          if ($minutes<10) {
             $m = '0'.$minutes;
           }
-          if ($s<10) {
+          if ($seconds<10) {
             $s = '0'.$seconds;
           }
 
@@ -81,7 +95,7 @@
           <td>{{ $v->siswa->noujian??'-' }}</td>
           <td>{{ $v->siswa->nama??'-' }}</td>
           <td>
-            @if ($v->end)
+            @if ($v->end || @$distance <= 0)
               <span class="text-success" style="font-weight: bold">Selesai</span>
             @elseif ($v->start)
               <span class="text-info" style="font-weight: bold">Mengerjakan soal</span>
@@ -91,10 +105,10 @@
           </td>
           <td>{{ $v->start?date('d/m/Y H:i',strtotime($v->start)):'-' }}</td>
           <td {{ $timer&&!$v->end?'class=l-time':'' }} data-timer="{{ $timer }}">
-            @if ($v->end || (@$distance <= 0 && $v->start))
+            @if (@$distance <= 0 && $v->start)
               <span class="text-danger">Waktu Habis</span>
             @else
-              <span class="{{ ($hours==0&&$minutes<10?'text-warning':'') }}">{{ $h.':'.$m.':'.$s }}</span>
+              <span class="{{ ($v->start&&$hours==0&&$minutes<10?'text-warning':'') }}">{{ $h.':'.$m.':'.$s }}</span>
             @endif
           </td>
           @if ($jadwalUjian->jenis_soal == 'P')

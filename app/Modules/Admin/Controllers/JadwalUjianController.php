@@ -430,8 +430,11 @@ class JadwalUjianController extends Controller
       if (request()->ajax()) {
         $login = Login::where('pin',$pin)->where('noujian',$noujian)->first();
         $login->_token = null;
-        $login->end = null;
         $login->ip_address = null;
+        if (!is_null($login->end)) {
+          $login->timestamps = false;
+        }
+        $login->end = null;
         $login->save();
       }
       return redirect()->route('admin.index');
