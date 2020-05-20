@@ -95,7 +95,7 @@
           <td>{{ $v->siswa->noujian??'-' }}</td>
           <td>{{ $v->siswa->nama??'-' }}</td>
           <td>
-            @if ($v->end || @$distance <= 0)
+            @if ($v->end)
               <span class="text-success" style="font-weight: bold">Selesai</span>
             @elseif ($v->start)
               <span class="text-info" style="font-weight: bold">Mengerjakan soal</span>
