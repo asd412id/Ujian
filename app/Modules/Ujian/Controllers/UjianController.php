@@ -73,6 +73,7 @@ class UjianController extends Controller
             $ujian = Auth::guard('siswa')->user()->attemptLogin()->where('pin',$r->pin)->first();
             $ujian->_token = $user->_token;
             $ujian->ip_address = $r->ip();
+            $ujian->created_at = Carbon::now()->subSeconds($ujian->created_at->diffInSeconds($ujian->updated_at,false))->toDateTimeString();
             $ujian->save();
             return redirect()->back();
           }
@@ -124,7 +125,7 @@ class UjianController extends Controller
       $jadwal = $login->jadwal;
       $timerNow = Carbon::now()->addMinutes($jadwal->lama_ujian) <= Carbon::parse($jadwal->selesai_ujian) ? Carbon::now()->addMinutes($jadwal->lama_ujian) : Carbon::parse($jadwal->selesai_ujian);
 
-      $intval = $timerNow->diffInSeconds(Carbon::parse($login->start)->addMinutes($jadwal->lama_ujian));
+      $intval = $timerNow->diffInSeconds($login->created_at->addMinutes($jadwal->lama_ujian));
 
       if ($int) {
         return $intval;
@@ -140,6 +141,7 @@ class UjianController extends Controller
       if ($login->start==null) {
         $soal = [];
         $login->start = Carbon::now()->toDateTimeString();
+        $login->created_at = Carbon::now()->toDateTimeString();
 
         $soalItem = ItemSoal::where('jenis_soal',$jadwal->jenis_soal)
         ->whereHas('getSoal',function($q) use($jadwal){

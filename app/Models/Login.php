@@ -10,6 +10,7 @@ class Login extends Model
   use SoftDeletes;
   protected $table = 'login';
   protected $fillable = ['current_number','end'];
+  protected $dates = ['start','end','created_at','updated_at','deleted_at'];
 
   public function siswa()
   {
