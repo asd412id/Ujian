@@ -18,9 +18,9 @@
         @php
         $timer = null;
         $distance = -1;
-        $h = '00';
-        $m = '00';
-        $s = '00';
+        $h = '-';
+        $m = '-';
+        $s = '-';
         if ($v->start) {
           $jadwal = $v->jadwal;
           $timerNow = Carbon\Carbon::now()->addMinutes($jadwal->lama_ujian) <= Carbon\Carbon::parse($jadwal->selesai_ujian) ? Carbon\Carbon::now()->addMinutes($jadwal->lama_ujian) : Carbon\Carbon::parse($jadwal->selesai_ujian);
