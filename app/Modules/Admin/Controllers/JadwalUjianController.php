@@ -668,6 +668,8 @@ class JadwalUjianController extends Controller
           ->orWhere('tingkat',$search);
         })
         ->orWhere('nama','like','%'.$search.'%')
+        ->orWhere('noujian',$search)
+        ->orWhere('nik',$search)
         ->select('uuid','noujian','kode_kelas','nama')
         ->with('kelas')
         ->orderBy('nama','asc')
@@ -693,10 +695,11 @@ class JadwalUjianController extends Controller
         $result = [];
         $search = $r->term;
         $data = Soal::whereHas('mapel',function($q) use($search){
-          $q->where('nama','like','%'.$search.'%');
+          $q->where('nama','like','%'.$search.'%')
+          ->orWhere('kode',$search);
         })
         ->orWhere('nama','like','%'.$search.'%')
-        ->orWhere('kode','like','%'.$search.'%')
+        ->orWhere('kode',$search)
         ->select('uuid','kode','nama')
         ->orderBy('nama','asc')
         ->get();
