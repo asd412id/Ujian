@@ -64,7 +64,7 @@
   </p>
   <p>
     <label for="password">PIN SESI UJIAN</label>
-    <input type="text" name="pin" value="{{ old('pin') }}" autocomplete="off">
+    <input type="text" name="pin" value="{{ old('pin') }}" autocomplete="off" placeholder="ISI JIKA MEMILIKI PIN SESI UJIAN">
   </p>
   </div>
   <p class="p-container">
