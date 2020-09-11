@@ -32,11 +32,9 @@ class UjianController extends Controller
       Validator::make($r->all(),[
         'noujian'=>'required',
         'password'=>'required',
-        'pin'=>'required',
       ],[
         'noujian.required'=>'Nomor ujian tidak boleh kosong',
         'password.required'=>'Password tidak boleh kosong',
-        'pin.required'=>'Pin harus diisi',
       ])->validate();
 
       $_token = Str::random(100);
@@ -48,7 +46,40 @@ class UjianController extends Controller
       }
 
       if (Hash::check($r->password,$siswa->password)) {
-        $jadwal = JadwalUjian::where('pin',$r->pin)->where('aktif',1)->first();
+        $jadwal = null;
+        if ($r->pin) {
+          $jadwal = JadwalUjian::where('pin',$r->pin)->where('aktif',1)->first();
+        }else {
+          $getJadwal = JadwalUjian::where('mulai_ujian','<=',Carbon::now())
+          ->where('selesai_ujian','>=',Carbon::now())
+          ->where('aktif', 1)->orderBy('mulai_ujian','asc')->get();
+          if ($getJadwal) {
+            $daftarJadwal = [];
+            $selesai = [];
+            foreach ($getJadwal as $key => $jd) {
+              $peserta = json_decode($jd->peserta);
+              if (in_array($siswa->uuid,json_decode($jd->peserta))) {
+                $isLogin = $siswa->attemptLogin()->where('pin',$jd->pin)->first();
+                if (!$isLogin) {
+                  array_push($daftarJadwal,$jd);
+                }else {
+                  if (!is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->_token) && is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->end)) {
+                    return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain!'])->withInput($r->only('noujian'));
+                  }elseif (is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->end)) {
+                    array_push($daftarJadwal,$jd);
+                  }
+                }
+              }
+            }
+            if (count($daftarJadwal)) {
+              if (count($daftarJadwal) > 1) {
+                return redirect()->route('ujian.login')->withErrors(['Anda memiliki '.count($daftarJadwal).' ujian yang sedang aktif. Masukkan PIN SESI untuk mengerjakan salah satu ujian!'])->withInput($r->only('noujian'));
+              }else {
+                $jadwal = $daftarJadwal[0];
+              }
+            }
+          }
+        }
         if (!$jadwal) {
           return redirect()->route('ujian.login')->withErrors(['Ujian tidak tersedia'])->withInput($r->only('noujian'));
         }elseif (Carbon::now() < Carbon::parse($jadwal->mulai_ujian)) {
@@ -57,10 +88,10 @@ class UjianController extends Controller
           return redirect()->route('ujian.login')->withErrors(['Sesi ujian telah berakhir'])->withInput($r->only('noujian'));
         }elseif (!in_array($siswa->uuid,json_decode($jadwal->peserta))) {
           return redirect()->route('ujian.login')->withErrors(['Anda tidak dapat mengikuti ujian ini'])->withInput($r->only('noujian'));
-        }elseif ($siswa->attemptLogin()->where('pin',$r->pin)->count()) {
-          if (!is_null($siswa->attemptLogin()->where('pin',$r->pin)->first()->end)) {
+        }elseif ($siswa->attemptLogin()->where('pin',$jadwal->pin)->count()) {
+          if (!is_null($siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->end)) {
             return redirect()->route('ujian.login')->withErrors(['Anda sudah selesai ujian'])->withInput($r->only('noujian'));
-          }elseif (!is_null($siswa->attemptLogin()->where('pin',$r->pin)->first()->_token)) {
+          }elseif (!is_null($siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->_token)) {
             return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain!'])->withInput($r->only('noujian'));
           }else{
             Auth::guard('siswa')->attempt([
@@ -70,7 +101,7 @@ class UjianController extends Controller
             $user = Auth::guard('siswa')->user();
             $user->_token = $_token;
             $user->save();
-            $ujian = Auth::guard('siswa')->user()->attemptLogin()->where('pin',$r->pin)->first();
+            $ujian = Auth::guard('siswa')->user()->attemptLogin()->where('pin',$jadwal->pin)->first();
             $ujian->_token = $user->_token;
             $ujian->ip_address = $r->ip();
             $ujian->created_at = Carbon::now()->subSeconds($ujian->created_at->diffInSeconds($ujian->updated_at,false))->toDateTimeString();
@@ -91,7 +122,7 @@ class UjianController extends Controller
         $ujian->uuid = (string)Str::uuid();
         $ujian->noujian = $user->noujian;
         $ujian->_token = $user->_token;
-        $ujian->pin = $r->pin;
+        $ujian->pin = $jadwal->pin;
         $ujian->start = null;
         $ujian->end = null;
         $ujian->ip_address = $r->ip();
