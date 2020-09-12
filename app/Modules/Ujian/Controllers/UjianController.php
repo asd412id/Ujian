@@ -47,37 +47,29 @@ class UjianController extends Controller
 
       if (Hash::check($r->password,$siswa->password)) {
         $jadwal = null;
-        if ($r->pin) {
-          $jadwal = JadwalUjian::where('pin',$r->pin)->where('aktif',1)->first();
-        }else {
-          $getJadwal = JadwalUjian::where('mulai_ujian','<=',Carbon::now())
-          ->where('selesai_ujian','>=',Carbon::now())
-          ->where('aktif', 1)->orderBy('mulai_ujian','asc')->get();
-          if ($getJadwal) {
-            $daftarJadwal = [];
-            $selesai = [];
-            foreach ($getJadwal as $key => $jd) {
-              $peserta = json_decode($jd->peserta);
-              if (in_array($siswa->uuid,json_decode($jd->peserta))) {
-                $isLogin = $siswa->attemptLogin()->where('pin',$jd->pin)->first();
-                if (!$isLogin) {
+        $getJadwal = JadwalUjian::where('mulai_ujian','<=',Carbon::now())
+        ->where('selesai_ujian','>=',Carbon::now())
+        ->where('aktif', 1)->orderBy('mulai_ujian','asc')->get();
+        if ($getJadwal) {
+          $daftarJadwal = [];
+          $selesai = [];
+          foreach ($getJadwal as $key => $jd) {
+            $peserta = json_decode($jd->peserta);
+            if (in_array($siswa->uuid,json_decode($jd->peserta))) {
+              $isLogin = $siswa->attemptLogin()->where('pin',$jd->pin)->first();
+              if (!$isLogin) {
+                array_push($daftarJadwal,$jd);
+              }else {
+                if (!is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->_token) && is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->end)) {
+                  return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain!'])->withInput($r->only('noujian'));
+                }elseif (is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->end)) {
                   array_push($daftarJadwal,$jd);
-                }else {
-                  if (!is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->_token) && is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->end)) {
-                    return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain!'])->withInput($r->only('noujian'));
-                  }elseif (is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->end)) {
-                    array_push($daftarJadwal,$jd);
-                  }
                 }
               }
             }
-            if (count($daftarJadwal)) {
-              if (count($daftarJadwal) > 1) {
-                return redirect()->route('ujian.login')->withErrors(['Anda memiliki '.count($daftarJadwal).' ujian yang sedang aktif. Masukkan PIN SESI untuk mengerjakan salah satu ujian!'])->withInput($r->only('noujian'));
-              }else {
-                $jadwal = $daftarJadwal[0];
-              }
-            }
+          }
+          if (count($daftarJadwal)) {
+            $jadwal = $daftarJadwal[0];
           }
         }
         if (!$jadwal) {

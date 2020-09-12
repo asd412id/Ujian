@@ -62,10 +62,6 @@
     <label for="password">PASSWORD</label>
     <input type="password" name="password" id="password">
   </p>
-  <p>
-    <label for="password">PIN SESI UJIAN</label>
-    <input type="text" name="pin" value="{{ old('pin') }}" id="pin" autocomplete="off" placeholder="ISI JIKA MEMILIKI PIN SESI UJIAN">
-  </p>
   </div>
   <p class="p-container">
     <input type="submit" name="go" id="go" value="Masuk">

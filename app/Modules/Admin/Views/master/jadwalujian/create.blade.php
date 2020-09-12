@@ -57,7 +57,7 @@
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Jumlah Digit PIN</label>
-          <input type="number" class="form-control" name="pin_digit" value="4" placeholder="Default: 4">
+          <input type="number" class="form-control" name="pin_digit" value="5" placeholder="Default: 5">
         </div>
         <div class="form-group">
           <label class="bmd-label-floating">Tampilkan Nilai</label>
