@@ -153,10 +153,10 @@ class JadwalUjianController extends Controller
       return redirect()->back()->withErrors('Terjadi Kesalahan!');
     }
 
-    public function generatePin($digit=4)
+    public function generatePin($digit=5)
     {
         if ($digit<1) {
-          $digit = 4;
+          $digit = 5;
         }
         $pin = strtoupper(Str::random($digit));
         $cek = JadwalUjian::where('pin',$pin)->count();
