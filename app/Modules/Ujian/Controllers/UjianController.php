@@ -49,7 +49,10 @@ class UjianController extends Controller
         $jadwal = null;
         $getJadwal = JadwalUjian::where('mulai_ujian','<=',Carbon::now())
         ->where('selesai_ujian','>=',Carbon::now())
-        ->where('aktif', 1)->orderBy('mulai_ujian','asc')->get();
+        ->where('aktif', 1)
+        ->orderBy('mulai_ujian','asc')
+        ->orderBy('created_at','asc')
+        ->get();
         if ($getJadwal) {
           $daftarJadwal = [];
           $selesai = [];
