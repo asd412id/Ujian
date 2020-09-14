@@ -121,7 +121,7 @@
             </td>
           @endif
           <td style="white-space: nowrap;width: 50px" class="text-right">
-            @if ($v->start)
+            @if ($v->start || $v->end)
               <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Waktu" data-text="Semua jawaban akan terhapus!<br>Reset Waktu {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.restart',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">undo</i></a>
             @endif
             @if (!$v->end)
