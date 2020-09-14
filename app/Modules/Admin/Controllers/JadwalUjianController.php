@@ -313,6 +313,48 @@ class JadwalUjianController extends Controller
         return redirect()->back()->withErrors('Terjadi Kesalahan!');
     }
 
+    public function reqReset()
+    {
+      $login = Login::whereHas('jadwal',function($q){
+        $q->where('aktif',1)
+        ->where('mulai_ujian','<=',Carbon::now())
+        ->where('selesai_ujian','>=',Carbon::now());
+      })
+      ->where('reset',1)
+      ->whereNotNull('_token')
+      ->orderBy('id','asc')
+      ->get();
+
+      if (request()->ajax()) {
+        return response()->json($login);
+      }
+
+      return view("Admin::monitoring.reqreset",[
+        'login'=>$login,
+        'title' => 'Permintaan Reset Login - Administrator',
+        'breadcrumb' => 'Permintaan Reset Login',
+      ]);
+    }
+
+    public function reqResetGetData()
+    {
+      if (request()->ajax()) {
+        $login = Login::whereHas('jadwal',function($q){
+          $q->where('aktif',1)
+          ->where('mulai_ujian','<=',Carbon::now())
+          ->where('selesai_ujian','>=',Carbon::now());
+        })
+        ->where('reset',1)
+        ->whereNotNull('_token')
+        ->orderBy('id','asc')
+        ->get();
+        return view("Admin::monitoring.reqresetgetdata",[
+          'data'=>$login,
+        ]);
+      }
+      return redirect()->route('admin.index');
+    }
+
     public function monitoring(Request $r)
     {
       $jadwalUjian = JadwalUjian::when($r->cari,function($jadwal,$role){
@@ -435,7 +477,18 @@ class JadwalUjianController extends Controller
           $login->timestamps = false;
         }
         $login->end = null;
+        $login->reset = false;
         $login->save();
+      }
+      return redirect()->route('admin.index');
+    }
+
+    public function monitoringRestart($pin,$noujian)
+    {
+      if (request()->ajax()) {
+        $login = Login::where('pin',$pin)->where('noujian',$noujian)->first();
+        $login->tes()->where('noujian',$noujian)->forceDelete();
+        $login->forceDelete();
       }
       return redirect()->route('admin.index');
     }

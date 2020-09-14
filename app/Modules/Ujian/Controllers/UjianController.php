@@ -64,7 +64,7 @@ class UjianController extends Controller
                 array_push($daftarJadwal,$jd);
               }else {
                 if (!is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->_token) && is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->end)) {
-                  return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain!'])->withInput($r->only('noujian'));
+                  return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain! Tekan tombol "Minta Reset Login" di bawah untuk meminta reset login.'])->with('req',$siswa->attemptLogin()->where('pin',$jd->pin)->first()->uuid)->withInput($r->only('noujian'));
                 }elseif (is_null($siswa->attemptLogin()->where('pin',$jd->pin)->first()->end)) {
                   array_push($daftarJadwal,$jd);
                 }
@@ -87,7 +87,7 @@ class UjianController extends Controller
           if (!is_null($siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->end)) {
             return redirect()->route('ujian.login')->withErrors(['Anda sudah selesai ujian'])->withInput($r->only('noujian'));
           }elseif (!is_null($siswa->attemptLogin()->where('pin',$jadwal->pin)->first()->_token)) {
-            return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain!'])->withInput($r->only('noujian'));
+            return redirect()->route('ujian.login')->withErrors(['Anda sudah login di tempat lain! Tekan tombol "Minta Reset Login" di bawah untuk meminta reset login.'])->with('req',$siswa->attemptLogin()->where('pin',$jd->pin)->first()->uuid)->withInput($r->only('noujian'));
           }else{
             Auth::guard('siswa')->attempt([
               'noujian'=>$r->noujian,
@@ -372,6 +372,15 @@ class UjianController extends Controller
         $siswa->logout();
       }
       return redirect()->route('ujian.login');
+    }
+
+    public function reqReset($uuid)
+    {
+      $login = Login::where('uuid',$uuid)->first();
+      $login->reset = true;
+      if ($login->save()) {
+        return redirect()->route('ujian.login')->with('message','Permintaan "Reset Login" Anda telah dikirim. Silahkan tunggu beberapa menit kemudian login kembali, atau hubungi operator!')->withInput();
+      }
     }
 
 }

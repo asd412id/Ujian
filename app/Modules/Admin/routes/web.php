@@ -112,6 +112,7 @@ Route::group(['module' => 'Admin', 'middleware' => ['web'], 'namespace' => 'App\
         Route::get('/detail/{uuid}','JadwalUjianController@monitoringDetail')->name('jadwal.ujian.monitoring.detail');
         Route::get('/getdata/{uuid}','JadwalUjianController@monitoringGetData')->name('jadwal.ujian.monitoring.getdata');
         Route::get('/reset/{pin}/{noujian}','JadwalUjianController@monitoringReset')->name('jadwal.ujian.reset');
+        Route::get('/restart/{pin}/{noujian}','JadwalUjianController@monitoringRestart')->name('jadwal.ujian.restart');
         Route::get('/stop/{pin}/{noujian}','JadwalUjianController@monitoringStop')->name('jadwal.ujian.stop');
       });
 
@@ -125,6 +126,9 @@ Route::group(['module' => 'Admin', 'middleware' => ['web'], 'namespace' => 'App\
     });
 
     Route::get('nilai/{jadwal}/detail/{siswa}','NilaiController@detailDownload')->name('nilai.detail.download')->middleware('shortcode:view');
+
+    Route::get('/reset-login','JadwalUjianController@reqReset')->name('jadwal.ujian.reqreset');
+    Route::get('/reset-login/getdata','JadwalUjianController@reqResetGetData')->name('jadwal.ujian.reqreset.getdata');
 
   });
 

@@ -65,6 +65,12 @@
           <p>Monitoring Ujian</p>
         </a>
       </li>
+      <li class="nav-item{{ strpos(Request::url(),route('jadwal.ujian.reqreset'))!==false?'  active':'' }}">
+        <a class="nav-link" href="{{ route('jadwal.ujian.reqreset') }}">
+          <i class="material-icons">refresh</i>
+          <p>Reset Login <span style="position: relative;top: -3px;padding: 3px 13px !important;font-size: 1.2em" class="pull-right btn btn-xs btn-danger d-none" id="reset-notif"></span></p>
+        </a>
+      </li>
       <li class="nav-item{{ strpos(Request::url(),route('nilai.index'))!==false?'  active':'' }}">
         <a class="nav-link" href="{{ route('nilai.index') }}">
           <i class="fa fa-edit"></i>
