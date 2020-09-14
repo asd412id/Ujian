@@ -30,6 +30,17 @@
       form h1{
         padding: 15px;
       }
+      #reset{
+        color: #fff;
+        background: #ff8040;
+        border: none;
+        padding: 6px 11px;
+        border-radius: 3px;
+        cursor: pointer;
+        text-decoration: none;
+        position: relative;
+        top: 7px;
+      }
     </style>
 </head>
 <body>
@@ -48,10 +59,14 @@
   <h1>SILAHKAN LOGIN UNTUK MEMULAI UJIAN</h1>
   <div class="inset">
   @if ($errors->any())
-    <div style="padding: 0 0 15px;font-weight: bold;color: red">
+    <div style="padding: 0 0 15px;font-weight: bold;color: #fe8585">
       @foreach ($errors->all() as $key => $e)
         <p style="text-align: center">{{ $e }}</p>
       @endforeach
+    </div>
+  @elseif (session()->has('message'))
+    <div style="padding: 0 0 15px;font-weight: bold;color: #ffff80">
+      <p style="text-align: center">{{ session()->get('message') }}</p>
     </div>
   @endif
   <p>
@@ -64,6 +79,9 @@
   </p>
   </div>
   <p class="p-container">
+    @if (session()->has('req'))
+      <a href="{{ route('ujian.reqreset',session()->get('req')) }}" id="reset">Minta Reset Login</a>
+    @endif
     <input type="submit" name="go" id="go" value="Masuk">
   </p>
 </form>
@@ -74,7 +92,7 @@
     <p>{{ 'Kab. '.$sekolah->kota.', Propinsi '.$sekolah->propinsi }}</p>
     <p>{{ 'Telp: '.($sekolah->telp??'-').', Fax: '.($sekolah->fax??'-').', Kodepos: '.($sekolah->kodepos??'-') }}</p>
   @endif
-  <p>&copy; {{ date('Y') }} by <a style="color: #fff" target="_blank" href="https://www.facebook.com/aezdar">Asdar Bin Syam</a></p>
+  <p>&copy; {{ date('Y') }} by <a id="copyright" style="color: #fff" target="_blank" href="https://www.facebook.com/aezdar">Asdar Bin Syam</a></p>
 </div>
 <script src="{{ url('/') }}/assets/js/core/jquery.min.js"></script>
 <script type="text/javascript">

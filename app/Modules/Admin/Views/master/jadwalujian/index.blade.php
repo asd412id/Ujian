@@ -21,7 +21,6 @@
               <th>Peserta</th>
               <th>Soal</th>
               <th>Jenis</th>
-              <th>Bobot</th>
               <th>Mulai</th>
               <th>Selesai</th>
               <th>Lama Ujian</th>
@@ -92,7 +91,6 @@
                     <td style="vertical-align: top">{{ @count(json_decode($v->peserta)) }}</td>
                     <td style="vertical-align: top">{{ $v->jumlah_soal }}</td>
                     <td style="vertical-align: top">{{ $v->jenis_soal=='P'?'Pilihan Ganda':'Essay' }}</td>
-                    <td style="vertical-align: top">{{ $v->bobot }}</td>
                     <td style="vertical-align: top">{{ date('d/m/Y H:i',strtotime($v->mulai_ujian)) }}</td>
                     <td style="vertical-align: top">{{ date('d/m/Y H:i',strtotime($v->selesai_ujian)) }}</td>
                     <td style="vertical-align: top">{{ $v->lama_ujian.' Menit' }}</td>

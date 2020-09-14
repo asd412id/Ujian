@@ -165,7 +165,7 @@
       <footer class="footer">
         <div class="container-fluid">
           <div class="copyright float-right">
-            &copy; {{ date('Y') }} Aplikasi Ujian by <a href="https://www.facebook.com/aezdar">Asdar Bin Syam</a>
+            &copy; {{ date('Y') }} Aplikasi Ujian by <a id="copyright" href="https://www.facebook.com/aezdar">Asdar Bin Syam</a>
           </div>
           <div class="modal fade modal-confirm" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
             <div class="modal-dialog">
@@ -205,6 +205,27 @@
       }
     })
   })
+  function checkRequest() {
+    var tm;
+    $.get('{{ route('jadwal.ujian.reqreset') }}',{},function(res){
+      if (res) {
+        if (res.length > 0) {
+          $("#reset-notif").text(res.length);
+          $("#reset-notif").removeClass('d-none');
+        }else {
+          $("#reset-notif").text('');
+          $("#reset-notif").addClass('d-none');
+        }
+        tm = setTimeout(()=>{
+          checkRequest()
+        },10000)
+      }else {
+        clearTimeout(tm);
+        console.log('error fetch data');
+      }
+    },'json');
+  }
+  checkRequest()
   </script>
   @yield('footer')
 </body>

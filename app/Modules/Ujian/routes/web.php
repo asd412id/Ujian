@@ -4,6 +4,7 @@ Route::group(['module' => 'Ujian', 'middleware' => ['web'], 'namespace' => 'App\
 
     Route::get('/','UjianController@index')->name('ujian.login')->middleware('guest:siswa');
     Route::post('/','UjianController@login')->name('ujian.dologin')->middleware('guest:siswa');
+    Route::get('/reset-login/{uuid}','UjianController@reqReset')->name('ujian.reqreset')->middleware('guest:siswa');
 
     Route::group(['prefix'=>'ujian','middleware'=>['auth:siswa']], function()
     {
