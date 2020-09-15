@@ -19,4 +19,19 @@ class JadwalUjian extends Model
   {
     return $this->hasMany(Tes::class,'pin','pin');
   }
+
+  public function siswa()
+  {
+    $peserta = json_decode($this->peserta);
+    return Siswa::whereIn('uuid',$peserta);
+  }
+
+  public function getSiswaNotLoginAttribute()
+  {
+    $peserta = json_decode($this->peserta);
+    return Siswa::whereIn('uuid',$peserta)->whereDoesntHave('login')
+    ->orWhereHas('login',function($q){
+      $q->whereNull('_token');
+    });
+  }
 }

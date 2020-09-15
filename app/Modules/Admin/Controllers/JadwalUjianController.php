@@ -445,7 +445,8 @@ class JadwalUjianController extends Controller
     {
       if ($r->ajax()) {
         $jadwal = JadwalUjian::where('uuid',$uuid)->first();
-        $login = $jadwal->login()->whereNotNull('_token')
+        $login = $jadwal->login()
+        ->whereNotNull('_token')
         ->orderBy('id','asc')
         ->get();
         return view("Admin::monitoring.getdata",[
