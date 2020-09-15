@@ -115,7 +115,7 @@
                 @if (count($belumLogin))
                   @foreach ($belumLogin as $key1 => $v)
                     <tr>
-                      <td>{{ $key+2+$key1 }}</td>
+                      <td>{{ $key1+1 }}</td>
                       <td>{{ $v->noujian??'-' }}</td>
                       <td>{{ $v->nama??'-' }}</td>
                       <td>
