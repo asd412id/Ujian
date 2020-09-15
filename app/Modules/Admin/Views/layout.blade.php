@@ -158,11 +158,13 @@
       </nav>
       <!-- End Navbar -->
       <div class="content">
+        <audio id="reqresetnotif" class="d-none">
+          <source src="{{ asset('assets/sounds/request_reset_notif.mp3') }}">
+        </audio>
         <div class="container-fluid">
           @yield('content')
         </div>
       </div>
-      <audio id="reqresetnotif" src="{{ asset('assets/sounds/request_reset_notif.mp3') }}" type="audio/mpeg" />
       <footer class="footer">
         <div class="container-fluid">
           <div class="copyright float-right">
