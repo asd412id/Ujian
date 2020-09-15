@@ -13,6 +13,9 @@
     <th></th>
   </thead>
   <tbody class="d-peserta">
+    @php
+    $belumLogin = $jadwalUjian->siswa_not_login->get();
+    @endphp
     @if (count($data))
       @foreach ($data as $key => $v)
         @php
@@ -99,6 +102,8 @@
               <span class="text-success" style="font-weight: bold">Selesai</span>
             @elseif ($v->start)
               <span class="text-info" style="font-weight: bold">Mengerjakan soal</span>
+            @elseif (is_null($v->_token))
+              <span class="text-danger" style="font-weight: bold">Belum Login</span>
             @else
               <span class="text-primary" style="font-weight: bold">Mengecek data</span>
             @endif
@@ -121,19 +126,60 @@
             </td>
           @endif
           <td style="white-space: nowrap;width: 50px" class="text-right">
-            @if ($v->start || $v->end)
-              <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Waktu" data-text="Semua jawaban akan terhapus!<br>Reset Waktu {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.restart',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">undo</i></a>
-            @endif
-            @if (!$v->end)
-              <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-danger stop" title="Set Selesai" data-text="Set Selesai {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.stop',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">not_interested</i></a>
+            @if (!is_null($v->_token))
+              @if ($v->start || $v->end)
+                <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Waktu" data-text="Semua jawaban akan terhapus!<br>Reset Waktu {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.restart',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">undo</i></a>
+              @endif
+              @if (!$v->end)
+                <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-danger stop" title="Set Selesai" data-text="Set Selesai {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.stop',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">not_interested</i></a>
+              @endif
             @endif
           </td>
         </tr>
       @endforeach
+      @if (count($belumLogin))
+        @foreach ($belumLogin as $key1 => $v)
+          <tr>
+            <td>{{ $key+2+$key1 }}</td>
+            <td>{{ $v->noujian??'-' }}</td>
+            <td>{{ $v->nama??'-' }}</td>
+            <td>
+                <span class="text-danger" style="font-weight: bold">Belum Login</span>
+            </td>
+            <td>-</td>
+            <td>-:-:-</td>
+            @if ($jadwalUjian->jenis_soal == 'P')
+              <td>-</td>
+              <td>-</td>
+            @endif
+            <td style="white-space: nowrap;width: 50px" class="text-right"></td>
+          </tr>
+        @endforeach
+      @endif
     @else
-      <tr>
-        <td class="text-center no-data" colspan="9">Data tidak tersedia</td>
-      </tr>
+      @if (count($belumLogin))
+        @foreach ($belumLogin as $key1 => $v)
+          <tr>
+            <td>{{ $key1+1 }}</td>
+            <td>{{ $v->noujian??'-' }}</td>
+            <td>{{ $v->nama??'-' }}</td>
+            <td>
+                <span class="text-danger" style="font-weight: bold">Belum Login</span>
+            </td>
+            <td>-</td>
+            <td>-:-:-</td>
+            @if ($jadwalUjian->jenis_soal == 'P')
+              <td>-</td>
+              <td>-</td>
+            @endif
+            <td style="white-space: nowrap;width: 50px" class="text-right"></td>
+          </tr>
+        @endforeach
+      @else
+        <tr>
+          <td class="text-center no-data" colspan="9">Data tidak tersedia</td>
+        </tr>
+      @endif
     @endif
   </tbody>
 </table>
