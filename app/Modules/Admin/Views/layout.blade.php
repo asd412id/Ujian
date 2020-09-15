@@ -162,6 +162,7 @@
           @yield('content')
         </div>
       </div>
+      <audio id="reqresetnotif" src="{{ asset('assets/sounds/request_reset_notif.mp3') }}" type="audio/mpeg" />
       <footer class="footer">
         <div class="container-fluid">
           <div class="copyright float-right">
@@ -176,7 +177,6 @@
       </footer>
     </div>
   </div>
-  <audio id="reqresetnotif" src="{{ asset('assets/sounds/request_reset_notif.mp3') }}" type="audio/mpeg" />
   <script src="{{ url('/') }}/assets/js/core/jquery.min.js"></script>
   <script src="{{ url('/') }}/assets/js/core/popper.min.js"></script>
   <script src="{{ url('/') }}/assets/js/core/bootstrap-material-design.min.js"></script>
