@@ -28,9 +28,10 @@ class JadwalUjian extends Model
 
   public function getSiswaNotLoginAttribute()
   {
+    $daftarSiswa = [];
     $peserta = json_decode($this->peserta);
-    return Siswa::whereIn('uuid',$peserta)->whereDoesntHave('login')
-    ->orWhereHas('login',function($q){
+    return Siswa::whereIn('uuid',$peserta)->whereDoesntHave('attemptLogin')
+    ->orWhereHas('attemptLogin',function($q){
       $q->whereNull('_token');
     });
   }
