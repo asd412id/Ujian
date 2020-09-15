@@ -30,11 +30,12 @@ class JadwalUjian extends Model
   {
     $pin = $this->pin;
     $peserta = json_decode($this->peserta);
-    return Siswa::whereIn('uuid',$peserta)->whereDoesntHave('attemptLogin')
+    return Siswa::whereIn('uuid',$peserta)
+    ->whereNull('_token')
+    ->whereDoesntHave('attemptLogin')
     ->orWhereHas('attemptLogin',function($q) use($pin){
       $q->where('pin',$pin)
       ->whereNull('_token')
-      ->whereNull('start')
       ->whereNull('end');
     });
   }
