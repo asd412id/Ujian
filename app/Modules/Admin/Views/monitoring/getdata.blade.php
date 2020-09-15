@@ -14,7 +14,7 @@
   </thead>
   <tbody class="d-peserta">
     @php
-    $belumLogin = $jadwalUjian->siswa_not_login->get();
+    $belumLogin = $jadwalUjian->siswa_not_login;
     @endphp
     @if (count($data))
       @foreach ($data as $key => $v)
@@ -126,6 +126,7 @@
             </td>
           @endif
           <td style="white-space: nowrap;width: 50px" class="text-right">
+            <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-success stop" title="Reset Login" data-text="Reset Login {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.reset',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">refresh</i></a>
             @if (!is_null($v->_token))
               @if ($v->start || $v->end)
                 <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Waktu" data-text="Semua jawaban akan terhapus!<br>Reset Waktu {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.restart',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">undo</i></a>
@@ -146,7 +147,10 @@
             <td>
                 <span class="text-danger" style="font-weight: bold">Belum Login</span>
             </td>
-            <td>-</td>
+            @php
+              $start = @$v->attemptLogin()->where('pin',$jadwalUjian->pin)->first()->start??null;
+            @endphp
+            <td>{{ $start?date('d/m/Y H:i',strtotime($start)):'-' }}</td>
             <td>-:-:-</td>
             @if ($jadwalUjian->jenis_soal == 'P')
               <td>-</td>
@@ -166,7 +170,10 @@
             <td>
                 <span class="text-danger" style="font-weight: bold">Belum Login</span>
             </td>
-            <td>-</td>
+            @php
+              $start = @$v->attemptLogin()->where('pin',$jadwalUjian->pin)->first()->start??null;
+            @endphp
+            <td>{{ $start?date('d/m/Y H:i',strtotime($start)):'-' }}</td>
             <td>-:-:-</td>
             @if ($jadwalUjian->jenis_soal == 'P')
               <td>-</td>

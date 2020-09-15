@@ -30,13 +30,14 @@ class JadwalUjian extends Model
   {
     $pin = $this->pin;
     $peserta = json_decode($this->peserta);
-    return Siswa::whereIn('uuid',$peserta)
-    ->whereNull('_token')
-    ->whereDoesntHave('attemptLogin')
-    ->orWhereHas('attemptLogin',function($q) use($pin){
-      $q->where('pin',$pin)
-      ->whereNull('_token')
-      ->whereNull('end');
-    });
+    $siswa = Siswa::whereIn('uuid',$peserta)->get();
+
+    $daftarSiswa = [];
+    foreach ($siswa as $key => $s) {
+      if (!$s->attemptLogin()->where('pin',$pin)->first() || ($s->attemptLogin()->where('pin',$pin)->first() && is_null($s->attemptLogin()->where('pin',$pin)->first()->_token))) {
+        array_push($daftarSiswa,$s);
+      }
+    }
+    return $daftarSiswa;
   }
 }

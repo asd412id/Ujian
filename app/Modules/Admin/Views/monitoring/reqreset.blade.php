@@ -52,7 +52,7 @@
                     <td>{{ $v->start?date('d/m/Y H:i',strtotime($v->start)):'-' }}</td>
                     <td {{ $timer?'class=l-time':'' }} data-timer="{{ $timer }}">00:00:00</td>
                     <td style="white-space: nowrap;width: 50px" class="text-right">
-                      <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-warning stop" title="Reset Login" data-text="Reset Login {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.reset',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">refresh</i></a>
+                      <a href="javascript:void(0)" class="btn btn-sm btn-xs btn-success stop" title="Reset Login" data-text="Reset Login {{ $v->siswa->nama }}?" data-url="{{ route('jadwal.ujian.reset',['pin'=>$v->pin,'noujian'=>$v->noujian]) }}" class="text-info"><i class="material-icons">refresh</i></a>
                     </td>
                   </tr>
                 @endforeach

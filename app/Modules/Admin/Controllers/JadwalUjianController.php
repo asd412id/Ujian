@@ -381,7 +381,7 @@ class JadwalUjianController extends Controller
     public function monitoringDetail($uuid)
     {
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
-      $login = $jadwal->login()->withTrashed()
+      $login = $jadwal->login()
       ->whereNotNull('_token')
       ->orderBy('id','asc')
       ->get();

@@ -176,6 +176,7 @@
       </footer>
     </div>
   </div>
+  <audio id="reqresetnotif" src="{{ asset('assets/sounds/request_reset_notif.mp3') }}" type="audio/mpeg" />
   <script src="{{ url('/') }}/assets/js/core/jquery.min.js"></script>
   <script src="{{ url('/') }}/assets/js/core/popper.min.js"></script>
   <script src="{{ url('/') }}/assets/js/core/bootstrap-material-design.min.js"></script>
@@ -188,6 +189,7 @@
   <script src="{{ url('/') }}/assets/js/scripts.js" type="text/javascript"></script>
   <script type="text/javascript">
   var lgin = false;
+  var _title = $("title").text();
   function loginProcess(form){
     $.get('{{ route('token.admin.generate') }}',function(token){
       form.find("input[name='_token']").val(token);
@@ -205,19 +207,28 @@
       }
     })
   })
-  function checkRequest() {
+  function checkRequest(sound=false) {
     var tm;
     $.get('{{ route('jadwal.ujian.reqreset') }}',{},function(res){
       if (res) {
+        var reqresetnotif = document.getElementById("reqresetnotif");
         if (res.length > 0) {
           $("#reset-notif").text(res.length);
           $("#reset-notif").removeClass('d-none');
+          $("title").text("("+res.length+") "+_title);
+          if (sound) {
+            reqresetnotif.play();
+          }
         }else {
           $("#reset-notif").text('');
           $("#reset-notif").addClass('d-none');
+          $("title").text(_title);
+          if (sound) {
+            reqresetnotif.pause();
+          }
         }
         tm = setTimeout(()=>{
-          checkRequest()
+          checkRequest(true)
         },10000)
       }else {
         clearTimeout(tm);
