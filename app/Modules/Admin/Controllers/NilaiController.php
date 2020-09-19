@@ -408,7 +408,7 @@ class NilaiController extends Controller
         ]);
       }
 
-      $filename = 'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
+      $filename = 'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' - ('.$siswa->noujian.') '.$siswa->nama.'.pdf';
 
       $pdf = PDF::loadFile(route('nilai.detail.download',['jadwal'=>$ujian,'siswa'=>$siswa->uuid,'view'=>true]));
 
