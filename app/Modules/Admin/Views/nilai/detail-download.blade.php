@@ -61,7 +61,7 @@
               <td valign="top">
                 <table class="table table-info">
                   <tr>
-                    <td width="150">NOMOR UJIAN</td>
+                    <td>NOMOR UJIAN</td>
                     <td align="center" style="width: 15px">:</td>
                     <th>{{ $siswa->noujian }}</th>
                   </tr>
