@@ -78,7 +78,7 @@
                   </tr>
                 </table>
               </td>
-              <td valign="top" width="350">
+              <td valign="top" width="325">
                 <table class="table table-info">
                   <tr>
                     <td>MATA PELAJARAN</td>
