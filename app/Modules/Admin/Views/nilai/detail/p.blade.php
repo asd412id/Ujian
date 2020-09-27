@@ -16,14 +16,14 @@
       @endphp
       <tr>
         <td align="center">{{ ($key+1).'.' }}</td>
-        <td class="soal" style="width: 55% !important">{!! (new \App\Http\Middleware\ShortcodeMiddleware)->shortcode('',nl2br(trim($s->soal)),null) !!}</td>
+        <td class="soal" style="width: 55% !important">{!! (new \App\Http\Middleware\ShortcodeMiddleware)->shortcode('',nl2br(trim($s->soal)),'soal') !!}</td>
         <td class="jawaban">
           @if ($s->jenis_soal == 'P')
             <table class="table-choice">
               @foreach ($opsis as $key => $o)
                 <tr>
                   <td class="{{ ($ss && (string)$ss->jawaban == (string)$key)?'font-weight-bold':'' }}{{ (string)$s->benar == (string)$key?' text-success':'' }}{{ $ss && (string)$ss->jawaban == (string)$key && (string)$s->benar != (string)$key?' text-danger':'' }}">{{ $choices[$key] }}</td>
-                  <td class="{{ ($ss && (string)$ss->jawaban == (string)$key)?'font-weight-bold':'' }}{{ (string)$s->benar == (string)$key?' text-success':'' }}{{ $ss && (string)$ss->jawaban == (string)$key && (string)$s->benar != (string)$key?' text-danger':'' }}">{!! strip_tags($o,'<sup><sub>') !!}</td>
+                  <td class="{{ ($ss && (string)$ss->jawaban == (string)$key)?'font-weight-bold':'' }}{{ (string)$s->benar == (string)$key?' text-success':'' }}{{ $ss && (string)$ss->jawaban == (string)$key && (string)$s->benar != (string)$key?' text-danger':'' }}">{!! (new \App\Http\Middleware\ShortcodeMiddleware)->shortcode('',strip_tags($o,'<sup><sub>'),'opsi') !!}</td>
                 </tr>
               @endforeach
             </table>

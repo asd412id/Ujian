@@ -56,7 +56,7 @@ class ShortcodeMiddleware
         	$src = url('uploads/'.$src);
         }
 
-       return '<div class="text-'.$sa.'" style="width: 100% !important"><a href="'.$src.'" data-lightbox="'.$src.'"><img src="'.$src.'" alt="" style="max-width: 100%;" width="'.$width.'" height="'.$height.'" /></a></div>';
+       return '<div class="text-'.$sa.'" style="width: 100% !important"><a href="'.$src.'" data-lightbox="'.$src.'"><img src="'.$src.'" alt="" style="max-width: '.($guard=='soal'?'375px':($guard=='opsi'?'150px':'100%')).';" width="'.$width.'" height="'.$height.'" /></a></div>';
      }
      function shortcode_audio($soal,$index,$guard=null,$src="",$play=0,$align="center",$width="",$height=""){
 
