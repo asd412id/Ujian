@@ -210,7 +210,7 @@ class SoalController extends Controller
       $item->jenis_soal = $r->jenis_soal;
       $item->soal = trim(strip_tags($r->soal,'<strong><b><em><i><br><span><u><strike><sup><sub>'));
       $item->acak_opsi = $r->jenis_soal=='P'?$r->acak_soal:null;
-      $item->opsi = $r->jenis_soal=='P'?json_encode($r->opsi):null;
+      $item->opsi = $r->jenis_soal=='P'?trim(strip_tags(json_encode($r->opsi),'<sup><sub>')):null;
       $item->benar = $r->jenis_soal=='P'?$r->benar:null;
 
       if ($item->save()) {

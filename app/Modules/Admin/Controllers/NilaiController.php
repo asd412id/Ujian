@@ -388,21 +388,6 @@ class NilaiController extends Controller
         $nilai += round($nbenar/$jumlah_soal*$jadwal->bobot,2);
       }
 
-      if (request()->view) {
-        return view("Admin::nilai.detail-download",[
-          'title'=>'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' - ('.$siswa->noujian.') '.$siswa->nama,
-          'breadcrumb'=>'Nilai Ujian',
-          'jadwal'=>$jadwal,
-          'siswa'=>$siswa,
-          'soal'=>$soal,
-          'mapel'=>$mapel,
-          'nilai'=>$nilai,
-          'benar'=>$nbenar,
-          'sekolah'=>Sekolah::first(),
-          'helper'=>new Helper
-        ]);
-      }
-
       $filename = '('.$siswa->noujian.') '.$siswa->nama.'.pdf';
 
       $pdf = PDF::loadView("Admin::nilai.detail-download",[

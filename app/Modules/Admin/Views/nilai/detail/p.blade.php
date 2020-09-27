@@ -16,7 +16,7 @@
       @endphp
       <tr>
         <td align="center">{{ ($key+1).'.' }}</td>
-        <td class="soal" style="width: 55% !important">{!! nl2br(trim($s->soal)) !!}</td>
+        <td class="soal" style="width: 55% !important">{!! (new \App\Http\Middleware\ShortcodeMiddleware)->shortcode('',nl2br(trim($s->soal)),null) !!}</td>
         <td class="jawaban">
           @if ($s->jenis_soal == 'P')
             <table class="table-choice">

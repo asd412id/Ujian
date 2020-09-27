@@ -53,7 +53,7 @@
                     <input type="radio" {{ $key==$item->benar?'checked':'' }} name="benar" value="{{ $key }}" style="right: -10px;position: relative;bottom: -2px;" title="Jawaban Benar">
                     <button type="button" class="btn btn-xs btn-link btn-delete pull-right" title="Hapus Opsi"><i class="material-icons">close</i></button>
                   </div>
-                  <input type="text" name="opsi[]" class="form-control opsi" value="{!! nl2br($v) !!}" autocomplete="off">
+                  <input type="text" name="opsi[]" class="form-control opsi" value="{!! strip_tags(nl2br($v),'<sup><sub>') !!}" autocomplete="off">
                 </div>
               @endforeach
             @else
