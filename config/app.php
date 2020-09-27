@@ -161,12 +161,10 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Barryvdh\Snappy\ServiceProvider::class,
-
         /*
          * Package Service Providers...
          */
-
+         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -227,8 +225,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Spreadsheet' => PhpOffice\PhpSpreadsheet\Spreadsheet::class,
         'Xlsx' => PhpOffice\PhpSpreadsheet\Writer\Xlsx::class,
-        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
-        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
 
     ],
 

@@ -20,7 +20,7 @@ class CreateTesUjianTable extends Migration
             $table->string('pin');
             $table->uuid('soal_item');
             $table->text('opsi')->nullable();
-            $table->string('jawaban')->nullable();
+            $table->text('jawaban')->nullable();
             $table->timestamps();
             $table->softdeletes();
         });

@@ -269,12 +269,7 @@ class NilaiController extends Controller
         'helper'=>new Helper
       ]);
 
-      return $pdf->setOption('page-width','21.5cm')
-      ->setOption('page-height','33cm')
-      // ->setOption('margin-bottom',0)
-      // ->setOption('margin-left',0)
-      // ->setOption('margin-right',0)
-      ->stream($filename);
+      return $pdf->stream($filename);
 
     }
 
@@ -408,16 +403,21 @@ class NilaiController extends Controller
         ]);
       }
 
-      $filename = 'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' - ('.$siswa->noujian.') '.$siswa->nama.'.pdf';
+      $filename = '('.$siswa->noujian.') '.$siswa->nama.'.pdf';
 
-      $pdf = PDF::loadFile(route('nilai.detail.download',['jadwal'=>$ujian,'siswa'=>$siswa->uuid,'view'=>true]));
+      $pdf = PDF::loadView("Admin::nilai.detail-download",[
+        'title'=>'('.$siswa->noujian.') '.$siswa->nama,
+        'jadwal'=>$jadwal,
+        'siswa'=>$siswa,
+        'soal'=>$soal,
+        'mapel'=>$mapel,
+        'nilai'=>$nilai,
+        'benar'=>$nbenar,
+        'sekolah'=>Sekolah::first(),
+        'helper'=>new Helper
+      ]);
 
-      return $pdf->setOption('page-width','21.5cm')
-      ->setOption('page-height','33cm')
-      // ->setOption('margin-bottom',0)
-      // ->setOption('margin-left',0)
-      // ->setOption('margin-right',0)
-      ->stream($filename);
+      return $pdf->stream($filename);
 
     }
 

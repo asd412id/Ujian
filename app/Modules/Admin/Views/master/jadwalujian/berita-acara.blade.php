@@ -3,9 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>{{ $title }}</title>
-    <link rel="stylesheet" href="{{ url('assets/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url('assets/fontawesome/css/all.min.css') }}">
-    <style media="screen">
+    @include('print-style')
+    <style>
       .font-weight-bold{
         font-weight: bold;
       }
@@ -18,6 +17,9 @@
       table.table-info td{
         padding: 3px !important;
       }
+      @page{
+        margin: 40px 30px;
+      }
     </style>
   </head>
   <body>
@@ -26,11 +28,8 @@
       $selesai = strtotime($jadwal->selesai_ujian);
     @endphp
     <div class="container-fluid">
-      <div style="position: relative">
-        @include('Admin::kop')
-      </div>
-      <h3 class="text-center" style="padding:0;margin: 0;margin-top: 15px;font-size: 1.5em">BERITA ACARA</h3>
-      <h3 class="text-center" style="padding:0;margin: 0;margin-bottom: 15px;font-size: 1.5em;text-transform: uppercase">PELAKSANAAN {!! nl2br($jadwal->nama_ujian) !!}</h3>
+      <h4 class="text-center" style="padding:0;margin: 0;margin-top: 15px">BERITA ACARA</h4>
+      <h4 class="text-center" style="padding:0;margin: 0;margin-bottom: 25px;text-transform: uppercase">PELAKSANAAN {!! nl2br($jadwal->nama_ujian) !!}</h4>
       <div style="font-size: 1.2em !important">
         <div class="row">
           <div class="col-sm-12">
@@ -46,7 +45,7 @@
           <div class="col-sm-12">
             <table class="table table-info">
               <tr>
-                <td>a)</td>
+                <td width="15" valign="top">a)</td>
                 <td colspan="3">
                   Telah dilaksanakan {{ $jadwal->nama_ujian }} dari pukul <strong>.............</strong> sampai dengan pukul <strong>.............</strong>
                 </td>
@@ -77,39 +76,39 @@
               </tr>
               <tr>
                 <td></td>
-                <td style="width: 250px">Yang Tidak Hadir</td>
-                <td style="width: 3px !important">:</td>
-                <td style="font-weight: bold"> .......... Orang</td>
+                <td style="width: 250px;height: 30px" valign="top">Yang Tidak Hadir</td>
+                <td style="width: 3px !important" valign="top">:</td>
+                <td style="font-weight: bold" valign="top"> .......... Orang</td>
               </tr>
               <tr>
-                <td style="padding-top: 15px !important">b)</td>
+                <td valign="top">b)</td>
                 <td colspan="3" style="padding-top: 15px !important">
                   Catatan Selama Pelaksanaan Ujian:
                 </td>
               </tr>
               <tr>
                 <td></td>
-                <td colspan="3" style="border-bottom: solid 1px !important;padding-top: 45px !important"></td>
+                <td colspan="3" style="border-bottom: solid 1px !important;padding: 10px !important">&nbsp;</td>
               </tr>
               <tr>
                 <td></td>
-                <td colspan="3" style="border-bottom: solid 1px !important;padding-top: 45px !important"></td>
+                <td colspan="3" style="border-bottom: solid 1px !important;padding: 10px !important">&nbsp;</td>
               </tr>
               <tr>
                 <td></td>
-                <td colspan="3" style="border-bottom: solid 1px !important;padding-top: 45px !important"></td>
+                <td colspan="3" style="border-bottom: solid 1px !important;padding: 10px !important">&nbsp;</td>
               </tr>
             </table>
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12" style="padding: 45px 30px">
+          <div class="col-sm-12" style="padding: 10px 35px">
             <p>Demikian Berita Acara ini dibuat dengan sesungguhnya</p>
           </div>
         </div>
         <div class="row" style="margin-bottom: 45px;margin-top: 30px;page-break-inside: avoid !important;">
           <div class="col-sm-12">
-            <div class="pull-right" style="white-space: nowrap">
+            <div style="white-space: nowrap;padding-left: 475px">
               <p>{{ $sekolah->kota.', '.date('d',$mulai).' '.$helper->bulan(date('m',$mulai)).' '.date('Y',$mulai) }}</p>
               <p>Yang Membuat Berita Acara,</p>
               <p style="margin-bottom: 125px">Pengawas</p>

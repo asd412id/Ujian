@@ -513,32 +513,9 @@ class JadwalUjianController extends Controller
         $peserta = $kelas->siswa()->orderBy('id','asc')->get();
       }
 
-      // $view = view('Admin::master.jadwalujian.kartu',[
-      //   'jadwal'=>$jadwal,
-      //   'peserta'=>$peserta,
-      //   'title'=>$filename,
-      //   'sekolah'=>Sekolah::first(),
-      //   'helper'=>new Helper
-      // ])->render();
-      //
-      // $client = new Client;
-      // $res = $client->request('POST','http://docker.local:/pdf',[
-      //   'form_params'=>[
-      //     'html'=>str_replace(url('/'),'http://nginx_ujian/',$view),
-      //     'options[page-width]'=>'21.5cm',
-      //     'options[page-height]'=>'33cm',
-      //     'options[margin-top]'=>'0.5cm',
-      //     'options[margin-bottom]'=>'0',
-      //     'options[margin-left]'=>'0',
-      //     'options[margin-right]'=>'0',
-      //   ]
-      // ]);
-      //
-      // if ($res->getStatusCode() == 200) {
-      //   return response()->attachment($res->getBody()->getContents(),$filename,'application/pdf');
-      // }
-      //
-      // return redirect()->back()->withErrors(['Tidak dapat mendownload file! Silahkan hubungi operator']);
+      $configs = [
+        'format' => [215,330],
+      ];
 
       $pdf = PDF::loadView('Admin::master.jadwalujian.kartu',[
         'jadwal'=>$jadwal,
@@ -546,17 +523,9 @@ class JadwalUjianController extends Controller
         'title'=>str_replace('.pdf','',$filename),
         'sekolah'=>Sekolah::first(),
         'helper'=>new Helper
-      ]);
+      ],[],$configs);
 
-      return $pdf->setOptions([
-        'page-width'=>'21.5cm',
-        'page-height'=>'33cm'
-      ])
-      ->setOption('margin-top','0.5cm')
-      ->setOption('margin-bottom',0)
-      ->setOption('margin-left',0)
-      ->setOption('margin-right',0)
-      ->stream($filename);
+      return $pdf->stream($filename);
     }
 
     public function printAbsen($uuid)
@@ -628,11 +597,7 @@ class JadwalUjianController extends Controller
         'helper'=>new Helper
       ]);
 
-      return $pdf->setOptions([
-        'page-width'=>'21.5cm',
-        'page-height'=>'33cm'
-      ])
-      ->stream($filename);
+      return $pdf->stream($filename);
     }
 
     public function printBerita($uuid)
@@ -704,11 +669,7 @@ class JadwalUjianController extends Controller
         'helper'=>new Helper
       ]);
 
-      return $pdf->setOptions([
-        'page-width'=>'21.5cm',
-        'page-height'=>'33cm'
-      ])
-      ->stream($filename);
+      return $pdf->stream($filename);
     }
 
     public function getPeserta(Request $r)
