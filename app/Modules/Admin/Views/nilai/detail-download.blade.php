@@ -46,11 +46,12 @@
         padding: 3px 7px;
       }
       @page{
-        margin: 60px 50px;
+        margin: 20px 50px;
       }
     </style>
   </head>
   <body>
+    @include('Admin::kop')
     <div class="container-fluid">
       <h4 class="text-center" style="padding:0;margin: 0">NILAI HASIL UJIAN</h4>
       <h4 class="text-center" style="padding:0;margin: 0;text-transform: uppercase">{!! nl2br($jadwal->nama_ujian) !!}</h4>
@@ -78,26 +79,26 @@
                   </tr>
                 </table>
               </td>
-              <td valign="top" width="325">
-                <table class="table table-info">
+              <td valign="top" align="right">
+                <table class="table table-info" style="width: auto">
                   <tr>
-                    <td>MATA PELAJARAN</td>
+                    <td align="left">MATA PELAJARAN</td>
                     <td align="center" style="width: 15px">:</td>
-                    <th>{{ $mapel }}</th>
+                    <th align="left">{{ $mapel }}</th>
                   </tr>
                   <tr>
-                    <td>JUMLAH SOAL</td>
+                    <td align="left">JUMLAH SOAL</td>
                     <td align="center">:</td>
-                    <th>{{ count($soal) }}</th>
+                    <th align="left">{{ count($soal) }}</th>
                   </tr>
                   <tr>
-                    <td>BOBOT</td>
+                    <td align="left">BOBOT</td>
                     <td align="center">:</td>
-                    <th>{{ $jadwal->bobot }}</th>
+                    <th align="left">{{ $jadwal->bobot }}</th>
                   </tr>
                   @if ($jadwal->jenis_soal=='P')
                     <tr>
-                      <th colspan="3" style="vertical-align: top !important;border: none"><h1 style="position: relative;font-size: 3em"><span style="font-size: 19px; position: relative;top: -35px;">NILAI AKHIR: </span>{{ $nilai }}</h1></th>
+                      <th align="left" colspan="3" style="vertical-align: top !important;border: none"><h1 style="position: relative;font-size: 3em"><span style="font-size: 19px; position: relative;top: -35px;">NILAI AKHIR: </span>{{ $nilai }}</h1></th>
                     </tr>
                   @endif
                 </table>

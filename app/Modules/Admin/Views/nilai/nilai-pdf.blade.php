@@ -27,7 +27,7 @@
         white-space: nowrap;
       }
       @page{
-        margin: 50px;
+        margin: 20px 50px;
       }
     </style>
   </head>
@@ -36,6 +36,7 @@
       $mulai = strtotime($jadwal->mulai_ujian);
       $selesai = strtotime($jadwal->selesai_ujian);
     @endphp
+    @include('Admin::kop')
     <div class="container-fluid">
       <h4 class="text-center" style="padding:0;margin: 0">NILAI HASIL UJIAN</h4>
       <h4 class="text-center" style="padding:0;margin: 0;text-transform: uppercase;margin-bottom: 15px">{!! nl2br($jadwal->nama_ujian) !!}</h4>
@@ -62,22 +63,22 @@
                   </tr>
                 </table>
               </td>
-              <td>
-                <table class="table table-info">
+              <td align="right">
+                <table class="table table-info" style="width: auto">
                   <tr>
-                    <td>JENIS SOAL</td>
+                    <td align="left">JENIS SOAL</td>
                     <td align="center">:</td>
-                    <th>{{ $jadwal->jenis_soal?'Pilihan Ganda':'Essay' }}</th>
+                    <th align="left">{{ $jadwal->jenis_soal?'Pilihan Ganda':'Essay' }}</th>
                   </tr>
                   <tr>
-                    <td>JUMLAH SOAL</td>
+                    <td align="left">JUMLAH SOAL</td>
                     <td align="center">:</td>
-                    <th>{{ $jadwal->jumlah_soal }}</th>
+                    <th align="left">{{ $jadwal->jumlah_soal }}</th>
                   </tr>
                   <tr>
-                    <td>BOBOT</td>
+                    <td align="left">BOBOT</td>
                     <td align="center">:</td>
-                    <th>{{ $jadwal->bobot }}</th>
+                    <th align="left">{{ $jadwal->bobot }}</th>
                   </tr>
                 </table>
               </td>

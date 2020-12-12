@@ -29,7 +29,7 @@
         white-space: normal;
       }
       @page{
-        margin: 30px 20px;
+        margin: 20px 40px;
       }
     </style>
   </head>
@@ -38,9 +38,10 @@
       $mulai = strtotime($jadwal->mulai_ujian);
       $selesai = strtotime($jadwal->selesai_ujian);
     @endphp
+    @include('Admin::kop')
     <div class="container-fluid">
       <h4 class="text-center font-weight-bold" style="padding:0;margin: 0">DAFTAR HADIR</h4>
-      <h4 class="text-center font-weight-bold" style="padding:0;margin: 0;margin-bottom: 15px;text-transform: uppercase">{!! nl2br($jadwal->nama_ujian) !!}</h4>
+      <h4 class="text-center font-weight-bold" style="padding:0;margin: 0;text-transform: uppercase">{!! nl2br($jadwal->nama_ujian) !!}</h4>
       <div style="font-size: 1.2em">
         <div class="row">
           <table class="table">
@@ -64,24 +65,24 @@
                   </tr>
                 </table>
               </td>
-              <td style="vertical-align: top;padding: 15px">
-                <table class="table table-info">
+              <td style="vertical-align: top;padding: 15px" align="right">
+                <table class="table table-info" style="width: auto">
                   <tr>
-                    <td>JENIS SOAL</td>
+                    <td align="left">JENIS SOAL</td>
                     <td align="center">:</td>
-                    <th>{{ $jadwal->jenis_soal?'Pilihan Ganda':'Essay' }}</th>
+                    <th align="left">{{ $jadwal->jenis_soal?'Pilihan Ganda':'Essay' }}</th>
                   </tr>
                   <tr>
-                    <td>JUMLAH SOAL</td>
+                    <td align="left">JUMLAH SOAL</td>
                     <td align="center">:</td>
-                    <th>{{ $jadwal->jumlah_soal }}</th>
+                    <th align="left">{{ $jadwal->jumlah_soal }}</th>
                   </tr>
                 </table>
               </td>
             </tr>
           </table>
         </div>
-        <div class="row">
+        <div class="row" style="margin-top: -50px">
           <div class="col-sm-12">
             <table class="table table-bordered table-absen">
               <thead>
@@ -116,7 +117,7 @@
             <div class="pull-right" style="white-space: nowrap">
               <p>{{ $sekolah->kota.', '.date('d',$mulai).' '.$helper->bulan(date('m',$mulai)).' '.date('Y',$mulai) }}</p>
               <p style="margin-bottom: 125px">Pengawas Ujian</p>
-              <p>[.......................................................]</p>
+              <p>[................................................]</p>
             </div>
           </div>
         </div>

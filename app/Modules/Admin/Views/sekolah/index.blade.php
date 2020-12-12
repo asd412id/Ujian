@@ -79,10 +79,20 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
               <div class="form-group is-focused">
                 <label class="bmd-label-floating">Kop Dokumen</label>
                 <textarea name="kop_kartu" rows="4" class="form-control" placeholder="PEMERINTAH KABUPATEN SINJAI&#10;DINAS PENDIDIKAN">{{ old('kop_kartu')?old('kop_kartu'):@$sekolah->kop_kartu }}</textarea>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="bmd-label-floating">Tampilan Kop Dokumen</label>
+                <select class="form-control" name="kop_type">
+                  <option {{ old('kop_type')==''||@$sekolah->kop_type==''?'selected':'' }} value="">Tidak ada</option>
+                  <option {{ old('kop_type')=='atas'||@$sekolah->kop_type=='atas'?'selected':'' }} value="atas">Logo Atas</option>
+                  <option {{ old('kop_type')=='samping'||@$sekolah->kop_type=='samping'?'selected':'' }} value="samping">Logo Samping</option>
+                </select>
               </div>
             </div>
           </div>

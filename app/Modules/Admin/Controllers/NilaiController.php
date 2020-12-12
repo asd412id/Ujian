@@ -406,4 +406,77 @@ class NilaiController extends Controller
 
     }
 
+    public function downloadSoal($uuid)
+    {
+      $mapel = '';
+      $kelas = '';
+      $soal = [];
+      $jadwal = JadwalUjian::with('tes')->where('uuid',$uuid)->first();
+
+      $getKelas = Kelas::whereHas('siswa',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->peserta));
+      })
+      ->orderBy('tingkat','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getKelas)) {
+        foreach ($getKelas as $key => $k) {
+          $kelas .= $k->nama;
+          if ($key < count($getKelas)-2) {
+            $kelas .= ', ';
+          }elseif ($key == count($getKelas)-2) {
+            if (count($getKelas) > 2) {
+              $kelas .= ',';
+            }
+            $kelas .= ' dan ';
+          }
+        }
+      }
+
+      $getMapel = Mapel::whereHas('soal',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->soal));
+      })
+      ->orderBy('id','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getMapel)) {
+        foreach ($getMapel as $key => $m) {
+          $mapel .= $m->nama;
+          if ($key < count($getMapel)-2) {
+            $mapel .= ', ';
+          }elseif ($key == count($getMapel)-2) {
+            if (count($getMapel) > 2) {
+              $mapel .= ',';
+            }
+            $mapel .= ' dan ';
+          }
+        }
+      }
+
+      $getSoal = Soal::whereIn('uuid',json_decode($jadwal->soal))->with('item')->get();
+
+      foreach ($getSoal as $key => $gs) {
+        foreach ($gs->item as $key => $si) {
+          array_push($soal,$si);
+        }
+      }
+
+      $filename = strip_tags(str_replace(["\r\n","\n","\r"],'',$jadwal->nama_ujian)).' ('.$mapel.') ('.$jadwal->pin.')';
+
+      $pdf = PDF::loadView("Admin::nilai.download-soal",[
+        'title'=>$filename,
+        'jadwal'=>$jadwal,
+        'kelas'=>$kelas,
+        'soal'=>$soal,
+        'mapel'=>$mapel,
+        'sekolah'=>Sekolah::first(),
+        'helper'=>new Helper
+      ]);
+
+      return $pdf->stream($filename.'.pdf');
+
+    }
+
 }

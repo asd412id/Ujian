@@ -120,6 +120,7 @@ Route::group(['module' => 'Admin', 'middleware' => ['web'], 'namespace' => 'App\
       {
         Route::get('/','NilaiController@index')->name('nilai.index');
         Route::get('/{uuid}/detail','NilaiController@detail')->name('nilai.detail');
+        Route::get('/{uuid}/download-soal','NilaiController@downloadSoal')->name('nilai.download.soal');
         Route::get('/download/excel/{uuid}','NilaiController@downloadExcel')->name('nilai.download.excel');
         Route::get('/download/pdf/{uuid}','NilaiController@downloadPDF')->name('nilai.download.pdf');
         Route::get('{jadwal}/detail/{siswa}','NilaiController@detailDownload')->name('nilai.detail.download')->middleware('shortcode:view');

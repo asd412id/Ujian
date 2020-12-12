@@ -89,6 +89,7 @@
                     <td>{{ $v->lama_ujian.' Menit' }}</td>
                     <td>{{ count(json_decode($v->peserta)) }}</td>
                     <td style="white-space: nowrap;width: 50px" class="text-right">
+                      <a class="btn btn-sm btn-xs btn-info" title="Download Soal" href="{{ route('nilai.download.soal',['uuid'=>$v->uuid]) }}" class="text-info"><i class="fa fa-fw fa-download"></i></a>
                       <a class="btn btn-sm btn-xs btn-primary" title="Detail Nilai Ujian" href="{{ route('nilai.detail',['uuid'=>$v->uuid]) }}" class="text-info"><i class="fa fa-fw fa-address-book"></i></a>
                       @if ($v->jenis_soal=='P')
                         <a class="btn btn-sm btn-xs btn-success" title="Download Nilai Excel" href="{{ route('nilai.download.excel',['uuid'=>$v->uuid]) }}" class="text-info"><i class="fa fa-fw fa-file-excel"></i></a>

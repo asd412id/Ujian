@@ -18,7 +18,7 @@
         padding: 3px !important;
       }
       @page{
-        margin: 40px 30px;
+        margin: 20px 40px;
       }
     </style>
   </head>
@@ -27,8 +27,9 @@
       $mulai = strtotime($jadwal->mulai_ujian);
       $selesai = strtotime($jadwal->selesai_ujian);
     @endphp
+    @include('Admin::kop')
     <div class="container-fluid">
-      <h4 class="text-center" style="padding:0;margin: 0;margin-top: 15px">BERITA ACARA</h4>
+      <h4 class="text-center" style="padding:0;margin: 0">BERITA ACARA</h4>
       <h4 class="text-center" style="padding:0;margin: 0;margin-bottom: 25px;text-transform: uppercase">PELAKSANAAN {!! nl2br($jadwal->nama_ujian) !!}</h4>
       <div style="font-size: 1.2em !important">
         <div class="row">
@@ -112,7 +113,7 @@
               <p>{{ $sekolah->kota.', '.date('d',$mulai).' '.$helper->bulan(date('m',$mulai)).' '.date('Y',$mulai) }}</p>
               <p>Yang Membuat Berita Acara,</p>
               <p style="margin-bottom: 125px">Pengawas</p>
-              <p>[.......................................................]</p>
+              <p>[......................................................]</p>
             </div>
           </div>
         </div>

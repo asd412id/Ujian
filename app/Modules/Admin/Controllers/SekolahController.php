@@ -60,6 +60,7 @@ class SekolahController extends Controller
       $sekolah->telp = $r->telp;
       $sekolah->fax = $r->fax;
       $sekolah->kop_kartu = $r->kop_kartu;
+      $sekolah->kop_type = $r->kop_type;
 
       if ($sekolah->save()) {
         return redirect()->back()->with('message', 'Data berhasil diubah');
