@@ -26,11 +26,6 @@ class SoalController extends Controller
         $role = [$role,'%'.$role.'%'];
         $q->where('kode','like',$role[1])
         ->orWhere('nama','like',$role[1])
-        ->orWhereHas('kelas',function($q) use($role){
-          $q->where('kode',$role[0])
-          ->orWhere('nama','like',$role[1])
-          ->orWhere('tingkat','like',$role[1]);
-        })
         ->orWhereHas('mapel',function($q) use($role){
           $q->where('kode',$role[0])
           ->orWhere('nama','like',$role[1]);

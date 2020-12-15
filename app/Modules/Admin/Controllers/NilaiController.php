@@ -83,7 +83,29 @@ class NilaiController extends Controller
     {
       $jadwal = JadwalUjian::where('uuid',$uuid)->first();
 
-      $filename = 'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.xlsx';
+      $mapel = '';
+      $getMapel = Mapel::whereHas('soal',function($q) use($jadwal){
+        $q->whereIn('uuid',json_decode($jadwal->soal));
+      })
+      ->orderBy('id','asc')
+      ->select('nama')
+      ->get();
+
+      if (count($getMapel)) {
+        foreach ($getMapel as $key => $m) {
+          $mapel .= $m->nama;
+          if ($key < count($getMapel)-2) {
+            $mapel .= ', ';
+          }elseif ($key == count($getMapel)-2) {
+            if (count($getMapel) > 2) {
+              $mapel .= ',';
+            }
+            $mapel .= ' dan ';
+          }
+        }
+      }
+
+      $filename = 'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' ('.$mapel.') ('.$jadwal->pin.')';
 
       $spreadsheet = new Spreadsheet();
   		$sheet = $spreadsheet->getActiveSheet();
@@ -192,7 +214,7 @@ class NilaiController extends Controller
 
       $writer = new Xlsx($spreadsheet);
   		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      header('Content-Disposition: attachment; filename="'.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.xlsx"');
+      header('Content-Disposition: attachment; filename="'.$filename.'.xlsx"');
   		$writer->save("php://output");
     }
 
@@ -203,8 +225,6 @@ class NilaiController extends Controller
       if (!$jadwal) {
         return redirect()->route('nilai.index')->withErrors('Jadwal ujian tidak ditemukan');
       }
-
-      $filename = 'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).'.pdf';
 
       $peserta = Siswa::whereIn('uuid',json_decode($jadwal->peserta))
       ->orderBy('id','asc')
@@ -259,17 +279,19 @@ class NilaiController extends Controller
         }
       }
 
+      $filename = 'Nilai '.str_replace(["\r\n","\r","\n"]," ",$jadwal->nama_ujian).' ('.$mapel.') ('.$jadwal->pin.')';
+
       $pdf = PDF::loadView('Admin::nilai.nilai-pdf',[
         'jadwal'=>$jadwal,
         'peserta'=>$peserta,
         'kelas'=>$kelas,
         'mapel'=>$mapel,
-        'title'=>'Nilai '.$jadwal->nama_ujian,
+        'title'=>$filename,
         'sekolah'=>Sekolah::first(),
         'helper'=>new Helper
       ]);
 
-      return $pdf->stream($filename);
+      return $pdf->stream($filename.'.pdf');
 
     }
 
@@ -388,10 +410,10 @@ class NilaiController extends Controller
         $nilai += round($nbenar/$jumlah_soal*$jadwal->bobot,2);
       }
 
-      $filename = '('.$siswa->noujian.') '.$siswa->nama.'.pdf';
+      $filename = '('.$siswa->noujian.') '.$siswa->nama.' ('.$mapel.') ('.$jadwal->pin.')';
 
       $pdf = PDF::loadView("Admin::nilai.detail-download",[
-        'title'=>'('.$siswa->noujian.') '.$siswa->nama,
+        'title'=>$filename,
         'jadwal'=>$jadwal,
         'siswa'=>$siswa,
         'soal'=>$soal,
@@ -402,7 +424,7 @@ class NilaiController extends Controller
         'helper'=>new Helper
       ]);
 
-      return $pdf->stream($filename);
+      return $pdf->stream($filename.'.pdf');
 
     }
 
@@ -463,10 +485,10 @@ class NilaiController extends Controller
         }
       }
 
-      $filename = strip_tags(str_replace(["\r\n","\n","\r"],'',$jadwal->nama_ujian)).' ('.$mapel.') ('.$jadwal->pin.')';
+      $filename = strip_tags(str_replace(["\r\n","\n","\r"],' ',$jadwal->nama_ujian)).' ('.$mapel.') ('.$jadwal->pin.')';
 
       $pdf = PDF::loadView("Admin::nilai.download-soal",[
-        'title'=>$filename,
+        'title'=>'Soal '.$filename,
         'jadwal'=>$jadwal,
         'kelas'=>$kelas,
         'soal'=>$soal,
