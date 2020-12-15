@@ -115,7 +115,7 @@
         <div class="row" style="margin-bottom: 45px;margin-top: 30px;page-break-inside: avoid !important;">
           <div class="col-sm-12" style="padding-left: 475px">
             <div class="pull-right" style="white-space: nowrap">
-              <p>{{ $sekolah->kota.', '.date('d',$mulai).' '.$helper->bulan(date('m',$mulai)).' '.date('Y',$mulai) }}</p>
+              <p>{{ '................., ...................... '.date('Y',$mulai) }}</p>
               <p style="margin-bottom: 125px">Pengawas Ujian</p>
               <p>[................................................]</p>
             </div>

@@ -147,7 +147,7 @@
               <td>
                 <table class="table">
                   <tr>
-                    <td valign="top">{{ $sekolah->kota.', '.date('d').' '.$helper->bulan(date('m')).' '.date('Y') }}</td>
+                    <td valign="top">{{ $sekolah->kota.', ............................ '.date('Y') }}</td>
                   </tr>
                   <tr>
                     <td valign="top" height="100">Guru Mata Pelajaran</td>

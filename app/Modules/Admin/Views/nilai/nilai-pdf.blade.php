@@ -144,8 +144,8 @@
           <div class="col-sm-12">
             <table class="table">
               <tr>
-                <td></td>
-                <td valign="top" width="200">{{ $sekolah->kota.', '.date('d',$mulai).' '.$helper->bulan(date('m',$mulai)).' '.date('Y',$mulai) }}</td>
+                <td width="65%"></td>
+                <td valign="top">{{ '................., ............................ '.date('Y') }}</td>
               </tr>
               <tr>
                 <td valign="top">Mengetahui</td>

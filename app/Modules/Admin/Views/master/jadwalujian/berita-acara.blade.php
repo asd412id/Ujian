@@ -110,7 +110,7 @@
         <div class="row" style="margin-bottom: 45px;margin-top: 30px;page-break-inside: avoid !important;">
           <div class="col-sm-12">
             <div style="white-space: nowrap;padding-left: 475px">
-              <p>{{ $sekolah->kota.', '.date('d',$mulai).' '.$helper->bulan(date('m',$mulai)).' '.date('Y',$mulai) }}</p>
+              <p>{{ '................, ...................... '.date('Y',$mulai) }}</p>
               <p>Yang Membuat Berita Acara,</p>
               <p style="margin-bottom: 125px">Pengawas</p>
               <p>[......................................................]</p>

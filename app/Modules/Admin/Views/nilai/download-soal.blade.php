@@ -110,7 +110,7 @@
               <td style="text-align: right">
                 <table class="table" style="width: auto">
                   <tr>
-                    <td valign="top" align="left">{{ $sekolah->kota.', '.date('d').' '.$helper->bulan(date('m')).' '.date('Y') }}</td>
+                    <td valign="top" align="left">{{ '................., ............................ '.date('Y') }}</td>
                   </tr>
                   <tr>
                     <td valign="top" height="100" align="left">Guru Mata Pelajaran</td>
