@@ -16,6 +16,8 @@
     <title>
         Masuk Ujian
     </title>
+    <link href="{{ url('assets/css/font-awesome.min.css') }}" rel="stylesheet" />
+    <link href="{{ url('assets/fontawesome/css/all.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ url('assets/css/login.css') }}" />
     <style media="screen">
       .logo-wrap{
@@ -88,9 +90,7 @@
 <div style="text-align: center">
   @if ($sekolah)
     <p>Aplikasi Ujian {{ $sekolah->nama }}</p>
-    <p>{{ $sekolah->alamat }}</p>
-    <p>{{ 'Kab. '.$sekolah->kota.', Propinsi '.$sekolah->propinsi }}</p>
-    <p>{{ 'Telp: '.($sekolah->telp??'-').', Fax: '.($sekolah->fax??'-').', Kodepos: '.($sekolah->kodepos??'-') }}</p>
+    {!! $sekolah->alamat?nl2br($sekolah->alamat):'' !!}
   @endif
   <p>&copy; {{ date('Y') }} by <a id="copyright" style="color: #fff" target="_blank" href="https://www.facebook.com/aezdar">Asdar Bin Syam</a></p>
 </div>

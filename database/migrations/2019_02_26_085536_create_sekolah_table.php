@@ -19,11 +19,6 @@ class CreateSekolahTable extends Migration
             $table->string('kode');
             $table->string('nama');
             $table->text('alamat')->nullable();
-            $table->string('kota')->nullable();
-            $table->string('propinsi')->nullable();
-            $table->integer('kodepos')->unsigned()->nullable();
-            $table->string('telp')->nullable();
-            $table->string('fax')->nullable();
             $table->text('kop_kartu')->nullable();
             $table->string('logo')->nullable();
             $table->string('dept_logo')->nullable();

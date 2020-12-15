@@ -28,7 +28,7 @@
     <tr>
       <td align="center">
         <em>
-          {{ $sekolah->alamat??'' }}{!! $sekolah->telp?',&nbsp;<span style="white-space: nowrap"><i class="fa fa-fw fa-phone"></i>'.$sekolah->telp.'</span>':'' !!}{!! $sekolah->kodepos?',&nbsp;<span style="white-space: nowrap"><i class="fa fa-fw fa-envelope"></i>'.$sekolah->kodepos.'</span>':'' !!}
+          {!! $sekolah->alamat?nl2br($sekolah->alamat):'' !!}
         </em>
       </td>
     </tr>
@@ -66,7 +66,7 @@
     <tr>
       <td align="center">
         <em>
-          {{ $sekolah->alamat??'' }}{!! $sekolah->telp?',&nbsp;<span style="white-space: nowrap"><i class="fa fa-fw fa-phone"></i>'.$sekolah->telp.'</span>':'' !!}{!! $sekolah->kodepos?',&nbsp;<span style="white-space: nowrap"><i class="fa fa-fw fa-envelope"></i>'.$sekolah->kodepos.'</span>':'' !!}
+          {!! $sekolah->alamat?nl2br($sekolah->alamat):'' !!}
         </em>
       </td>
     </tr>

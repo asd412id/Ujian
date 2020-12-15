@@ -40,41 +40,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label class="bmd-label-floating">Alamat</label>
-                <input type="text" class="form-control" name="alamat" value="{{ old('alamat')?old('alamat'):@$sekolah->alamat }}">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="bmd-label-floating">Kota</label>
-                <input type="text" class="form-control" name="kota" value="{{ old('kota')?old('kota'):@$sekolah->kota }}">
-              </div>
-            </div>
-            <div class="col-md-5">
-              <div class="form-group">
-                <label class="bmd-label-floating">Propinsi</label>
-                <input type="text" class="form-control" name="propinsi" value="{{ old('propinsi')?old('propinsi'):@$sekolah->propinsi }}">
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group">
-                <label class="bmd-label-floating">Kode Pos</label>
-                <input type="text" class="form-control" name="kodepos" value="{{ old('kodepos')?old('kodepos'):@$sekolah->kodepos }}">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="bmd-label-floating">No. Telepon</label>
-                <input type="text" class="form-control" name="telp" value="{{ old('telp')?old('telp'):@$sekolah->telp }}">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="bmd-label-floating">Fax</label>
-                <input type="text" class="form-control" name="fax" value="{{ old('fax')?old('fax'):@$sekolah->fax }}">
+                <textarea name="alamat" rows="4" class="form-control" placeholder="">{{ old('alamat')?old('alamat'):@$sekolah->alamat }}</textarea>
               </div>
             </div>
           </div>

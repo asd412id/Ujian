@@ -54,11 +54,6 @@ class SekolahController extends Controller
       $sekolah->kode = $r->kode;
       $sekolah->nama = $r->nama;
       $sekolah->alamat = $r->alamat;
-      $sekolah->kota = $r->kota;
-      $sekolah->propinsi = $r->propinsi;
-      $sekolah->kodepos = $r->kodepos;
-      $sekolah->telp = $r->telp;
-      $sekolah->fax = $r->fax;
       $sekolah->kop_kartu = $r->kop_kartu;
       $sekolah->kop_type = $r->kop_type;
 
