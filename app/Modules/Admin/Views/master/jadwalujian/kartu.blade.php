@@ -63,7 +63,7 @@
               </tr>
               <tr>
                 <td colspan="3" class="text-center" style="font-size: 0.9em;padding: 3px">
-                  {{ $sekolah->alamat.', '.$sekolah->kota.', '.$sekolah->propinsi }}
+                  {!! nl2br($sekolah->alamat) !!}
                 </td>
               </tr>
               <tr>
@@ -106,7 +106,7 @@
                         @endif
                       </td>
                       <td class="text-center" style="padding-bottom: 5px;padding-left: 100px;padding-top: 11px">
-                        {{ $sekolah->kota }},&nbsp;{{ date('d') }}&nbsp;{{ $helper->bulan(date('m')).' '.date('Y') }}
+                        {{ date('d') }}&nbsp;{{ $helper->bulan(date('m')).' '.date('Y') }}
                         <br>
                         <br>
                         <br>
